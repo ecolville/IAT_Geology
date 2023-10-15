@@ -1,10 +1,99 @@
 <!DOCTYPE html>
- <html>
-  <head>
-   <title>GEOG 576 Midterm AGOL Project</title>
-  </head>
-  <body>
-   <!-- hello world text to check if everything worked -->
-   <h1>Hello World! I am ready to midterm project.</h1>
-  </body>
+<html>
+<head>
+    <title>TrailGuard</title>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="description" content="" />
+    <link rel="icon" href="hazard.png">
+
+    <!--calls for the arcgis api's CSS file and JS library-->
+    <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.25/"></script>
+
+    <!--Adding the modules, API key, and map constant needed for full screen map app-->
+
+
+    <!--style the page-->
+    <style>
+        html,
+        body,
+        #viewDiv {
+         padding: 0;
+         margin: 0;
+         height: 100%;
+         width: 100%;
+        }
+  
+      .addRecordBtn {
+        position: absolute;
+        z-index: 10;
+        top: 10px;
+        right: 10px;
+        background-color: #0079c1;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+        text-decoration: none;
+      }
+  
+      .addRecordBtn:hover {
+        background-color: #005a87;
+      }
+       </style> 
+
+<!--adding the modules for the graphic, graphic and feature layers, API, and map constant needed for a full screen map app-->
+<script>
+  require([
+    "esri/config", 
+    "esri/Map", 
+    "esri/views/MapView",
+    "esri/widgets/BasemapGallery",
+    "esri/widgets/Locate",
+    "esri/widgets/Search",
+    "esri/widgets/Expand",
+    "esri/Graphic",  
+    "esri/layers/GraphicsLayer", 
+    "esri/geometry/Polyline",
+    "esri/geometry/Polygon",
+    "esri/layers/FeatureLayer",
+    "esri/widgets/Editor",
+    "esri/widgets/Legend",
+    "esri/widgets/LayerList"
+  ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, Graphic, GraphicsLayer, Polyline, Polygon, FeatureLayer, Editor, Legend, LayerList) {
+
+    esriConfig.apiKey = "AAPKddba40c16f2c479188ee7654064642bcKj2RV3mAHrsiJS_6TRKUzkim46MXbNeE97z3bQn0zq3zyX67A3i8hBg6lEH0Fxl_"
+    const map = new Map({
+      basemap: "arcgis-light-gray" //basemap layer
+    });
+
+    //view of Wisconsin
+    const view = new MapView({
+      map:map,
+      center: [-89.633617,  44.873498], //longitude, latitude
+      zoom: 9, //zoom level
+      container: "viewDiv" //Div element
+    });
+
+    //add the feature layer for IAT sections
+    const iatSections = new FeatureLayer({
+      url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/ArcGIS/rest/services/IAT_Segments_CR/FeatureServer",
+      title: "IAT Sections and Connecting Routes"
+    });
+    map.add(iatSections);
+
+  });
+
+</head>
+
+<body>
+
+    <!--the div that displays the map-->
+    <div id="viewDiv"></div>
+
+</body>
 </html>
