@@ -39,7 +39,7 @@
     //view of Wisconsin
     const view = new MapView({
       map:map,
-      center: [-89.553929,  44.370325], //longitude, latitude
+      center: [-89.585655,  43.999906], //longitude, latitude
       zoom: 7, //zoom level
       container: "viewDiv" //Div element
     });
@@ -86,7 +86,7 @@
       content: "<b>Potability: </b> {Potability} <br><b>Reliability: </b> {Reliability} <br><b>Description: </b> {Description}"
     }
 
-    //add the feature layer for IAT sections
+   //add the feature layer for IAT sections
     const sections = new FeatureLayer({
       url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments_CR/FeatureServer",
       title: "IAT Sections or Connecting Routes",
@@ -141,6 +141,8 @@
       symbol: {
         type: "picture-marker",
         url: "https://ecolville.github.io/TrailGuard/Generic-Trail-Community-Logo.png",
+        width: "18px",
+        height: "18px"
       }
     };
 
@@ -148,9 +150,7 @@
     const communities = new FeatureLayer({
       url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/Ice_Age_Trail_Communities_View/FeatureServer",
       title: "Trail Communities",
-      type: "simple-marker",
-      color: "#0077D4",
-      style: "circle",
+      renderer: communityRenderer,
       labelingInfo: [communityLabels]
   });
   map.add(communities);
