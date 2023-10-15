@@ -56,6 +56,12 @@
       content: "<b>Parking Type: </b> {Parking_Type} <br><b>Comment: </b> {Comment} <br><b>Description: </b> {Description} <br><b>Fee: </b> {Fee} <br><b>Overnight Parking: </b> {Overnight_Park}"
     }
 
+    //define a popup template for the camping feature layer
+    const campingPopupTemplate = {
+      title: "Camping Areas",
+      content: "<b>Type: </b> {Camp_Type} <br><b># of sites: </b> {Num_sites} <br><b>water: </b> {Water} <br><b>toilet: </b> {Toilet} <br><b>Showers: </b> {Showers}<br><b>Description: </b> {Description}"
+    }
+
     //add the feature layer for IAT sections
     const sections = new FeatureLayer({
       url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/ArcGIS/rest/services/IAT_Segments_CR/FeatureServer",
@@ -78,8 +84,32 @@
     });
     map.add(parking);
 
+    //add the feature layer for IAT camping areas
+    const camping = new FeatureLayer({
+      url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Camping1/FeatureServer",
+      title: "Camping Areas",
+      
+      //add the popup template
+      outFields: ["Camp_Type", "Num_Sites", "Water", "Toilet", "Showers", "Description"],
+      popupTemplate: campingPopupTemplate
+    })
+    map.add(camping);
+
+
   });
   </script>
+
+<!--css to make a full screen map-->
+<style>  
+  html, 
+  body,  
+  #viewDiv {  
+    padding: 0;  
+    margin: 0;  
+    height: 100%;  
+    width: 100%;  
+ }  
+</style> 
    
 </head>
 
