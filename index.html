@@ -71,13 +71,19 @@
     //define a popup template for the parking feature layer
     const parkingPopupTemplate = {
       title: "Parking Area",
-      content: "<b>Parking Type: </b> {Parking_Type} <br><b>Comment: </b> {Comment} <br><b>Description: </b> {Description} <br><b>Fee: </b> {Fee} <br><b>Overnight Parking: </b> {Overnight_Park}"
+      content: "<b>Parking Type: </b> {Parking_Type} <br><b>Description: </b> {Description} <br><b>Fee: </b> {Fee} <br><b>Overnight Parking: </b> {Overnight_Park}<br><b>Comment: </b> {Comment} <br>"
     }
 
     //define a popup template for the camping feature layer
     const campingPopupTemplate = {
-      title: "Camping Areas",
-      content: "<b>Type: </b> {Camp_Type} <br><b># sites: </b> {Num_sites} <br><b>water: </b> {Water} <br><b>toilet: </b> {Toilet} <br><b>Showers: </b> {Showers}<br><b>Description: </b> {Description}"
+      title: "Camping Area",
+      content: "<b>Type: </b> {Camp_Type} <br><b># sites: </b> {Num_sites} <br><b>Water: </b> {Water} <br><b>Toilet: </b> {Toilet} <br><b>Showers: </b> {Showers}<br><b>Description: </b> {Description}"
+    }
+
+    //define a popuup template for the water feature layer
+    const waterPopupTemplate = {
+      title: "Potential Water Source",
+      content: "<b>Potability: </b> {Potability} <br><b>Reliability: </b> {Reliability} <br><b>Description: </b> {Description}"
     }
 
     //add the feature layer for IAT sections
@@ -116,7 +122,7 @@
     //add the feature layer for IAT communities
     const communities = new FeatureLayer({
       url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/Ice_Age_Trail_Communities_View/FeatureServer",
-      title: "Trail Communities",
+      title: "Trail Communities"
   });
   map.add(communities);
 
@@ -124,6 +130,16 @@
   communities.popupTemplate = {
     title: "{Name}"
   }
+
+  //add feature layer for water
+  const water = new FeatureLayer ({
+    url:"https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Potable_Water/FeatureServer",
+    title: "Potable Water",
+    //add the popup template
+    outFields: ["Potability", "Reliability", "Description"],
+    popupTemplate: waterPopupTemplate
+  });
+  
 });
   </script>
 
