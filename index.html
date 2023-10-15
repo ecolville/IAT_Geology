@@ -120,10 +120,10 @@
     map.add(camping);
 
     //const for community labels
-    const communitiesLabels = {
+    const communityLabels = {
       symbol: {
         type: "text",
-        color: "orange",
+        color: "#0077D4",
         font: {
           size: 12,
           family: "Noto Sans",
@@ -140,17 +140,18 @@
       type: "simple",
       symbol: {
         type: "picture-marker",
-        url: 
+        url: "https://github.com/ecolville/TrailGuard/Generic-Trail-Community-Logo.png",
       }
-    }
+    };
+
     //add the feature layer for IAT communities
     const communities = new FeatureLayer({
       url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/Ice_Age_Trail_Communities_View/FeatureServer",
       title: "Trail Communities",
       type: "simple-marker",
-      color: "orange",
+      color: "#0077D4",
       style: "circle",
-      labelingInfo: [communitiesLabels]
+      labelingInfo: [communityLabels]
   });
   map.add(communities);
 
