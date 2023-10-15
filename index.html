@@ -119,10 +119,30 @@
     });
     map.add(camping);
 
+    //const for community labels
+    const communitiesLabels = {
+      symbol: {
+        type: "text",
+        color: "orange",
+        font: {
+          size: 12,
+          family: "Noto Sans",
+          }
+      },
+      labelPlacement: "above-center",
+      labelExpressionInfo: {
+        expression: "$feature.Name"
+      }
+    };
+
     //add the feature layer for IAT communities
     const communities = new FeatureLayer({
       url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/Ice_Age_Trail_Communities_View/FeatureServer",
-      title: "Trail Communities"
+      title: "Trail Communities",
+      type: "simple-marker",
+      color: "orange",
+      style: "circle",
+      labelingInfo: [communitiesLabels]
   });
   map.add(communities);
 
