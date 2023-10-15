@@ -40,7 +40,7 @@
     const view = new MapView({
       map:map,
       center: [-89.568209,  44.511926], //longitude, latitude
-      zoom: 6.5, //zoom level
+      zoom: 7, //zoom level
       container: "viewDiv" //Div element
     });
 
@@ -135,6 +135,14 @@
       }
     };
 
+    //const for community icon
+    const communityRenderer = {
+      type: "simple",
+      symbol: {
+        type: "picture-marker",
+        url: 
+      }
+    }
     //add the feature layer for IAT communities
     const communities = new FeatureLayer({
       url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/Ice_Age_Trail_Communities_View/FeatureServer",
