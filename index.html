@@ -47,8 +47,26 @@
     //define a popup template for the sections feature layer
     const sectionsPopupTemplate = {
       title: "Section or Connecting Route",
-      content: "<b>Name: </b> {Section} <br><b>Length: </b> {length_mi} mi"
-    }
+      content: [
+        {
+          type: "text",
+          text: "<b>Name: </b> {Section} <br>"
+        },
+        {
+          type: "fields",
+          fieldInfos: [
+            {
+              fieldName: "length_mi",
+              label: "Length",
+              format: {
+                places: 1,
+                digitSeparator: true
+              }
+            }
+          ]
+        }
+      ]
+    };
 
     //define a popup template for the parking feature layer
     const parkingPopupTemplate = {
@@ -59,7 +77,7 @@
     //define a popup template for the camping feature layer
     const campingPopupTemplate = {
       title: "Camping Areas",
-      content: "<b>Type: </b> {Camp_Type} <br><b># of sites: </b> {Num_sites} <br><b>water: </b> {Water} <br><b>toilet: </b> {Toilet} <br><b>Showers: </b> {Showers}<br><b>Description: </b> {Description}"
+      content: "<b>Type: </b> {Camp_Type} <br><b># sites: </b> {Num_sites} <br><b>water: </b> {Water} <br><b>toilet: </b> {Toilet} <br><b>Showers: </b> {Showers}<br><b>Description: </b> {Description}"
     }
 
     //add the feature layer for IAT sections
