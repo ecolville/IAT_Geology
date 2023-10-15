@@ -50,7 +50,7 @@
       content: [
         {
           type: "text",
-          text: "<b>Name: </b> {Segment} <br>"
+          text: "<b>Name: </b> {Segment} <br><b>Type: </b> {Status} <br>"
         },
         {
           type: "fields",
@@ -88,11 +88,11 @@
 
     //add the feature layer for IAT sections
     const sections = new FeatureLayer({
-      url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments1/FeatureServer",
-      title: "IAT Sections",
+      url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments_CR/FeatureServer",
+      title: "IAT Sections or Connecting Routes",
 
       //add the popup template
-      outFields: ["Segment", "length_mi"],
+      outFields: ["Segment", "length_mi", "Status"],
       popupTemplate: sectionsPopupTemplate
     });
     map.add(sections);
