@@ -130,7 +130,7 @@
           family: "Noto Sans",
           }
       },
-      labelPlacement: "above-center",
+      labelPlacement: "above-right",
       labelExpressionInfo: {
         expression: "$feature.Name"
       }
@@ -170,7 +170,97 @@
     popupTemplate: waterPopupTemplate
   });
 
-});
+  const hazards = new FeatureLayer ({
+    url:"https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/survey123_28999d44a3004264b788805abd470022_results/FeatureServer",
+    title: "Trail Hazards & Maintenance Issues",
+    renderer: {
+      type: "simple",
+      symbol: {
+        type: "picture-marker",
+        url: "https://ecolville.github.io/TrailGuard/hazard.png",
+        width: "20px",
+        height: "20px"
+      },
+    }
+  });
+  map.add(hazards);
+
+  //popuptemplate for the trail hazards
+  hazards.popupTemplate = {
+    title: "Trail Hazards and Maintenance Issue",
+    content: "<b>Date of Observation: </b> {observation_date_and_time} <br><b>Location: </b> {trail_segment_name} {mile_marker} <br><b>Hazard/Maintenence Need: </b> {hazardmaintenance_need} <br><b>Description: </b> {description}<br><b>Severity of Issue: </b> {level_of_severity} <br>"
+  };
+
+  //expand widget for basemap gallery
+  const bgExpand = new Expand({
+    view: view,
+    content: new BasemapGallery({
+      view: view
+    })
+  });
+  view.ui.add(bgExpand, "top-right");
+
+  //create a locate widget instance and add it to the view
+  const locate = new Locate({
+        view: view
+      });
+      view.ui.add(locate, "top-left");
+
+      // Create a Search widget instance and add it to the view
+      const search = new Search({
+        view: view,
+        suggestionsEnabled: true,
+        maxSuggestions: 3
+      });
+      
+      //expand the search widget
+     //expand the search widget
+     const searchExpand = new Expand({
+        view: view,
+        content: search,
+        expandIconClass: "esri-icon-search",
+        expandTooltip: "Search",
+        expanded: false
+      })
+
+      //add the search widget to the top left corner of the view
+        view.ui.add(searchExpand, {
+          position: "top-left",
+          index: 2
+        });
+
+      // Create a Legend widget instance and add it to the view
+      const legend = new Legend({
+        view: view,
+        respectLayerVisibility: true,
+      });
+
+      const legendExpand = new Expand({
+        view: view,
+        content: legend,
+        expandIconClass: "esri-icon-layer-list",
+        expandTooltip: "Legend",
+        expanded: window.innerWidth > 768 //expand in desktop mode
+      });
+      view.ui.add(legendExpand, "bottom-left");
+
+     // Create a LayerList widget
+      const layerList = new LayerList({
+        view: view
+      });
+
+      // Put the LayerList widget into an Expand widget
+      const layerListExpand = new Expand({
+        view: view,
+        content: layerList,
+        expandIconClass: "esri-icon-layer-list",  // Change this to choose the icon for the button
+        expandTooltip: "Layers"  // Tooltip text for the button
+      });
+
+      // Add the Expand widget to the view
+      view.ui.add(layerListExpand, "top-right");
+  
+    });
   </script>
 
 <!--css to make a full screen map-->
