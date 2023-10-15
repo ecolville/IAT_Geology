@@ -6,45 +6,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
     <meta name="description" content="" />
-    <link rel="icon" href="hazard.png">
 
     <!--calls for the arcgis api's CSS file and JS library-->
     <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css">
     <script src="https://js.arcgis.com/4.25/"></script>
-
-    <!--Adding the modules, API key, and map constant needed for full screen map app-->
-
-
-    <!--style the page-->
-    <style>
-        html,
-        body,
-        #viewDiv {
-         padding: 0;
-         margin: 0;
-         height: 100%;
-         width: 100%;
-        }
-  
-      .addRecordBtn {
-        position: absolute;
-        z-index: 10;
-        top: 10px;
-        right: 10px;
-        background-color: #0079c1;
-        color: white;
-        padding: 8px 16px;
-        border: none;
-        border-radius: 4px;
-        font-size: 14px;
-        cursor: pointer;
-        text-decoration: none;
-      }
-  
-      .addRecordBtn:hover {
-        background-color: #005a87;
-      }
-       </style> 
 
 <!--adding the modules for the graphic, graphic and feature layers, API, and map constant needed for a full screen map app-->
 <script>
@@ -79,15 +44,43 @@
       container: "viewDiv" //Div element
     });
 
+    //define a popup template for the sections feature layer
+    const sectionsPopupTemplate = {
+      title: "Section or Connecting Route",
+      content: "<b>Name: </b> {Section} <br><b>Length: </b> {length_mi} mi"
+    }
+
+    //define a popup template for the parking feature layer
+    const parkingPopupTemplate = {
+      title: "Parking Area",
+      content: "<b>Parking Type: </b> {Parking_Type} <br><b>Comment: </b> {Comment} <br><b>Description: </b> {Description} <br><b>Fee: </b> {Fee} <br><b>Overnight Parking: </b> {Overnight_Park}"
+    }
+
     //add the feature layer for IAT sections
-    const iatSections = new FeatureLayer({
+    const sections = new FeatureLayer({
       url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/ArcGIS/rest/services/IAT_Segments_CR/FeatureServer",
-      title: "IAT Sections and Connecting Routes"
+      title: "IAT Sections and Connecting Routes",
+
+      //add the popup template
+      outFields: ["Section", "length_mi"]
+      popupTemplate: sectionsPopupTemplate
     });
-    map.add(iatSections);
+    map.add(sections);
+
+    //add the feature layer for IAT parking lots
+    const parking = new FeatureLayer({
+      url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Parking/FeatureServer",
+      title: "Parking Areas",
+
+      //add the popup template
+      outFields: ["Parking_Type", "Comment", "Description", "Fee", "Overnight_Park"],
+      popupTemplate: parkingPopupTemplate
+    });
+    map.add(parking);
 
   });
-
+  </script>
+    </style> 
 </head>
 
 <body>
