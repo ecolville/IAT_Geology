@@ -92,11 +92,21 @@
       //add the popup template
       outFields: ["Camp_Type", "Num_Sites", "Water", "Toilet", "Showers", "Description"],
       popupTemplate: campingPopupTemplate
-    })
+    });
     map.add(camping);
 
-
+    //add the feature layer for IAT communities
+    const communities = new FeatureLayer({
+      url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/Ice_Age_Trail_Communities_View/FeatureServer",
+      title: "Trail Communities",
   });
+  map.add(communities);
+
+  //add popup template
+  communities.popupTemplate = {
+    title: "Name"
+  }
+});
   </script>
 
 <!--css to make a full screen map-->
