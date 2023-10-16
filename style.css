@@ -1,0 +1,25 @@
+html, body, #viewDiv {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.addRecordBtn {
+    position: absolute;
+    z-index: 10;
+    top: 10px;
+    right: 10px;
+    background-color: #0079c1;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.addRecordBtn:hover {
+    background-color: #005a87;
+}
