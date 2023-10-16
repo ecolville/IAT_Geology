@@ -190,7 +190,7 @@
                 <b>Reliability: </b> {Reliability} <br>
                 <b>Description: </b> {Description}`
     }
-
+/*
     //make section lines brown
     const sectionsRenderer = new SimpleRenderer({
       symbol: new SimpleLineSymbol({
@@ -198,12 +198,12 @@
         width: "3px"
       })
     });
-
+*/
     //add sections layer 
     const sections = new FeatureLayer({
       url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments_CR/FeatureServer",
       title: "IAT Sections and Connecting Routes",
-      renderer: sectionsRenderer,
+      //renderer: sectionsRenderer,
       //add the popup template
       outFields: ["Segment", "length_mi", "Status"],
       popupTemplate: sectionsPopupTemplate
@@ -318,11 +318,7 @@
     });
     //adding the feature layer to the map
     map.add(mySegments);
-
-    //set the point layer's LayerInfo
-    const lineInfos = {
-      layer: mySegments
-    }
+    
 });
 </script>
 </head>
