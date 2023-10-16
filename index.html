@@ -40,7 +40,7 @@
         "esri/widgets/Editor",
         "esri/widgets/Legend",
         "esri/widgets/LayerList"
-    ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, FeatureLayer, SimpleRender, SimpleLineSymbol, Color, Editor, Legend, LayerList) {
+    ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, FeatureLayer, SimpleRenderer, SimpleLineSymbol, Color, Editor, Legend, LayerList) {
 
     //add API key
     esriConfig.apiKey = "AAPKddba40c16f2c479188ee7654064642bcKj2RV3mAHrsiJS_6TRKUzkim46MXbNeE97z3bQn0zq3zyX67A3i8hBg6lEH0Fxl_"
@@ -190,7 +190,7 @@
                 <b>Reliability: </b> {Reliability} <br>
                 <b>Description: </b> {Description}`
     }
-/*
+
     //make section lines brown
     const sectionsRenderer = new SimpleRenderer({
       symbol: new SimpleLineSymbol({
@@ -198,7 +198,7 @@
         width: "3px"
       })
     });
-*/
+
     //add sections layer 
     const sections = new FeatureLayer({
       url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments_CR/FeatureServer",
@@ -318,7 +318,7 @@
     });
     //adding the feature layer to the map
     map.add(mySegments);
-    
+
 });
 </script>
 </head>
