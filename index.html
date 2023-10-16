@@ -39,6 +39,26 @@
 
     .addRecordBtn:hover {
       background-color: #ff6700;
+
+      #heading {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      background-color: #0077D4;
+    }
+
+    .header {
+      text-align: left;
+      background: ##0077D4;
+      color: rgb(255, 255, 255);
+      height: 44px;
+      display: flex;
+      align-items: center;
+      font-weight: bolder;
+      font-size: 10pt;
+      padding-left: 10px;
+    }
 }
     </style> 
 
@@ -342,6 +362,11 @@
 </script>
 </head>
 <body>
+   <!-- the div to display the header-->
+   <div class = "header">
+    <h1>TrailGuard: Ice Age Trail Reporter </h1>
+  </div>
+ 
   <!--Link to Trail Hazards and Maintenance Issues Survey-->
   <a href="https://survey123.arcgis.com/share/28999d44a3004264b788805abd470022"target="_blank" class="addRecordBtn">Report Trail Issue</a>
   <!--the div that displays the map-->
