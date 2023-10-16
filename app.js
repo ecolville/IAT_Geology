@@ -1,5 +1,4 @@
 require([
-    "esri/config", 
     "esri/Map", 
     "esri/views/MapView",
     "esri/widgets/BasemapGallery",
@@ -11,7 +10,7 @@ require([
     "esri/widgets/Editor",
     "esri/widgets/Legend",
     "esri/widgets/LayerList"
-  ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, FeatureLayer, SimpleRender, Legend, LayerList) {
+  ], function(Map, MapView, BasemapGallery, Locate, Search, Expand, FeatureLayer, SimpleRender, Editor, Legend, LayerList) {
 
    const config = {
     apiKey: "AAPKddba40c16f2c479188ee7654064642bcKj2RV3mAHrsiJS_6TRKUzkim46MXbNeE97z3bQn0zq3zyX67A3i8hBg6lEH0Fxl_",
@@ -92,7 +91,9 @@ require([
       content: `<b>Potability: </b> {Potability} <br>
                 <b>Reliability: </b> {Reliability} <br>
                 <b>Description: </b> {Description}`
-    }; 
+    };
+    
+    //function to create feature layers
     function createFeatureLayer(url, title, outFields, popupTemplate) {
         return new FeatureLayer({
           url,
@@ -135,7 +136,8 @@ require([
         "Potable Water",
         ["Potability", "Reliability", "Description"],
         waterPopupTemplate
-    );    
+    ); 
+    map.add(water);   
 
     //const for community icon
     const communityRenderer = {
@@ -162,6 +164,7 @@ require([
     title: "{Name}"
   }
 
+  //create hazards layer that users can add data to
   const hazards = new FeatureLayer ({
     url: config.urls.hazard,
     title: "Trail Hazards & Maintenance Issues",
@@ -277,7 +280,7 @@ require([
       const mySegments = new FeatureLayer ({
         url: config.urls.mySegments,
         renderer: mySegmentsRenderer,
-                
+           
         //adding the popup here
         popupTemplate: mySegmentPopupTemplate,
         outFields: ["SegmentName", "DateCompleted", "Length_mi"],
@@ -287,7 +290,7 @@ require([
       //adding the feature layer to the map
       map.add(mySegments);
 
-      //set the point layer's LayerInfo
+      //set the line layer's LayerInfo
       const lineInfos = {
         layer: mySegments
       }
@@ -310,4 +313,4 @@ require([
       //add the editor widget to the view
       view.ui.add(editorExpand, "top-right");
      
-    });
+});
