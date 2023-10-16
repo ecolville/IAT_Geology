@@ -45,7 +45,9 @@
         "esri/widgets/LayerList"
     ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, Graphic, GraphicsLayer, Polyline, FeatureLayer, SimpleRender, SimpleLineSymbol, Color, Editor, Legend, LayerList) {
 
+    //add API key
     esriConfig.apiKey = "AAPKddba40c16f2c479188ee7654064642bcKj2RV3mAHrsiJS_6TRKUzkim46MXbNeE97z3bQn0zq3zyX67A3i8hBg6lEH0Fxl_"
+    //create map w grey basemap layer
     const map = new Map({
       basemap: "arcgis-light-gray" //basemap layer
     });
@@ -58,79 +60,97 @@
       container: "viewDiv" //Div element
     });
 
-  //expand widget for basemap gallery
-  const bgExpand = new Expand({
-    view: view,
-    content: new BasemapGallery({
+    //expand and add widget for basemap gallery
+    const bgExpand = new Expand({
       view: view,
-    })
-  });
-  view.ui.add(bgExpand, "top-right");
-
-  //create a locate widget instance and add it to the view
-  const locate = new Locate({
-        view: view
-      });
-      view.ui.add(locate, "top-left");
-
-      // Create a Search widget instance and add it to the view
-      const search = new Search({
+      content: new BasemapGallery({
         view: view,
-        suggestionsEnabled: true,
-        maxSuggestions: 3
-      });
+       })
+    });
+    view.ui.add(bgExpand, "top-right");
+
+    //create a locate widget instance and add it to the view
+    const locate = new Locate({
+        view: view
+    });
+    view.ui.add(locate, "top-left");
+
+    // Create a Search widget instance 
+    const search = new Search({
+      view: view,
+      suggestionsEnabled: true,
+      maxSuggestions: 3
+    });
       
-      //expand the search widget
-     const searchExpand = new Expand({
-        view: view,
-        content: search,
-        expandIconClass: "esri-icon-search",
-        expandTooltip: "Search",
-        expanded: false
-      })
+    //expand the search widget 
+    const searchExpand = new Expand({
+      view: view,
+      content: search,
+      expandIconClass: "esri-icon-search",
+      expandTooltip: "Search",
+      expanded: false
+    })
+    //add the search widget to the top left corner of the view
+    view.ui.add(searchExpand, {
+      position: "top-left",
+      index: 2
+    });
 
-      //add the search widget to the top left corner of the view
-        view.ui.add(searchExpand, {
-          position: "top-left",
-          index: 2
-        });
-
-// Create a LayerList widget
-const layerList = new LayerList({
+    // Create a LayerList widget
+    const layerList = new LayerList({
         view: view
-      });
+    });
     
-// Put the LayerList widget into an Expand widget
-const layerListExpand = new Expand({
+    // Put the LayerList widget into an Expand widget
+    const layerListExpand = new Expand({
+      view: view,
+      content: layerList,
+      expandIconClass: "esri-icon-layer-list",
+      expandTooltip: "Layers"  // Tooltip text for the button
+    });
+    // Add the Expand widget to the view
+    view.ui.add(layerListExpand, "top-right");
+
+    // Create a Legend widget instance 
+    const legend = new Legend({
+      view: view
+    });
+
+    //Put legend widget into an expand widget and add it to the view
+    const legendExpand = new Expand({
+      view: view,
+      content: legend,
+      expandIconClass: "esri-icon-legend",
+      expandTooltip: "Legend",
+    });
+    view.ui.add(legendExpand, "bottom-left");
+
+    //create editor widget instance and add it to the view
+      const editor = new Editor({
         view: view,
-        content: layerList,
-        expandIconClass: "esri-icon-layer-list",
-        expandTooltip: "Layers"  // Tooltip text for the button
+        //layerInfos: [lineInfos]
+      }); 
+
+      //expand the editor widget
+      const editorExpand = new Expand({
+        view: view,
+        content: editor,
+        expandIconClass: "esri-icon-edit",
+        expandTooltip: "Editor",
+        expanded: false
       });
 
-      // Add the Expand widget to the view
-      view.ui.add(layerListExpand, "top-right");
+      //add the editor widget to the view
+      view.ui.add(editorExpand, "top-right");
 
-       // Create a Legend widget instance and add it to the view
-       const legend = new Legend({
-  view: view
-});
-
-      const legendExpand = new Expand({
-        view: view,
-        content: legend,
-        expandIconClass: "esri-icon-legend",
-        expandTooltip: "Legend",
-      });
-      view.ui.add(legendExpand, "bottom-left");
-
-      //add sections layer
- const sections = new FeatureLayer({
-  url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments_CR/FeatureServer",
-  title: "IAT Sections and Connecting Routes",
-});
-map.add(sections);
-     
+    //add sections layer
+    const sections = new FeatureLayer({
+      url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments_CR/FeatureServer",
+      title: "IAT Sections and Connecting Routes",
+    });
+    map.add(sections);
+    
+    //
 
    });
 </script>
