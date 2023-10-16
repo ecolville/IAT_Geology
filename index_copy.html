@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html>
-<head>
+<html lang="en">
+  <head>
     <title>TrailGuard</title>
 
     <meta charset="UTF-8" />
@@ -12,29 +12,58 @@
     <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css">
     <script src="https://js.arcgis.com/4.25/"></script>
 
-<!--adding the modules for the graphic, graphic and feature layers, API, and map constant needed for a full screen map app-->
-<script>
-  require([
-    "esri/config", 
-    "esri/Map", 
-    "esri/views/MapView",
-    "esri/widgets/BasemapGallery",
-    "esri/widgets/Locate",
-    "esri/widgets/Search",
-    "esri/widgets/Expand",
-    "esri/Graphic",  
-    "esri/layers/GraphicsLayer", 
-    "esri/geometry/Polyline",
-    "esri/layers/FeatureLayer",
-    "esri/renderers/SimpleRenderer",
-    "esri/symbols/SimpleLineSymbol",
-    "esri/Color",
-    "esri/widgets/Editor",
-    "esri/widgets/Legend",
-    "esri/widgets/LayerList"
-  ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, Graphic, GraphicsLayer, Polyline, FeatureLayer, SimpleRender, SimpleLineSymbol, Color, Legend, LayerList) {
+    <!--CSS to make a full screen map-->
+    <style>  
+    html,  
+    body,  
+    #viewDiv {  
+      padding: 0;  
+      margin: 0;  
+      height: 100%;  
+      width: 100%;  }
+      
+    .addRecordBtn {
+      position: absolute;
+      z-index: 10;
+      bottom: 20px;
+      right: 10px;
+      background-color: #ff6700;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+    }
 
+    .addRecordBtn:hover {
+      background-color: #ff6700;
+}
+    </style> 
+
+    <!--adding the modules for the app-->
+    <script>
+    require([
+        "esri/config", 
+        "esri/Map", 
+        "esri/views/MapView",
+        "esri/widgets/BasemapGallery",
+        "esri/widgets/Locate",
+        "esri/widgets/Search",
+        "esri/widgets/Expand",
+        "esri/layers/FeatureLayer",
+        "esri/renderers/SimpleRenderer",
+        "esri/symbols/SimpleLineSymbol",
+        "esri/Color",
+        "esri/widgets/Editor",
+        "esri/widgets/Legend",
+        "esri/widgets/LayerList"
+    ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, FeatureLayer, SimpleRenderer, SimpleLineSymbol, Color, Editor, Legend, LayerList) {
+
+    //add API key
     esriConfig.apiKey = "AAPKddba40c16f2c479188ee7654064642bcKj2RV3mAHrsiJS_6TRKUzkim46MXbNeE97z3bQn0zq3zyX67A3i8hBg6lEH0Fxl_"
+    //create map w grey basemap layer
     const map = new Map({
       basemap: "arcgis-light-gray" //basemap layer
     });
@@ -47,6 +76,88 @@
       container: "viewDiv" //Div element
     });
 
+    //expand and add widget for basemap gallery
+    const bgExpand = new Expand({
+      view: view,
+      content: new BasemapGallery({
+        view: view,
+       })
+    });
+    view.ui.add(bgExpand, "top-right");
+
+    //create a locate widget instance and add it to the view
+    const locate = new Locate({
+        view: view
+    });
+    view.ui.add(locate, "top-left");
+
+    // Create a Search widget instance 
+    const search = new Search({
+      view: view,
+      suggestionsEnabled: true,
+      maxSuggestions: 3
+    });
+      
+    //expand the search widget 
+    const searchExpand = new Expand({
+      view: view,
+      content: search,
+      expandIconClass: "esri-icon-search",
+      expandTooltip: "Search",
+      expanded: false
+    })
+    //add the search widget to the top left corner of the view
+    view.ui.add(searchExpand, {
+      position: "top-left",
+      index: 2
+    });
+
+    // Create a LayerList widget
+    const layerList = new LayerList({
+        view: view
+    });
+    
+    // Put the LayerList widget into an Expand widget
+    const layerListExpand = new Expand({
+      view: view,
+      content: layerList,
+      expandIconClass: "esri-icon-layer-list",
+      expandTooltip: "Layers"  // Tooltip text for the button
+    });
+    // Add the Expand widget to the view
+    view.ui.add(layerListExpand, "top-right");
+
+    // Create a Legend widget instance 
+    const legend = new Legend({
+      view: view
+    });
+
+    //Put legend widget into an expand widget and add it to the view
+    const legendExpand = new Expand({
+      view: view,
+      content: legend,
+      expandIconClass: "esri-icon-legend",
+      expandTooltip: "Legend",
+    });
+    view.ui.add(legendExpand, "bottom-left");
+
+    //create editor widget instance and add it to the view
+    const editor = new Editor({
+      view: view,
+      //layerInfos: [lineInfos]
+    }); 
+
+    //expand the editor widget
+    const editorExpand = new Expand({
+      view: view,
+      content: editor,
+      expandIconClass: "esri-icon-edit",
+      expandTooltip: "Add Completed Segments",
+      expanded: false
+    });
+    //add the editor widget to the view
+    view.ui.add(editorExpand, "top-right");
+
     //define a popup template for the sections feature layer
     const sectionsPopupTemplate = {
       title: "Section or Connecting Route",
@@ -54,20 +165,18 @@
         {
           type: "text",
           text: `<b>Name: </b> {Segment} <br>
-                 <b>Type: </b> {Status} <br>`
+                <b>Type: </b> {Status} <br>`
         },
         {
           type: "fields",
-          fieldInfos: [
-            {
-              fieldName: "length_mi",
-              label: "Length",
+          fieldInfos: [{
+            fieldName: "length_mi",
+            label: "Length",
               format: {
                 places: 1,
                 digitSeparator: true
               }
-            }
-          ]
+            }]
         }
       ]
     };
@@ -101,16 +210,25 @@
                 <b>Description: </b> {Description}`
     }
 
-   //add the feature layer for IAT sections
+    //make section lines brown
+    const sectionsRenderer = new SimpleRenderer({
+      symbol: new SimpleLineSymbol({
+        color: new Color([86, 63, 35]),
+        width: "3px"
+      })
+    });
+
+    //add sections layer 
     const sections = new FeatureLayer({
       url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments_CR/FeatureServer",
-      title: "IAT Sections or Connecting Routes",
+      title: "IAT Sections and Connecting Routes",
+      renderer: sectionsRenderer,
       //add the popup template
       outFields: ["Segment", "length_mi", "Status"],
       popupTemplate: sectionsPopupTemplate
     });
     map.add(sections);
-
+    
     //add the feature layer for IAT parking lots
     const parking = new FeatureLayer({
       url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Parking/FeatureServer",
@@ -132,16 +250,16 @@
     map.add(camping);
 
     //add feature layer for water
-  const water = new FeatureLayer ({
-    url:"https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Potable_Water/FeatureServer",
-    title: "Potable Water",
-    //add the popup template
-    outFields: ["Potability", "Reliability", "Description"],
-    popupTemplate: waterPopupTemplate
-  });
-  map.add(water);
+    const water = new FeatureLayer ({
+      url:"https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Potable_Water/FeatureServer",
+      title: "Potable Water",
+      //add the popup template
+      outFields: ["Potability", "Reliability", "Description"],
+      popupTemplate: waterPopupTemplate
+    });
+    map.add(water);
 
-   //const for community icon
+    //community icon renderer
     const communityRenderer = {
       type: "simple",
       symbol: {
@@ -158,209 +276,77 @@
       title: "Trail Communities",
       renderer: communityRenderer,
     });
-  map.add(communities);
-
-  //add popup template
-  communities.popupTemplate = {
+    map.add(communities);
+    //add popup template
+    communities.popupTemplate = {
     title: "{Name}"
-  }
-
-  //add hazards feature layer that's created by users
-  const hazards = new FeatureLayer ({
-    url:"https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/survey123_28999d44a3004264b788805abd470022_results/FeatureServer",
-    title: "Trail Hazards & Maintenance Issues",
-    renderer: {
-      type: "simple",
-      symbol: {
-        type: "picture-marker",
-        url: "https://ecolville.github.io/TrailGuard/hazard.png",
-        width: "20px",
-        height: "30px"
-      },
     }
-  });
-  map.add(hazards);
 
-  //popup template for the trail hazards
-  hazards.popupTemplate = {
-    title: "Trail Hazards and Maintenance Issue",
-    content: `<b>Date of Observation: </b> {observation_date_and_time} <br>
-              <b>Location: </b> {trail_segment_name} {mile_marker} <br>
-              <b>Hazard/Maintenence Need: </b> {hazardmaintenance_need} <br>
-              <b>Description: </b> {description}<br>
-              <b>Severity of Issue: </b> {level_of_severity} <br>`
-  };
+    //add hazards feature layer that's created by survey123 data
+    const hazards = new FeatureLayer ({
+      url:"https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/survey123_28999d44a3004264b788805abd470022_results/FeatureServer",
+      title: "Trail Hazards & Maintenance Issues",
+      renderer: {
+        type: "simple",
+        symbol: {
+          type: "picture-marker",
+          url: "https://ecolville.github.io/TrailGuard/hazard.png",
+          width: "20px",
+          height: "30px"
+        },
+      }
+    });
+    map.add(hazards);
 
-  //expand widget for basemap gallery
-  const bgExpand = new Expand({
-    view: view,
-    content: new BasemapGallery({
-      view: view,
-    expandTooltip: "Change Basemap"
-    })
-  });
-  view.ui.add(bgExpand, "top-right");
+    //popup template for the trail hazards
+    hazards.popupTemplate = {
+      title: "Trail Hazards and Maintenance Issue",
+      content: `<b>Date of Observation: </b> {observation_date_and_time} <br>
+                <b>Location: </b> {trail_segment_name} {mile_marker} <br>
+                <b>Hazard/Maintenence Need: </b> {hazardmaintenance_need} <br>
+                <b>Description: </b> {description}<br>
+                <b>Severity of Issue: </b> {level_of_severity} <br>`
+    };
 
-  //create a locate widget instance and add it to the view
-  const locate = new Locate({
-        view: view
-      });
-      view.ui.add(locate, "top-left");
-
-      // Create a Search widget instance and add it to the view
-      const search = new Search({
-        view: view,
-        suggestionsEnabled: true,
-        maxSuggestions: 3
-      });
-      
-      //expand the search widget
-     const searchExpand = new Expand({
-        view: view,
-        content: search,
-        expandIconClass: "esri-icon-search",
-        expandTooltip: "Search",
-        expanded: false
-      })
-
-      //add the search widget to the top left corner of the view
-        view.ui.add(searchExpand, {
-          position: "top-left",
-          index: 2
-        });
-
- /*
-      // Create a Legend widget instance and add it to the view
-      const legend = new Legend({
-        view: view,
-      });
-
-      const legendExpand = new Expand({
-        view: view,
-        content: legend,
-        expandIconClass: "esri-icon-legend",
-        expandTooltip: "Legend",
-      });
-      view.ui.add(legendExpand, "bottom-left");
-*/
-     // Create a LayerList widget
-      const layerList = new LayerList({
-        view: view
-      });
-      view.ui.add(layerList)
-
-/*
-      // Put the LayerList widget into an Expand widget
-      const layerListExpand = new Expand({
-        view: view,
-        content: layerList,
-        expandIconClass: "esri-icon-layer-list",
-        expandTooltip: "Layers"  // Tooltip text for the button
-      });
-
-      // Add the Expand widget to the view
-      view.ui.add(layerListExpand, "top-right");
- */ 
-      /*
-      //create yellow line for mySegments
-      const yellowLineSymbol = new SimpleLineSymbol({
-        color: new Color([255, 255, 0]),
-        width: "2px",
+    //create yellow line for mySegments
+    const yellowLineSymbol = new SimpleLineSymbol({
+        color: new Color([251, 222, 74]),
+        width: "3px",
         style: "solid"
-      });
+    });
 
-      //render yellow line for mySegments
-      const mySegmentsRenderer = new SimpleRender ({
-        symbol: yellowLineSymbol
-      });
+    //render yellow line for mySegments
+    const mySegmentsRenderer = new SimpleRenderer ({
+      symbol: yellowLineSymbol
+    });
 
-      //define the popup template for the editable feature layer (airport)
-      const mySegmentPopupTemplate = {
-          title: "{SegmentName} Segment Completed",
-          content: "on {DateCompleted} <br> {Length_mi} miles"
-        }
+    //define the popup template for the editable feature layer (airport)
+    const mySegmentPopupTemplate = {
+      title: "{SegmentName} Segment Completed",
+      content: "on {DateCompleted} <br> {Length_mi} miles"
+    }
 
-      //create mySegments Feature Layer
-      const mySegments = new FeatureLayer ({
-        url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Completed_IAT_Segments/FeatureServer",
-        renderer: myRenderer,
-        labelingInfo: [mySegmentLabels], 
-        
-        //adding the popup here
+    //create mySegments Feature Layer
+    const mySegments = new FeatureLayer ({
+      url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Completed_IAT_Segments/FeatureServer",
+      renderer: mySegmentsRenderer,
+      //adding the mySegment popup 
         popupTemplate: mySegmentPopupTemplate,
         outFields: ["SegmentName", "DateCompleted", "Length_mi"],
         title: "Segment Completed",
-      });
-
-      //adding the feature layer to the map
-      map.add(mySegments);
-
-      //set the point layer's LayerInfo
-      const lineInfos = {
-        layer: mySegments
-      }
-
-      //create editor widget instance and add it to the view
-      const editor = new Editor({
-        view: view,
-        layerInfos: [lineInfos]
-      }); 
-
-      //expand the editor widget
-      const editorExpand = new Expand({
-        view: view,
-        content: editor,
-        expandIconClass: "esri-icon-edit",
-        expandTooltip: "Editor",
-        expanded: true
-      });
-
-      //add the editor widget to the view
-      view.ui.add(editorExpand, "top-right");
-*/
-      
     });
-  </script>
+    //adding the feature layer to the map
+    map.add(mySegments);
 
-<!--style the page-->
-<style>
-  html,
-  body,
-  #viewDiv {
-   padding: 0;
-   margin: 0;
-   height: 100%;
-   width: 100%;
-  }
-
-.addRecordBtn {
-  position: absolute;
-  z-index: 10;
-  bottom: 20px;
-  right: 10px;
-  background-color: #ff6700;
-  color: white;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.addRecordBtn:hover {
-  background-color: #ff6700;
-}
- </style>
-   
+});
+</script>
 </head>
-
 <body>
-  <!--THIS IS GOING TO THE WRONG SURVEY RIGHT NOW UPDATE IT-->
+  <!--Link to Trail Hazards and Maintenance Issues Survey-->
   <a href="https://survey123.arcgis.com/share/28999d44a3004264b788805abd470022"target="_blank" class="addRecordBtn">Report Trail Issue</a>
-  
   <!--the div that displays the map-->
   <div id="viewDiv"></div>
-
 </body>
+
 </html>
+ 
