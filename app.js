@@ -6,20 +6,29 @@ require([
     "esri/widgets/Locate",
     "esri/widgets/Search",
     "esri/widgets/Expand",
-    "esri/Graphic",  
-    "esri/layers/GraphicsLayer", 
-    "esri/geometry/Polyline",
-    "esri/geometry/Polygon",
     "esri/layers/FeatureLayer",
     "esri/renderers/SimpleRenderer",
-    "esri/symbols/SimpleLineSymbol",
-    "esri/Color",
     "esri/widgets/Editor",
     "esri/widgets/Legend",
     "esri/widgets/LayerList"
-  ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, Graphic, GraphicsLayer, Polyline, Polygon, FeatureLayer, SimpleRender, SimpleLineSymbol, Color, Legend, LayerList) {
+  ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, FeatureLayer, SimpleRender, Legend, LayerList) {
 
-    esriConfig.apiKey = "AAPKddba40c16f2c479188ee7654064642bcKj2RV3mAHrsiJS_6TRKUzkim46MXbNeE97z3bQn0zq3zyX67A3i8hBg6lEH0Fxl_"
+   const config = {
+    apiKey: "AAPKddba40c16f2c479188ee7654064642bcKj2RV3mAHrsiJS_6TRKUzkim46MXbNeE97z3bQn0zq3zyX67A3i8hBg6lEH0Fxl_",
+    urls: {
+        sections:"https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments_CR/FeatureServer",
+        parking: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Parking/FeatureServer",
+        camping: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Camping1/FeatureServer",
+        communities: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/Ice_Age_Trail_Communities_View/FeatureServer",
+        water: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Potable_Water/FeatureServer",
+        hazards: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/survey123_28999d44a3004264b788805abd470022_results/FeatureServer",
+        mySegments: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Completed_IAT_Segments/FeatureServer"
+    },
+    symbols: {
+        community: "https://ecolville.github.io/TrailGuard/Generic-Trail-Community-Logo.png",
+        hazard: "https://ecolville.github.io/TrailGuard/hazard.png",
+    }   
+   } 
     const map = new Map({
       basemap: "arcgis-light-gray" //basemap layer
     });
@@ -59,60 +68,81 @@ require([
     //define a popup template for the parking feature layer
     const parkingPopupTemplate = {
       title: "Parking Area",
-      content: "<b>Parking Type: </b> {Parking_Type} <br><b>Description: </b> {Description} <br><b>Fee: </b> {Fee} <br><b>Overnight Parking: </b> {Overnight_Park}<br><b>Comment: </b> {Comment} <br>"
-    }
+      content: `<b>Parking Type: </b> {Parking_Type} <br>
+                <b>Description: </b> {Description} <br>
+                <b>Fee: </b> {Fee} <br>
+                <b>Overnight Parking: </b> {Overnight_Park}<br>
+                <b>Comment: </b> {Comment} <br>`
+    };
 
     //define a popup template for the camping feature layer
     const campingPopupTemplate = {
       title: "Camping Area",
-      content: "<b>Type: </b> {Camp_Type} <br><b># sites: </b> {Num_sites} <br><b>Water: </b> {Water} <br><b>Toilet: </b> {Toilet} <br><b>Showers: </b> {Showers}<br><b>Description: </b> {Description}"
-    }
+      content: `<b>Type: </b> {Camp_Type} <br>
+                <b># sites: </b> {Num_sites} <br>
+                <b>Water: </b> {Water} <br>
+                <b>Toilet: </b> {Toilet} <br>
+                <b>Showers: </b> {Showers}<br>
+                <b>Description: </b> {Description}`
+    };
 
-    //define a popuup template for the water feature layer
+    //define a popup template for the water feature layer
     const waterPopupTemplate = {
       title: "Potential Water Source",
-      content: "<b>Potability: </b> {Potability} <br><b>Reliability: </b> {Reliability} <br><b>Description: </b> {Description}"
-    }
-
-   //add the feature layer for IAT sections
-    const sections = new FeatureLayer({
-      url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments_CR/FeatureServer",
-      title: "IAT Sections or Connecting Routes",
-
-      //add the popup template
-      outFields: ["Segment", "length_mi", "Status"],
-      popupTemplate: sectionsPopupTemplate
-    });
-    map.add(sections);
-
-    //add the feature layer for IAT parking lots
-    const parking = new FeatureLayer({
-      url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Parking/FeatureServer",
-      title: "Parking Areas",
-
-      //add the popup template
-      outFields: ["Parking_Type", "Comment", "Description", "Fee", "Overnight_Park"],
-      popupTemplate: parkingPopupTemplate
-    });
-    map.add(parking);
-
-    //add the feature layer for IAT camping areas
-    const camping = new FeatureLayer({
-      url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Camping1/FeatureServer",
-      title: "Camping Areas",
+      content: `<b>Potability: </b> {Potability} <br>
+                <b>Reliability: </b> {Reliability} <br>
+                <b>Description: </b> {Description}`
+    }; 
+    function createFeatureLayer(url, title, outFields, popupTemplate) {
+        return new FeatureLayer({
+          url,
+          title,
+          outFields,
+          popupTemplate
+        });
+      }
       
-      //add the popup template
-      outFields: ["Camp_Type", "Num_Sites", "Water", "Toilet", "Showers", "Description"],
-      popupTemplate: campingPopupTemplate
-    });
+      // create IAT sections layer
+      const sections = createFeatureLayer(
+        config.urls.sections,
+        "IAT Sections or Connecting Routes",
+        ["Segment", "length_mi", "Status"],
+        sectionsPopupTemplate
+      );
+      map.add(sections);
+    
+      //create IAT parking areas layer
+      const parking = createFeatureLayer(
+        config.urls.parking,
+        "Parking Areas",
+        ["Parking_Type", "Comment", "Description", "Fee", "Overnight_Park"],
+        parkingPopupTemplate
+      );
+      map.add(parking)
+
+    //create camping areas layer
+    const camping = createFeatureLayer(
+        config.urls.camping,
+        "Camping Areas",
+        ["Camp_Type", "Num_Sites", "Water", "Toilet", "Showers", "Description"],
+        campingPopupTemplate
+    );
     map.add(camping);
+
+    //create water layer
+    const water = createFeatureLayer(
+        config.urls.water,
+        "Potable Water",
+        ["Potability", "Reliability", "Description"],
+        waterPopupTemplate
+    );    
 
     //const for community icon
     const communityRenderer = {
       type: "simple",
       symbol: {
         type: "picture-marker",
-        url: "https://ecolville.github.io/TrailGuard/Generic-Trail-Community-Logo.png",
+        url: config.symbols.community,
         width: "18px",
         height: "18px"
       }
@@ -120,7 +150,7 @@ require([
 
     //add the feature layer for IAT communities
     const communities = new FeatureLayer({
-      url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/Ice_Age_Trail_Communities_View/FeatureServer",
+      url: config.urls.communities,
       title: "Trail Communities",
       renderer: communityRenderer,
       labelingInfo: [communityLabels]
@@ -132,23 +162,14 @@ require([
     title: "{Name}"
   }
 
-  //add feature layer for water
-  const water = new FeatureLayer ({
-    url:"https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Potable_Water/FeatureServer",
-    title: "Potable Water",
-    //add the popup template
-    outFields: ["Potability", "Reliability", "Description"],
-    popupTemplate: waterPopupTemplate
-  });
-
   const hazards = new FeatureLayer ({
-    url:"https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/survey123_28999d44a3004264b788805abd470022_results/FeatureServer",
+    url: config.urls.hazard,
     title: "Trail Hazards & Maintenance Issues",
     renderer: {
       type: "simple",
       symbol: {
         type: "picture-marker",
-        url: "https://ecolville.github.io/TrailGuard/hazard.png",
+        url: config.symbols.hazard,
         width: "20px",
         height: "20px"
       },
@@ -159,7 +180,11 @@ require([
   //popuptemplate for the trail hazards
   hazards.popupTemplate = {
     title: "Trail Hazards and Maintenance Issue",
-    content: "<b>Date of Observation: </b> {observation_date_and_time} <br><b>Location: </b> {trail_segment_name} {mile_marker} <br><b>Hazard/Maintenence Need: </b> {hazardmaintenance_need} <br><b>Description: </b> {description}<br><b>Severity of Issue: </b> {level_of_severity} <br>"
+    content: `<b>Date of Observation: </b> {observation_date_and_time} <br>
+              <b>Location: </b> {trail_segment_name} {mile_marker} <br>
+              <b>Hazard/Maintenence Need: </b> {hazardmaintenance_need} <br>
+              <b>Description: </b> {description}<br>
+              <b>Severity of Issue: </b> {level_of_severity} <br>`
   };
 
   //expand widget for basemap gallery
@@ -250,7 +275,7 @@ require([
 
       //create mySegments Feature Layer
       const mySegments = new FeatureLayer ({
-        url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Completed_IAT_Segments/FeatureServer",
+        url: config.urls.mySegments,
         renderer: mySegmentsRenderer,
                 
         //adding the popup here
