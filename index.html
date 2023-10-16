@@ -225,6 +225,11 @@
       });
       view.ui.add(layerList, "top-right")
     
+      // Create a Legend widget instance and add it to the view
+      const legend = new Legend({
+        view: view,
+      });
+      view.ui.add(legend, "bottom-left")
     });
   </script>
 
