@@ -27,10 +27,13 @@
     "esri/geometry/Polyline",
     "esri/geometry/Polygon",
     "esri/layers/FeatureLayer",
+    "esri/renderers/SimpleRenderer",
+    "esri/symbols/SimpleLineSymbol",
+    "esri/Color",
     "esri/widgets/Editor",
     "esri/widgets/Legend",
     "esri/widgets/LayerList"
-  ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, Graphic, GraphicsLayer, Polyline, Polygon, FeatureLayer, Editor, Legend, LayerList) {
+  ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, Graphic, GraphicsLayer, Polyline, Polygon, FeatureLayer, SimpleRender, SimpleLineSymbol, Color, Legend, LayerList) {
 
     esriConfig.apiKey = "AAPKddba40c16f2c479188ee7654064642bcKj2RV3mAHrsiJS_6TRKUzkim46MXbNeE97z3bQn0zq3zyX67A3i8hBg6lEH0Fxl_"
     const map = new Map({
@@ -214,7 +217,6 @@
       });
       
       //expand the search widget
-     //expand the search widget
      const searchExpand = new Expand({
         view: view,
         content: search,
@@ -260,24 +262,102 @@
       // Add the Expand widget to the view
       view.ui.add(layerListExpand, "top-right");
   
+      //create yellow line for mySegments
+      const yellowLineSymbol = new SimpleLineSymbol({
+        color: new Color([255, 255, 0]),
+        width: "2px",
+        style: "solid"
+      });
+
+      //render yellow line for mySegments
+      const mySegmentsRenderer = new SimpleRender ({
+        symbol: yellowLineSymbol
+      });
+
+      //define the popup template for the editable feature layer (airport)
+      const mySegmentPopupTemplate = {
+          title: "{SegmentName} Segment Completed",
+          content: "on {DateCompleted} <br> {Length_mi} miles"
+        }
+
+      //create mySegments Feature Layer
+      const mySegments = new FeatureLayer ({
+        url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Completed_IAT_Segments/FeatureServer",
+        renderer: myRenderer,
+        labelingInfo: [mySegmentLabels], 
+        
+        //adding the popup here
+        popupTemplate: mySegmentPopupTemplate,
+        outFields: ["SegmentName", "DateCompleted", "Length_mi"],
+        title: "Segment Completed",
+      });
+
+      //adding the feature layer to the map
+      map.add(mySegments);
+
+      //set the point layer's LayerInfo
+      const lineInfos = {
+        layer: mySegments
+      }
+
+      //create editor widget instance and add it to the view
+      const editor = new Editor({
+        view: view,
+        layerInfos: [lineInfos]
+      }); 
+
+      //expand the editor widget
+      const editorExpand = new Expand({
+        view: view,
+        content: editor,
+        expandIconClass: "esri-icon-edit",
+        expandTooltip: "Editor",
+        expanded: true
+      });
+
+      //add the editor widget to the view
+      view.ui.add(editorExpand, "top-right");
+
+      
     });
   </script>
 
-<!--css to make a full screen map-->
-<style>  
-  html, 
-  body,  
-  #viewDiv {  
-    padding: 0;  
-    margin: 0;  
-    height: 100%;  
-    width: 100%;  
- }  
-</style> 
+<!--style the page-->
+<style>
+  html,
+  body,
+  #viewDiv {
+   padding: 0;
+   margin: 0;
+   height: 100%;
+   width: 100%;
+  }
+
+.addRecordBtn {
+  position: absolute;
+  z-index: 10;
+  top: 10px;
+  right: 10px;
+  background-color: #0079c1;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.addRecordBtn:hover {
+  background-color: #005a87;
+}
+ </style>
    
 </head>
 
 <body>
+   <!--THIS IS GOING TO THE WRONG SURVEY RIGHT NOW UPDATE IT-->
+  <a href="https://arcg.is/KWf0a"target="_blank" class="addRecordBtn">Add Record</a>
 
     <!--the div that displays the map-->
     <div id="viewDiv"></div>
