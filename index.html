@@ -128,7 +128,7 @@
     //create editor widget instance and add it to the view
     const editor = new Editor({
       view: view,
-      //layerInfos: [lineInfos]
+      layerInfos: [lineInfos]
     }); 
 
     //expand the editor widget
@@ -136,7 +136,7 @@
       view: view,
       content: editor,
       expandIconClass: "esri-icon-edit",
-      expandTooltip: "Editor",
+      expandTooltip: "Add Completed Segments",
       expanded: false
     });
     //add the editor widget to the view
@@ -285,8 +285,8 @@
 
     //create yellow line for mySegments
     const yellowLineSymbol = new SimpleLineSymbol({
-        color: new Color([255, 255, 0]),
-        width: "10px",
+        color: new Color([251, 222, 74]),
+        width: "4px",
         style: "solid"
     });
 
