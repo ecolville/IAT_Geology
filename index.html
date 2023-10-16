@@ -35,7 +35,6 @@
         "esri/widgets/Expand",
         "esri/Graphic",  
         "esri/layers/GraphicsLayer", 
-        "esri/geometry/Polyline",
         "esri/layers/FeatureLayer",
         "esri/renderers/SimpleRenderer",
         "esri/symbols/SimpleLineSymbol",
@@ -43,7 +42,7 @@
         "esri/widgets/Editor",
         "esri/widgets/Legend",
         "esri/widgets/LayerList"
-    ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, Graphic, GraphicsLayer, Polyline, FeatureLayer, SimpleRender, SimpleLineSymbol, Color, Editor, Legend, LayerList) {
+    ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, Graphic, GraphicsLayer, FeatureLayer, SimpleRender, SimpleLineSymbol, Color, Editor, Legend, LayerList) {
 
     //add API key
     esriConfig.apiKey = "AAPKddba40c16f2c479188ee7654064642bcKj2RV3mAHrsiJS_6TRKUzkim46MXbNeE97z3bQn0zq3zyX67A3i8hBg6lEH0Fxl_"
@@ -196,7 +195,7 @@
 
     //make section lines brown
     const sectionsRenderer = new SimpleRenderer({
-    symbol: new SimpleLineSymbol({
+      symbol: new SimpleLineSymbol({
         color: new Color([86, 63, 35]),
         width: "3px"
       })
