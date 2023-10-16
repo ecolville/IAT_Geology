@@ -165,8 +165,7 @@
     title: "{Name}"
   }
 
- /* 
- //add hazards feature layer that's created by users
+  //add hazards feature layer that's created by users
   const hazards = new FeatureLayer ({
     url:"https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/survey123_28999d44a3004264b788805abd470022_results/FeatureServer",
     title: "Trail Hazards & Maintenance Issues",
@@ -192,13 +191,12 @@
               <b>Severity of Issue: </b> {level_of_severity} <br>`
   };
 
-*/
-
   //expand widget for basemap gallery
   const bgExpand = new Expand({
     view: view,
     content: new BasemapGallery({
-      view: view
+      view: view,
+    expandTooltip: "Change Basemap"
     })
   });
   view.ui.add(bgExpand, "top-right");
@@ -231,6 +229,7 @@
           index: 2
         });
 
+ /*
       // Create a Legend widget instance and add it to the view
       const legend = new Legend({
         view: view,
@@ -243,7 +242,7 @@
         expandTooltip: "Legend",
       });
       view.ui.add(legendExpand, "bottom-left");
-
+*/
      // Create a LayerList widget
       const layerList = new LayerList({
         view: view
