@@ -194,10 +194,19 @@
                 <b>Description: </b> {Description}`
     }
 
+    //make section lines brown
+    const sectionsRenderer = new SimpleRenderer({
+    symbol: new SimpleLineSymbol({
+        color: new Color([86, 63, 35]),
+        width: "3px"
+      })
+    });
+
     //add sections layer 
     const sections = new FeatureLayer({
       url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments_CR/FeatureServer",
       title: "IAT Sections and Connecting Routes",
+      renderer: sectionsRenderer,
       //add the popup template
       outFields: ["Segment", "length_mi", "Status"],
       popupTemplate: sectionsPopupTemplate
@@ -234,7 +243,7 @@
     });
     map.add(water);
 
-    //const for community icon
+    //community icon renderer
     const communityRenderer = {
       type: "simple",
       symbol: {
