@@ -58,6 +58,14 @@
       container: "viewDiv" //Div element
     });
 
+//add the feature layer for IAT sections
+const sections = new FeatureLayer({
+      url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments_CR/FeatureServer",
+      title: "IAT Sections or Connecting Routes",
+      });
+    map.add(sections);
+
+    
      //expand widget for basemap gallery
   const bgExpand = new Expand({
     view: view,
@@ -124,12 +132,7 @@ const layerListExpand = new Expand({
       // Add the Expand widget to the view
       view.ui.add(layerListExpand, "top-right");
 
-//add the feature layer for IAT sections
-const sections = new FeatureLayer({
-      url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments_CR/FeatureServer",
-      title: "IAT Sections or Connecting Routes",
-      });
-    map.add(sections);
+
 
   });
 </script>
