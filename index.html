@@ -131,6 +131,16 @@
     });
     map.add(camping);
 
+    //add feature layer for water
+  const water = new FeatureLayer ({
+    url:"https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Potable_Water/FeatureServer",
+    title: "Potable Water",
+    //add the popup template
+    outFields: ["Potability", "Reliability", "Description"],
+    popupTemplate: waterPopupTemplate
+  });
+  map.add(water);
+
    //const for community icon
     const communityRenderer = {
       type: "simple",
@@ -155,16 +165,7 @@
     title: "{Name}"
   }
 
-  //add feature layer for water
-  const water = new FeatureLayer ({
-    url:"https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Potable_Water/FeatureServer",
-    title: "Potable Water",
-    //add the popup template
-    outFields: ["Potability", "Reliability", "Description"],
-    popupTemplate: waterPopupTemplate
-  });
-  map.add(water);
-
+  //add hazards feature layer that's created by users
   const hazards = new FeatureLayer ({
     url:"https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/survey123_28999d44a3004264b788805abd470022_results/FeatureServer",
     title: "Trail Hazards & Maintenance Issues",
