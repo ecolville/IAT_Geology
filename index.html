@@ -137,8 +137,8 @@
       symbol: {
         type: "picture-marker",
         url: "https://ecolville.github.io/TrailGuard/Generic-Trail-Community-Logo.png",
-        width: "18px",
-        height: "18px"
+        width: "20px",
+        height: "20px"
       }
     };
 
@@ -250,14 +250,14 @@
       const layerListExpand = new Expand({
         view: view,
         content: layerList,
-        expandIconClass: "esri-icon-layer-list",  // Change this to choose the icon for the button
+        expandIconClass: "esri-icon-layer-list",
         expandTooltip: "Layers"  // Tooltip text for the button
       });
 
       // Add the Expand widget to the view
       view.ui.add(layerListExpand, "top-right");
   
-      //create yellow line for mySegments
+      /*//create yellow line for mySegments
       const yellowLineSymbol = new SimpleLineSymbol({
         color: new Color([255, 255, 0]),
         width: "2px",
@@ -312,7 +312,7 @@
 
       //add the editor widget to the view
       view.ui.add(editorExpand, "top-right");
-
+*/
       
     });
   </script>
