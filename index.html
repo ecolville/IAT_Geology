@@ -131,16 +131,6 @@
     });
     map.add(camping);
 
-    //add feature layer for water
-  const water = new FeatureLayer ({
-    url:"https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Potable_Water/FeatureServer",
-    title: "Potable Water",
-    //add the popup template
-    outFields: ["Potability", "Reliability", "Description"],
-    popupTemplate: waterPopupTemplate
-  });
-  map.add(water);
-
    //const for community icon
     const communityRenderer = {
       type: "simple",
