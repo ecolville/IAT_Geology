@@ -61,7 +61,7 @@
  //add sections layer
  const sections = new FeatureLayer({
   url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments_CR/FeatureServer",
-  title: "IAT Sections or Connecting Routes",
+  title: "IAT Sections and Connecting Routes",
 });
 map.add(sections);
 
@@ -120,11 +120,7 @@ const layerListExpand = new Expand({
 
        // Create a Legend widget instance and add it to the view
        const legend = new Legend({
-  view: view,
-  layerInfos: [{
-    layer: sections,
-    title: "IAT Sections or Connecting Routes"
-  }]
+  view: view
 });
 
       const legendExpand = new Expand({
