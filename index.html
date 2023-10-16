@@ -288,38 +288,35 @@
         color: new Color([255, 255, 0]),
         width: "2px",
         style: "solid"
-      });
+    });
 
-      //render yellow line for mySegments
-      const mySegmentsRenderer = new SimpleRender ({
-        symbol: yellowLineSymbol
-      });
+    //render yellow line for mySegments
+    const mySegmentsRenderer = new SimpleRender ({
+      symbol: yellowLineSymbol
+    });
 
-      //define the popup template for the editable feature layer (airport)
-      const mySegmentPopupTemplate = {
-          title: "{SegmentName} Segment Completed",
-          content: "on {DateCompleted} <br> {Length_mi} miles"
-        }
+    //define the popup template for the editable feature layer (airport)
+    const mySegmentPopupTemplate = {
+      title: "{SegmentName} Segment Completed",
+      content: "on {DateCompleted} <br> {Length_mi} miles"
+    }
 
-      //create mySegments Feature Layer
-      const mySegments = new FeatureLayer ({
-        url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Completed_IAT_Segments/FeatureServer",
-        renderer: myRenderer,
-        labelingInfo: [mySegmentLabels], 
-        
-        //adding the popup here
+    //create mySegments Feature Layer
+    const mySegments = new FeatureLayer ({
+      url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Completed_IAT_Segments/FeatureServer",
+      renderer: mySegmentsRenderer,
+      //adding the mySegment popup 
         popupTemplate: mySegmentPopupTemplate,
         outFields: ["SegmentName", "DateCompleted", "Length_mi"],
         title: "Segment Completed",
-      });
+    });
+    //adding the feature layer to the map
+    map.add(mySegments);
 
-      //adding the feature layer to the map
-      map.add(mySegments);
-
-      //set the point layer's LayerInfo
-      const lineInfos = {
-        layer: mySegments
-      }
+    //set the point layer's LayerInfo
+    const lineInfos = {
+      layer: mySegments
+    }
 });
 </script>
 </head>
