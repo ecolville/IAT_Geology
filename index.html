@@ -273,18 +273,54 @@
     });
     map.add(hazards);
 
-  //popup template for the trail hazards
-  hazards.popupTemplate = {
-    title: "Trail Hazards and Maintenance Issue",
-    content: `<b>Date of Observation: </b> {observation_date_and_time} <br>
-              <b>Location: </b> {trail_segment_name} {mile_marker} <br>
-              <b>Hazard/Maintenence Need: </b> {hazardmaintenance_need} <br>
-              <b>Description: </b> {description}<br>
-              <b>Severity of Issue: </b> {level_of_severity} <br>`
-  };
+    //popup template for the trail hazards
+    hazards.popupTemplate = {
+      title: "Trail Hazards and Maintenance Issue",
+      content: `<b>Date of Observation: </b> {observation_date_and_time} <br>
+                <b>Location: </b> {trail_segment_name} {mile_marker} <br>
+                <b>Hazard/Maintenence Need: </b> {hazardmaintenance_need} <br>
+                <b>Description: </b> {description}<br>
+                <b>Severity of Issue: </b> {level_of_severity} <br>`
+    };
 
+    //create yellow line for mySegments
+    const yellowLineSymbol = new SimpleLineSymbol({
+        color: new Color([255, 255, 0]),
+        width: "2px",
+        style: "solid"
+      });
 
-   });
+      //render yellow line for mySegments
+      const mySegmentsRenderer = new SimpleRender ({
+        symbol: yellowLineSymbol
+      });
+
+      //define the popup template for the editable feature layer (airport)
+      const mySegmentPopupTemplate = {
+          title: "{SegmentName} Segment Completed",
+          content: "on {DateCompleted} <br> {Length_mi} miles"
+        }
+
+      //create mySegments Feature Layer
+      const mySegments = new FeatureLayer ({
+        url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Completed_IAT_Segments/FeatureServer",
+        renderer: myRenderer,
+        labelingInfo: [mySegmentLabels], 
+        
+        //adding the popup here
+        popupTemplate: mySegmentPopupTemplate,
+        outFields: ["SegmentName", "DateCompleted", "Length_mi"],
+        title: "Segment Completed",
+      });
+
+      //adding the feature layer to the map
+      map.add(mySegments);
+
+      //set the point layer's LayerInfo
+      const lineInfos = {
+        layer: mySegments
+      }
+});
 </script>
 </head>
 <body>
