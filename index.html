@@ -96,9 +96,13 @@
         });
 
        // Create a Legend widget instance and add it to the view
-      const legend = new Legend({
-        view: view,
-      });
+       const legend = new Legend({
+  view: view,
+  layerInfos: [{
+    layer: sections,
+    title: "IAT Sections or Connecting Routes"
+  }]
+});
 
       const legendExpand = new Expand({
         view: view,
@@ -124,19 +128,10 @@ const layerListExpand = new Expand({
       // Add the Expand widget to the view
       view.ui.add(layerListExpand, "top-right");
 
-    //sections renderer
-      const sectionsRenderer = new SimpleRenderer({
-  symbol: new SimpleLineSymbol({
-    color: new Color([226, 119, 40]),  // e.g., orange color for lines
-    width: 2
-  })
-});
-
-//add sections layer
+    //add sections layer
 const sections = new FeatureLayer({
   url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments_CR/FeatureServer",
   title: "IAT Sections or Connecting Routes",
-  renderer: sectionsRenderer
 });
 map.add(sections);
 
