@@ -6,6 +6,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
     <meta name="description" content="" />
+    <link rel="icon" href="TG.png">
     
     <!--calls for the arcgis api's CSS file and JS library-->
     <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css">
@@ -24,7 +25,6 @@
     "esri/Graphic",  
     "esri/layers/GraphicsLayer", 
     "esri/geometry/Polyline",
-    "esri/geometry/Polygon",
     "esri/layers/FeatureLayer",
     "esri/renderers/SimpleRenderer",
     "esri/symbols/SimpleLineSymbol",
@@ -32,7 +32,7 @@
     "esri/widgets/Editor",
     "esri/widgets/Legend",
     "esri/widgets/LayerList"
-  ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, Graphic, GraphicsLayer, Polyline, Polygon, FeatureLayer, SimpleRender, SimpleLineSymbol, Color, Legend, LayerList) {
+  ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, Graphic, GraphicsLayer, Polyline, FeatureLayer, SimpleRender, SimpleLineSymbol, Color, Legend, LayerList) {
 
     esriConfig.apiKey = "AAPKddba40c16f2c479188ee7654064642bcKj2RV3mAHrsiJS_6TRKUzkim46MXbNeE97z3bQn0zq3zyX67A3i8hBg6lEH0Fxl_"
     const map = new Map({
@@ -238,7 +238,6 @@
         content: legend,
         expandIconClass: "esri-icon-layer-list",
         expandTooltip: "Legend",
-        expanded: window.innerWidth > 768 //expand in desktop mode
       });
       view.ui.add(legendExpand, "bottom-left");
 
