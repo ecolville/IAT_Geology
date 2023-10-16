@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>TrailGuard</title>
+  <head>
+    <title>TrailGuard</title>
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
@@ -23,27 +23,27 @@
       width: 100%;  }  
     </style> 
 
-<!--adding the modules for the graphic, graphic and feature layers, API, and map constant needed for a full screen map app-->
-<script>
-  require([
-    "esri/config", 
-    "esri/Map", 
-    "esri/views/MapView",
-    "esri/widgets/BasemapGallery",
-    "esri/widgets/Locate",
-    "esri/widgets/Search",
-    "esri/widgets/Expand",
-    "esri/Graphic",  
-    "esri/layers/GraphicsLayer", 
-    "esri/geometry/Polyline",
-    "esri/layers/FeatureLayer",
-    "esri/renderers/SimpleRenderer",
-    "esri/symbols/SimpleLineSymbol",
-    "esri/Color",
-    "esri/widgets/Editor",
-    "esri/widgets/Legend",
-    "esri/widgets/LayerList"
-  ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, Graphic, GraphicsLayer, Polyline, FeatureLayer, SimpleRender, SimpleLineSymbol, Color, Legend, LayerList) {
+    <!--adding the modules for the graphic, graphic and feature layers, API, and map constant needed for a full screen map app-->
+    <script>
+    require([
+        "esri/config", 
+        "esri/Map", 
+        "esri/views/MapView",
+        "esri/widgets/BasemapGallery",
+        "esri/widgets/Locate",
+        "esri/widgets/Search",
+        "esri/widgets/Expand",
+        "esri/Graphic",  
+        "esri/layers/GraphicsLayer", 
+        "esri/geometry/Polyline",
+        "esri/layers/FeatureLayer",
+        "esri/renderers/SimpleRenderer",
+        "esri/symbols/SimpleLineSymbol",
+        "esri/Color",
+        "esri/widgets/Editor",
+        "esri/widgets/Legend",
+        "esri/widgets/LayerList"
+    ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, Graphic, GraphicsLayer, Polyline, FeatureLayer, SimpleRender, SimpleLineSymbol, Color, Editor, Legend, LayerList) {
 
     esriConfig.apiKey = "AAPKddba40c16f2c479188ee7654064642bcKj2RV3mAHrsiJS_6TRKUzkim46MXbNeE97z3bQn0zq3zyX67A3i8hBg6lEH0Fxl_"
     const map = new Map({
