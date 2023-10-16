@@ -165,7 +165,8 @@
     title: "{Name}"
   }
 
-  //add hazards feature layer that's created by users
+ /* 
+ //add hazards feature layer that's created by users
   const hazards = new FeatureLayer ({
     url:"https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/survey123_28999d44a3004264b788805abd470022_results/FeatureServer",
     title: "Trail Hazards & Maintenance Issues",
@@ -190,6 +191,8 @@
               <b>Description: </b> {description}<br>
               <b>Severity of Issue: </b> {level_of_severity} <br>`
   };
+
+*/
 
   //expand widget for basemap gallery
   const bgExpand = new Expand({
@@ -257,7 +260,8 @@
       // Add the Expand widget to the view
       view.ui.add(layerListExpand, "top-right");
   
-      /*//create yellow line for mySegments
+      /*
+      //create yellow line for mySegments
       const yellowLineSymbol = new SimpleLineSymbol({
         color: new Color([255, 255, 0]),
         width: "2px",
