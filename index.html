@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css">
     <script src="https://js.arcgis.com/4.25/"></script>
 
+    <!--CSS to make a full screen map-->
     <style>  
     html,  
     body,  
@@ -56,6 +57,65 @@
       zoom: 7, //zoom level
       container: "viewDiv" //Div element
     });
+
+     //expand widget for basemap gallery
+  const bgExpand = new Expand({
+    view: view,
+    content: new BasemapGallery({
+      view: view,
+    expandTooltip: "Change Basemap"
+    })
+  });
+  view.ui.add(bgExpand, "top-right");
+
+  //create a locate widget instance and add it to the view
+  const locate = new Locate({
+        view: view
+      });
+      view.ui.add(locate, "top-left");
+
+      // Create a Search widget instance and add it to the view
+      const search = new Search({
+        view: view,
+        suggestionsEnabled: true,
+        maxSuggestions: 3
+      });
+      
+      //expand the search widget
+     const searchExpand = new Expand({
+        view: view,
+        content: search,
+        expandIconClass: "esri-icon-search",
+        expandTooltip: "Search",
+        expanded: false
+      })
+
+      //add the search widget to the top left corner of the view
+        view.ui.add(searchExpand, {
+          position: "top-left",
+          index: 2
+        });
+
+       // Create a Legend widget instance and add it to the view
+      const legend = new Legend({
+        view: view,
+      });
+
+      const legendExpand = new Expand({
+        view: view,
+        content: legend,
+        expandIconClass: "esri-icon-legend",
+        expandTooltip: "Legend",
+      });
+      view.ui.add(legendExpand, "bottom-left");
+
+     // Create a LayerList widget
+      const layerList = new LayerList({
+        view: view
+      });
+      view.ui.add(layerList)
+
+
   });
 </script>
 </head>
