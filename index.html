@@ -113,8 +113,17 @@
       const layerList = new LayerList({
         view: view
       });
-      view.ui.add(layerList)
+    
+// Put the LayerList widget into an Expand widget
+const layerListExpand = new Expand({
+        view: view,
+        content: layerList,
+        expandIconClass: "esri-icon-layer-list",
+        expandTooltip: "Layers"  // Tooltip text for the button
+      });
 
+      // Add the Expand widget to the view
+      view.ui.add(layerListExpand, "top-right");
 
   });
 </script>
