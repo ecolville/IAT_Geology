@@ -1,4 +1,5 @@
 require([
+    "esri/config",
     "esri/Map", 
     "esri/views/MapView",
     "esri/widgets/BasemapGallery",
@@ -10,10 +11,11 @@ require([
     "esri/widgets/Editor",
     "esri/widgets/Legend",
     "esri/widgets/LayerList"
-  ], function(Map, MapView, BasemapGallery, Locate, Search, Expand, FeatureLayer, SimpleRender, Editor, Legend, LayerList) {
+  ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, FeatureLayer, SimpleRender, Editor, Legend, LayerList) {
 
-   const config = {
-    apiKey: "AAPKddba40c16f2c479188ee7654064642bcKj2RV3mAHrsiJS_6TRKUzkim46MXbNeE97z3bQn0zq3zyX67A3i8hBg6lEH0Fxl_",
+    esriConfig.apiKey = "AAPKddba40c16f2c479188ee7654064642bcKj2RV3mAHrsiJS_6TRKUzkim46MXbNeE97z3bQn0zq3zyX67A3i8hBg6lEH0Fxl_"
+
+    const config = {
     urls: {
         sections:"https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments_CR/FeatureServer",
         parking: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Parking/FeatureServer",
