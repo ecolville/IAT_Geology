@@ -102,6 +102,22 @@ map.add(sections);
           index: 2
         });
 
+// Create a LayerList widget
+const layerList = new LayerList({
+        view: view
+      });
+    
+// Put the LayerList widget into an Expand widget
+const layerListExpand = new Expand({
+        view: view,
+        content: layerList,
+        expandIconClass: "esri-icon-layer-list",
+        expandTooltip: "Layers"  // Tooltip text for the button
+      });
+
+      // Add the Expand widget to the view
+      view.ui.add(layerListExpand, "top-right");
+
        // Create a Legend widget instance and add it to the view
        const legend = new Legend({
   view: view,
@@ -119,21 +135,7 @@ map.add(sections);
       });
       view.ui.add(legendExpand, "bottom-left");
 
-     // Create a LayerList widget
-      const layerList = new LayerList({
-        view: view
-      });
-    
-// Put the LayerList widget into an Expand widget
-const layerListExpand = new Expand({
-        view: view,
-        content: layerList,
-        expandIconClass: "esri-icon-layer-list",
-        expandTooltip: "Layers"  // Tooltip text for the button
-      });
-
-      // Add the Expand widget to the view
-      view.ui.add(layerListExpand, "top-right");
+     
 
    });
 </script>
