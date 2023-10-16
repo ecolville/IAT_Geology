@@ -107,22 +107,6 @@ require([
     });
     map.add(camping);
 
-    //const for community labels
-    const communityLabels = {
-      symbol: {
-        type: "text",
-        color: "#0077D4",
-        font: {
-          size: 12,
-          family: "Noto Sans",
-          }
-      },
-      labelPlacement: "above-right",
-      labelExpressionInfo: {
-        expression: "$feature.Name"
-      }
-    };
-
     //const for community icon
     const communityRenderer = {
       type: "simple",
@@ -239,7 +223,7 @@ require([
       const layerListExpand = new Expand({
         view: view,
         content: layerList,
-        expandIconClass: "esri-icon-layer-list",  // Change this to choose the icon for the button
+        expandIconClass: "esri-icon-layer-list",  
         expandTooltip: "Layers"  // Tooltip text for the button
       });
 
@@ -258,7 +242,7 @@ require([
         symbol: yellowLineSymbol
       });
 
-      //define the popup template for the editable feature layer (airport)
+      //define the popup template for the editable mySegment layer
       const mySegmentPopupTemplate = {
           title: "{SegmentName} Segment Completed",
           content: "on {DateCompleted} <br> {Length_mi} miles"
@@ -267,13 +251,12 @@ require([
       //create mySegments Feature Layer
       const mySegments = new FeatureLayer ({
         url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Completed_IAT_Segments/FeatureServer",
-        renderer: myRenderer,
-        labelingInfo: [mySegmentLabels], 
-        
+        renderer: mySegmentsRenderer,
+                
         //adding the popup here
         popupTemplate: mySegmentPopupTemplate,
         outFields: ["SegmentName", "DateCompleted", "Length_mi"],
-        title: "Segment Completed",
+        title: "Segment Completed"
       });
 
       //adding the feature layer to the map
