@@ -239,6 +239,12 @@
                 <div><b>Severity of Issue: </b> {level_of_severity}</div>`
     };
 
+    //define the popup template for mySegment
+    const mySegmentPopupTemplate = {
+      title: "{SegmentName} Segment Completed",
+      content: "on {DateCompleted} <br> {Length_mi} miles"
+    }
+
     //make section lines brown
     const sectionsRenderer = new SimpleRenderer({
       symbol: new SimpleLineSymbol({
@@ -315,6 +321,7 @@
     const hazards = new FeatureLayer ({
       url:"https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/survey123_28999d44a3004264b788805abd470022_results/FeatureServer",
       title: "Trail Hazards & Maintenance Issues",
+      outFields: [{observation_date_and_time}, {trail_segment_name}, {mile_marker}, {hazardmaintenance_need}, {description}, {level_of_severity}],
       popupTemplate: hazardsPopupTemplate,
       renderer: {
         type: "simple",
@@ -339,12 +346,6 @@
     const mySegmentsRenderer = new SimpleRenderer ({
       symbol: yellowLineSymbol
     });
-
-    //define the popup template for the editable feature layer (airport)
-    const mySegmentPopupTemplate = {
-      title: "{SegmentName} Segment Completed",
-      content: "on {DateCompleted} <br> {Length_mi} miles"
-    }
 
     //create mySegments Feature Layer
     const mySegments = new FeatureLayer ({
