@@ -19,7 +19,7 @@
     #viewDiv {  
       padding: 0;  
       margin: 0;  
-      height: 100%;  
+      height: calc(100% - 22px);
       width: 100%;  }
 
       body {
@@ -45,7 +45,6 @@
       background-color: #ff6700;
     }
      
-
     #heading {
       padding: 0;
       margin: 0;
@@ -62,10 +61,31 @@
       background: #0077D4; /* IAT blue */
       color: rgb(255, 255, 255);
       padding: 10px 20px; 
-      height: 50px;
+      height: 44px;
     }
-    
+   
+    /* Enhance the overall border and shadow of the popup for a modern look */
+    .esri-popup {
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
 
+    /* Styling the popup header */
+    .esri-popup__header {
+      background-color: #0077D4;
+      color: rgb(255, 255, 255); /* Attempting to add white text color...not displaying */
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      padding: 10px 15px; 
+      font-weight: 500; /* Slightly bold text */
+    }
+    /* Styling the popup content */
+    .esri-popup__content {
+      background-color: rgba(0, 119, 212, 0.1); /* Light blue with some transparency */
+      padding: 15px; /* Add some padding */
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
     </style> 
 
     <!--adding the modules for the app-->
@@ -187,53 +207,38 @@
     //define a popup template for the sections feature layer
     const sectionsPopupTemplate = {
       title: "Section or Connecting Route",
-      content: [
-        {
-          type: "text",
-          text: `<b>Name: </b> {Segment} <br>
-                <b>Type: </b> {Status} <br>`
-        },
-        {
-          type: "fields",
-          fieldInfos: [{
-            fieldName: "length_mi",
-            label: "Length",
-              format: {
-                places: 1,
-                digitSeparator: true
-              }
-            }]
-        }
-      ]
+      content: `<div style="margin-bottom: 10px;"><b>Name: </b> {Segment}</div>
+        <div style="margin-bottom: 10px;"><b>Type: </b> {Status}</div>
+        <div style="margin-bottom: 10px;"><b>Length: </b> {Round(length_mi, 1)} miles</div>`
     };
 
     //define a popup template for the parking feature layer
     const parkingPopupTemplate = {
       title: "Parking Area",
-      content: `<b>Parking Type: </b> {Parking_Type} <br>
-                <b>Description: </b> {Description} <br>
-                <b>Fee: </b> {Fee} <br>
-                <b>Overnight Parking: </b> {Overnight_Park}<br>
-                <b>Comment: </b> {Comment} <br>`
+      content: `<div style="margin-bottom: 10px;"><b>Parking Type: </b> {Parking_Type}</div>
+                <div style="margin-bottom: 10px;"><b>Description: </b> {Description}</div>
+                <div style="margin-bottom: 10px;"><b>Fee: </b> {Fee}</div>
+                <div style="margin-bottom: 10px;"><b>Overnight Parking: </b> {Overnight_Park}</div>
+                <div><b>Comment: </b> {Comment}</div>`
     }
 
     //define a popup template for the camping feature layer
     const campingPopupTemplate = {
       title: "Camping Area",
-      content: `<b>Type: </b> {Camp_Type} <br>
-                <b># sites: </b> {Num_sites} <br>
-                <b>Water: </b> {Water} <br>
-                <b>Toilet: </b> {Toilet} <br>
-                <b>Showers: </b> {Showers}<br>
-                <b>Description: </b> {Description}`
+      content: `<div style="margin-bottom: 10px;"><b>Type: </b> {Camp_Type}</div>
+                <div style="margin-bottom: 10px;"><b># sites: </b> {Num_sites}</div>
+                <div style="margin-bottom: 10px;"><b>Water: </b> {Water}</div>
+                <div style="margin-bottom: 10px;"><b>Toilet: </b> {Toilet}</div>
+                <div style="margin-bottom: 10px;"><b>Showers: </b> {Showers}</div>
+                <div><b>Description: </b> {Description}</div>`
     }
 
     //define a popup template for the water feature layer
     const waterPopupTemplate = {
       title: "Potential Water Source",
-      content: `<b>Potability: </b> {Potability} <br>
-                <b>Reliability: </b> {Reliability} <br>
-                <b>Description: </b> {Description}`
+      content: `<div style="margin-bottom: 10px;"><b>Potability: </b> {Potability}</div>
+                <div style="margin-bottom: 10px;"><b>Reliability: </b> {Reliability}</div>
+                <div><b>Description: </b> {Description}</div>`
     }
 
     //make section lines brown
@@ -327,11 +332,11 @@
     //popup template for the trail hazards
     hazards.popupTemplate = {
       title: "Trail Hazards and Maintenance Issue",
-      content: `<b>Date of Observation: </b> {observation_date_and_time} <br>
-                <b>Location: </b> {trail_segment_name} {mile_marker} <br>
-                <b>Hazard/Maintenence Need: </b> {hazardmaintenance_need} <br>
-                <b>Description: </b> {description}<br>
-                <b>Severity of Issue: </b> {level_of_severity} <br>`
+      content: `<div style="margin-bottom: 10px;"><b>Date of Observation: </b> {observation_date_and_time}</div>
+                <div style="margin-bottom: 10px;"><b>Location: </b> {trail_segment_name} {mile_marker}</div>
+                <div style="margin-bottom: 10px;"><b>Hazard/Maintenence Need: </b> {hazardmaintenance_need}</div>
+                <div style="margin-bottom: 10px;"><b>Description: </b> {description}</div>
+                <div><b>Severity of Issue: </b> {level_of_severity}</div>`
     };
 
     //create yellow line for mySegments
@@ -346,7 +351,7 @@
       symbol: yellowLineSymbol
     });
 
-    //define the popup template for the editable feature layer (airport)
+    //define the popup template for the mySegments layer
     const mySegmentPopupTemplate = {
       title: "{SegmentName} Segment Completed",
       content: "on {DateCompleted} <br> {Length_mi} miles"
@@ -367,13 +372,15 @@
 });
 </script>
 </head>
+
 <body>
+  
   <!-- the div to display the header-->
   <div class = "header">
-   <h1> TrailGuard: Ice Age Trail Reporter</h1> 
-<!--Link to Trail Hazards and Maintenance Issues Survey-->
-<a href="https://survey123.arcgis.com/share/28999d44a3004264b788805abd470022"target="_blank" class="addRecordBtn">Report Trail Issue</a>
- </div>
+    <h1> TrailGuard: Ice Age Trail Reporter</h1> 
+    <!--Link to Trail Hazards and Maintenance Issues Survey-->
+    <a href="https://survey123.arcgis.com/share/28999d44a3004264b788805abd470022"target="_blank" class="addRecordBtn">Report Trail Issue</a>
+  </div>
 
  <!--the div that displays the map-->
  <div id="viewDiv"></div>
@@ -381,4 +388,3 @@
 </body>
 
 </html>
- 
