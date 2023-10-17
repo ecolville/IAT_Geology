@@ -19,12 +19,12 @@
     #viewDiv {  
       padding: 0;  
       margin: 0;  
-      height: calc(100%-50px); /*account for heading*/ 
+      height: 100%;  
       width: 100%;  }
 
       body {
-    font-family: "Century Gothic", sans-serif; /* Font used in IATA brand */
-    }
+        font-family: "Century Gothic", sans-serif; /* Font used in IATA brand */
+      }
 
       .addRecordBtn {
       position: absolute;
@@ -44,6 +44,15 @@
     .addRecordBtn:hover {
       background-color: #ff6700;
     }
+     
+
+    #heading {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      background-color: #0077D4;
+    }
 
     .header {
       display: flex;
@@ -55,44 +64,6 @@
       padding: 10px 20px; 
       height: 50px;
     }
-      .modal {
-      display: none; /* Hidden by default */
-      position: fixed; /* Stay in place */
-      z-index: 1; /* Sit on top */
-      padding-top: 100px; /* Location of the box */
-      left: 0;
-      top: 0;
-      width: 100%; /* Full width */
-      height: 100%; /* Full height */
-      overflow: auto; /* Enable scroll if needed */
-      background-color: rgba(251, 221, 74, 0.379); /* Fallback color */
-      text-align: center;
-      }
-
-      .modal-content {
-      background-color: #e7e7e7;
-      margin: auto;
-      padding: 20px;
-      border: 8px solid #888;
-      width: 80%;
-      max-height: 80vh; /* This will limit the height to 80% of the viewport height */
-      overflow-y: auto; /* This will allow vertical scrolling if the content exceeds the max height */
-    }
-
-      .close {
-        color: #aaaaaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-      }
-
-      .close:hover,
-      .close:focus {
-        color: #000;
-        text-decoration: none;
-        cursor: pointer;
-      }
-      
     
 
     </style> 
@@ -199,6 +170,7 @@
     //create editor widget instance and add it to the view
     const editor = new Editor({
       view: view,
+      //layerInfos: [lineInfos]
     }); 
 
     //expand the editor widget
@@ -396,16 +368,15 @@
 </script>
 </head>
 <body>
-   <!-- the div to display the header-->
-   <div class = "header">
-    <h1> TrailGuard: Ice Age Trail Reporter</h1> 
+  <!-- the div to display the header-->
+  <div class = "header">
+   <h1> TrailGuard: Ice Age Trail Reporter</h1> 
 <!--Link to Trail Hazards and Maintenance Issues Survey-->
 <a href="https://survey123.arcgis.com/share/28999d44a3004264b788805abd470022"target="_blank" class="addRecordBtn">Report Trail Issue</a>
-  </div>
- 
-  
-  <!--the div that displays the map-->
-  <div id="viewDiv"></div>
+ </div>
+
+ <!--the div that displays the map-->
+ <div id="viewDiv"></div>
 
 </body>
 
