@@ -230,7 +230,7 @@
     }
 
     //define popup template for the trail hazards
-    hazards.popupTemplate = {
+    const hazardsPopupTemplate = {
       title: "Trail Hazards and Maintenance Issue",
       content: `<div style="margin-bottom: 10px;"><b>Date of Observation: </b> {observation_date_and_time}</div>
                 <div style="margin-bottom: 10px;"><b>Location: </b> {trail_segment_name} {mile_marker}</div>
@@ -315,6 +315,7 @@
     const hazards = new FeatureLayer ({
       url:"https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/survey123_28999d44a3004264b788805abd470022_results/FeatureServer",
       title: "Trail Hazards & Maintenance Issues",
+      popupTemplate: hazardsPopupTemplate,
       renderer: {
         type: "simple",
         symbol: {
@@ -356,10 +357,10 @@
     });
     //adding the feature layer to the map
     map.add(mySegments);
+
 });
 </script>
 </head>
-
 <body>
   <!-- the div to display the header-->
   <div class = "header">
