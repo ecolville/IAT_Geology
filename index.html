@@ -309,9 +309,24 @@
   //define a popup template for the sections feature layer
   const sectionsPopupTemplate = {
     title: "Section or Connecting Route",
-    content: `<div style="margin-bottom: 10px;"><b>Name: </b> {Segment}</div>
-      <div style="margin-bottom: 10px;"><b>Type: </b> {Status}</div>
-      <div style="margin-bottom: 10px;"><b>Length: </b> {Round(length_mi, 1)} miles</div>`
+    content: [
+      {
+        type: "text",
+        text: `<div style="margin-bottom: 10px;"><b>Name: </b> {Segment}</div>
+              <div style="margin-bottom: 10px;"><b>Type: </b> {Status}</div>`
+      },
+      {
+        type: "fields", //used Arcade expressions to change the long float to one decimal
+        fieldInfos: [{
+          fieldName: "length_mi",
+          label: "Length", 
+          format: {
+            places: 1,
+            digitSeparator: true
+          }
+        }]
+      }
+    ]
   };
 
   //define a popup template for the parking feature layer
