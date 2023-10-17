@@ -1,107 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>TrailGuard</title>
-
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
-    <meta name="description" content="" />
     <link rel="icon" href="TG.png">
-    
-    <!--calls for the arcgis api's CSS file and JS library-->
     <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css">
-    <script src="https://js.arcgis.com/4.25/"></script>
 
-    <!--CSS to make a full screen map-->
-    <style>  
-    html,  
-    body,  
-    #viewDiv {  
-      padding: 0;  
-      margin: 0;  
-      height: calc(100% - 22px);
-      width: 100%;  }
+    <style>
+        html,
+        body,
+        #viewDiv {
+            padding: 0;
+            margin: 0;
+            height: calc(100% - 22px);
+            width: 100%;
+        }
 
-      body {
-        font-family: "Century Gothic", sans-serif; /* Font used in IATA brand */
-      }
+        body {
+            font-family: "Century Gothic", sans-serif;
+        }
 
-      .addRecordBtn {
-      position: absolute;
-      z-index: 10;
-      top: 10px;
-      right: 10px;
-      background-color: #ff6700;
-      color: white;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 4px;
-      font-size: 14px;
-      cursor: pointer;
-      text-decoration: none;
-    }
+        .addRecordBtn {
+            position: absolute;
+            z-index: 10;
+            top: 10px;
+            right: 10px;
+            background-color: #ff6700;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
 
-    .addRecordBtn:hover {
-      background-color: #ff6700;
-    }
-     
-    #heading {
-      padding: 0;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-      background-color: #0077D4;
-    }
+        .addRecordBtn:hover {
+            background-color: #ff6700;
+        }
 
-    .header {
-      display: flex;
-      justify-content: space-between; 
-      align-items: center; 
-      text-align: left;
-      background: #0077D4; /* IAT blue */
-      color: rgb(255, 255, 255);
-      padding: 10px 20px; 
-      height: 44px;
-    }
-   
-    * Enhance the overall border and shadow of the popup for a modern look */
-.esri-popup {
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0077D4;
+            color: #FFF;
+            padding: 10px 20px;
+            height: 44px;
+        }
 
-/* Styling the popup header */
-.esri-popup__header {
-    background-color: #0077D4;
-    color: rgb(255, 255, 255); /* White color */
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    padding: 10px 15px; /* Add some padding to make it look spacious */
-    font-weight: 500; /* Slightly bold text */
-}
+        /* Enhanced Popup Styling */
+        .esri-popup {
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
 
-/* Styling the close button for consistency (if you have one) */
-.esri-popup__header-button {
-    color: rgb(255, 255, 255); /* White color */
-}
+        .esri-popup__header {
+            background-color: #0077D4;
+            color: #FFF;
+            border-radius: 8px 8px 0 0;
+            padding: 10px 15px;
+            font-weight: 500;
+        }
 
-/* Styling the popup content */
-.esri-popup__content {
-    background-color: rgba(0, 119, 212, 0.1); /* Light blue with some transparency */
-    padding: 15px; /* Add some padding */
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-}
+        .esri-popup__header-button {
+            color: #FFF;
+        }
 
-/* If there are any actions/buttons at the bottom, style them too */
-.esri-popup__footer {
-    background-color: rgba(0, 119, 212, 0.1);
-    padding: 10px 15px;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-}
-
-    </style> 
+        .esri-popup__content,
+        .esri-popup__footer {
+            background-color: rgba(0, 119, 212, 0.1);
+            padding: 15px;
+            border-radius: 0 0 8px 8px;
+        }
+    </style>
+</head>
 
     <!--adding the modules for the app-->
     <script>
@@ -205,7 +179,6 @@
     //create editor widget instance and add it to the view
     const editor = new Editor({
       view: view,
-      //layerInfos: [lineInfos]
     }); 
 
     //expand the editor widget
@@ -223,8 +196,8 @@
     const sectionsPopupTemplate = {
       title: "Section or Connecting Route",
       content: `<div style="margin-bottom: 10px;"><b>Name: </b> {Segment}</div>
-        <div style="margin-bottom: 10px;"><b>Type: </b> {Status}</div>
-        <div style="margin-bottom: 10px;"><b>Length: </b> {length_mi} miles</div>`
+                <div style="margin-bottom: 10px;"><b>Type: </b> {Status}</div>
+                <div style="margin-bottom: 10px;"><b>Length: </b> {Round(length_mi, 1)} miles</div>`
     };
 
     //define a popup template for the parking feature layer
@@ -255,6 +228,16 @@
                 <div style="margin-bottom: 10px;"><b>Reliability: </b> {Reliability}</div>
                 <div><b>Description: </b> {Description}</div>`
     }
+
+    //define popup template for the trail hazards
+    hazards.popupTemplate = {
+      title: "Trail Hazards and Maintenance Issue",
+      content: `<div style="margin-bottom: 10px;"><b>Date of Observation: </b> {observation_date_and_time}</div>
+                <div style="margin-bottom: 10px;"><b>Location: </b> {trail_segment_name} {mile_marker}</div>
+                <div style="margin-bottom: 10px;"><b>Hazard/Maintenence Need: </b> {hazardmaintenance_need}</div>
+                <div style="margin-bottom: 10px;"><b>Description: </b> {description}</div>
+                <div><b>Severity of Issue: </b> {level_of_severity}</div>`
+    };
 
     //make section lines brown
     const sectionsRenderer = new SimpleRenderer({
@@ -344,16 +327,6 @@
     });
     map.add(hazards);
 
-    //popup template for the trail hazards
-    hazards.popupTemplate = {
-      title: "Trail Hazards and Maintenance Issue",
-      content: `<div style="margin-bottom: 10px;"><b>Date of Observation: </b> {observation_date_and_time}</div>
-                <div style="margin-bottom: 10px;"><b>Location: </b> {trail_segment_name} {mile_marker}</div>
-                <div style="margin-bottom: 10px;"><b>Hazard/Maintenence Need: </b> {hazardmaintenance_need}</div>
-                <div style="margin-bottom: 10px;"><b>Description: </b> {description}</div>
-                <div><b>Severity of Issue: </b> {level_of_severity}</div>`
-    };
-
     //create yellow line for mySegments
     const yellowLineSymbol = new SimpleLineSymbol({
         color: new Color([251, 222, 74]),
@@ -383,10 +356,10 @@
     });
     //adding the feature layer to the map
     map.add(mySegments);
-
 });
 </script>
 </head>
+
 <body>
   <!-- the div to display the header-->
   <div class = "header">
