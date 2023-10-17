@@ -64,43 +64,28 @@
       height: 44px;
     }
    
-    * Enhance the overall border and shadow of the popup for a modern look */
-.esri-popup {
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
+    /* Enhance the overall border and shadow of the popup for a modern look */
+    .esri-popup {
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
 
-/* Styling the popup header */
-.esri-popup__header {
-    background-color: #0077D4;
-    color: rgb(255, 255, 255); /* White color */
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    padding: 10px 15px; /* Add some padding to make it look spacious */
-    font-weight: 500; /* Slightly bold text */
-}
-
-/* Styling the close button for consistency (if you have one) */
-.esri-popup__header-button {
-    color: rgb(255, 255, 255); /* White color */
-}
-
-/* Styling the popup content */
-.esri-popup__content {
-    background-color: rgba(0, 119, 212, 0.1); /* Light blue with some transparency */
-    padding: 15px; /* Add some padding */
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-}
-
-/* If there are any actions/buttons at the bottom, style them too */
-.esri-popup__footer {
-    background-color: rgba(0, 119, 212, 0.1);
-    padding: 10px 15px;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-}
-
+    /* Styling the popup header */
+    .esri-popup__header {
+      background-color: #0077D4;
+      color: rgb(255, 255, 255); /* Attempting to add white text color...not displaying */
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      padding: 10px 15px; 
+      font-weight: 500; /* Slightly bold text */
+    }
+    /* Styling the popup content */
+    .esri-popup__content {
+      background-color: rgba(0, 119, 212, 0.1); /* Light blue with some transparency */
+      padding: 15px; /* Add some padding */
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
     </style> 
 
     <!--adding the modules for the app-->
@@ -366,7 +351,7 @@
       symbol: yellowLineSymbol
     });
 
-    //define the popup template for the editable feature layer (airport)
+    //define the popup template for the mySegments layer
     const mySegmentPopupTemplate = {
       title: "{SegmentName} Segment Completed",
       content: "on {DateCompleted} <br> {Length_mi} miles"
@@ -387,13 +372,15 @@
 });
 </script>
 </head>
+
 <body>
+  
   <!-- the div to display the header-->
   <div class = "header">
-   <h1> TrailGuard: Ice Age Trail Reporter</h1> 
-<!--Link to Trail Hazards and Maintenance Issues Survey-->
-<a href="https://survey123.arcgis.com/share/28999d44a3004264b788805abd470022"target="_blank" class="addRecordBtn">Report Trail Issue</a>
- </div>
+    <h1> TrailGuard: Ice Age Trail Reporter</h1> 
+    <!--Link to Trail Hazards and Maintenance Issues Survey-->
+    <a href="https://survey123.arcgis.com/share/28999d44a3004264b788805abd470022"target="_blank" class="addRecordBtn">Report Trail Issue</a>
+  </div>
 
  <!--the div that displays the map-->
  <div id="viewDiv"></div>
@@ -401,4 +388,3 @@
 </body>
 
 </html>
- 
