@@ -45,7 +45,6 @@
       background-color: #ff6700;
     }
      
-
     #heading {
       padding: 0;
       margin: 0;
@@ -65,16 +64,43 @@
       height: 44px;
     }
    
-    /* Make the popup header's background color blue */
-    .esri-popup__header {
-  background-color: #0077D4;
-  color: rgb(255, 255, 255); /* White color */
+    * Enhance the overall border and shadow of the popup for a modern look */
+.esri-popup {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Optionally, make the popup content's background color a light shade of blue or yellow */
-.esri-popup__content {
-  background-color: rgba(0, 119, 212, 0.1); /* Light blue with some transparency */
+/* Styling the popup header */
+.esri-popup__header {
+    background-color: #0077D4;
+    color: rgb(255, 255, 255); /* White color */
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 10px 15px; /* Add some padding to make it look spacious */
+    font-weight: 500; /* Slightly bold text */
 }
+
+/* Styling the close button for consistency (if you have one) */
+.esri-popup__header-button {
+    color: rgb(255, 255, 255); /* White color */
+}
+
+/* Styling the popup content */
+.esri-popup__content {
+    background-color: rgba(0, 119, 212, 0.1); /* Light blue with some transparency */
+    padding: 15px; /* Add some padding */
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/* If there are any actions/buttons at the bottom, style them too */
+.esri-popup__footer {
+    background-color: rgba(0, 119, 212, 0.1);
+    padding: 10px 15px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
     </style> 
 
     <!--adding the modules for the app-->
@@ -219,11 +245,11 @@
     //define a popup template for the parking feature layer
     const parkingPopupTemplate = {
       title: "Parking Area",
-      content: `<b>Parking Type: </b> {Parking_Type} <br>
-                <b>Description: </b> {Description} <br>
-                <b>Fee: </b> {Fee} <br>
-                <b>Overnight Parking: </b> {Overnight_Park}<br>
-                <b>Comment: </b> {Comment} <br>`
+      content: `<div style="margin-bottom: 10px;"><b>Parking Type: </b> {Parking_Type}</div>
+                <div style="margin-bottom: 10px;"><b>Description: </b> {Description}</div>
+                <div style="margin-bottom: 10px;"><b>Fee: </b> {Fee}</div>
+                <div style="margin-bottom: 10px;"><b>Overnight Parking: </b> {Overnight_Park}</div>
+                <div><b>Comment: </b> {Comment}</div>`
     }
 
     //define a popup template for the camping feature layer
