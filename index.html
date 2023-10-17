@@ -111,6 +111,9 @@
   border: 1px solid #888;
   width: 50%;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  display: flex;
+  flex-direction: column;
+  align-items: center;  /* Horizontally center the items */
 }
 
 /* The Close Button */
@@ -149,19 +152,22 @@
 <!-- The Modal -->
 <div id="myModal" class="modal">
   <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h2>Welcome to TrailGuard: Ice Age Trail Reporter!</h2>
-      <img src="LOGO_Ice-Age-Trail-Alliance-JPG-1267x1536.jpg" alt="Logo of Ice Age Trail Alliance" width="125" height="150">
-      <p>Dive into your ultimate companion for the Ice Age Trail. As a member of this passionate community, you have a world of features at your fingertips:</p>
-      <ul>
-          <li><b>Streamlined Reporting: </b>Quickly and easily report safety hazards and maintenance issues to keep the trail safe and pristine for all.</li>
-          <li><b>Interactive Maps: </b> Navigate confidently with detailed maps highlighting trail segments, campgrounds, water sources, and more.</li>
-          <li><b>Trailhead and Campground Insights: </b>Equip yourself with comprehensive details on amenities, facilities, and unique lodging experiences.</li>
-          <li><b>Track Your Adventures: </b>Celebrate every milestone as you record, track, and conquer segments of the Ice Age Trail.</li>
-      </ul>
-      <p>With TrailGuard, you're not just hiking—you're actively contributing to the preservation and enjoyment of a national treasure. Dive in, explore, report, and celebrate the Ice Age Trail's splendor with us!</p></p>
+<div class="modal-content">
+  <span class="close">&times;</span>
+  <h2>Welcome to TrailGuard: Ice Age Trail Reporter!</h2>
+  <img src="LOGO_Ice-Age-Trail-Alliance-JPG-1267x1536.jpg" alt="Logo of Ice Age Trail Alliance" width="125" height="150">
+  
+  <div class="modal-text">
+    <p>Dive into your ultimate companion for the Ice Age Trail. As a member of this passionate community, you have a world of features at your fingertips:</p>
+    <ul>
+        <li><b>Streamlined Reporting: </b>Quickly and easily report safety hazards and maintenance issues to keep the trail safe and pristine for all.</li>
+        <li><b>Interactive Maps: </b> Navigate confidently with detailed maps highlighting trail segments, campgrounds, water sources, and more.</li>
+        <li><b>Trailhead and Campground Insights: </b>Equip yourself with comprehensive details on amenities, facilities, and unique lodging experiences.</li>
+        <li><b>Track Your Adventures: </b>Celebrate every milestone as you record, track, and conquer segments of the Ice Age Trail.</li>
+    </ul>
+    <p>With TrailGuard, you're not just hiking—you're actively contributing to the preservation and enjoyment of a national treasure. Dive in, explore, report, and celebrate the Ice Age Trail's splendor with us!</p>
   </div>
+</div>
 </div>
 
 <script>
