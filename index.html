@@ -173,28 +173,10 @@
   </div>
 
   <script>
-  //get modal element by its ID  
-  var modal = document.getElementById("myModal");
-  //get first element with the class name 'close', used to close the modal
-  var span = document.getElementsByClassName("close")[0];
 
-  //when app loads, open modal
-  window.onload = function() {
-  modal.style.display = "block";
-  }
-
-  //when the user clicks on close button, close modal
-  span.onclick = function() {
-  modal.style.display = "none";
-  }
-
-  //when the user clicks anywhere outside of the modal, close it
-  window.onclick = function(event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
+    window.onload = function() {
+      loadModal()
     }
-  }
-
   
   //load the necessary modules for the app
   require([
@@ -483,7 +465,7 @@
   const mySegments = new FeatureLayer ({
     url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Completed_IAT_Segments/FeatureServer",
     renderer: mySegmentsRenderer,
-    
+
     //adding the mySegment popup 
       popupTemplate: mySegmentPopupTemplate,
       outFields: ["SegmentName", "DateCompleted", "Length_mi"],
@@ -494,6 +476,28 @@
   map.add(mySegments);
 
   });
+
+    function loadModal() {
+        var modal = document.getElementById("myModal");
+        
+        //get first element with the class name 'close', used to close the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        modal.style.display = "block";
+
+        //when the user clicks on close button, close modal
+        span.onclick = function() {
+        modal.style.display = "none";
+        }
+
+        //when the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+
+      }
   </script>
 </body>
 </html>
