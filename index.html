@@ -6,11 +6,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
     <meta name="description" content="" />
-    <link rel="icon" href="TG.png">
+    <link rel="icon" href="img/TG.png">
     
     <!--calls for the arcgis api's CSS file and JS library-->
-    <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css">
-    <script src="https://js.arcgis.com/4.25/"></script>
+    <!-- Just updating to the most recent stable version -->
+    <link rel="stylesheet" href="https://js.arcgis.com/4.27/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.27/"></script>
 
     <!--CSS to make a full screen map-->
     <style>  
@@ -19,6 +20,7 @@
     #viewDiv {  
       padding: 0;  
       margin: 0;  
+      /* this is cool. Didn't know you could do this.  */
       height: calc(100% - 22px);
       width: 100%;  }
 
@@ -149,50 +151,33 @@
  <!--the div that displays the map-->
  <div id="viewDiv"></div>
 
-<!-- the div to display the modal -->
-<div id="myModal" class="modal">
-  <!-- modal content -->
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h2>Welcome to TrailGuard: Ice Age Trail Reporter!</h2>
-    <img src="LOGO_Ice-Age-Trail-Alliance-JPG-1267x1536.jpg" alt="Logo of Ice Age Trail Alliance" width="125" height="150">
-    <!-- div for the modal text so that it can be styled differently than the content above-->
-    <div class="modal-text">
-      <p>Dive into your ultimate companion for the Ice Age Trail. As a member of this passionate community, you have a world of features at your fingertips:</p>
-      <ul>
-          <li><b>Streamlined Reporting: </b>Quickly and easily report safety hazards and maintenance issues to keep the trail safe and pristine for all.</li>
-          <li><b>Interactive Maps: </b> Navigate confidently with detailed maps highlighting trail segments, campgrounds, water sources, and more.</li>
-          <li><b>Trailhead and Campground Insights: </b>Equip yourself with comprehensive details on amenities, facilities, and unique lodging experiences.</li>
-          <li><b>Track Your Adventures: </b>Celebrate every milestone as you record, track, and conquer segments of the Ice Age Trail.</li>
-      </ul>
-      <p>With TrailGuard, you're not just hiking—you're actively contributing to the preservation and enjoyment of a national treasure. Dive in, explore, report, and celebrate the Ice Age Trail's splendor with us!</p>
+  <!-- the div to display the modal -->
+  <div id="myModal" class="modal">
+    <!-- modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Welcome to TrailGuard: Ice Age Trail Reporter!</h2>
+      <img src="img/LOGO_Ice-Age-Trail-Alliance-JPG-1267x1536.jpg" alt="Logo of Ice Age Trail Alliance" width="125" height="150">
+      <!-- div for the modal text so that it can be styled differently than the content above-->
+      <div class="modal-text">
+        <p>Dive into your ultimate companion for the Ice Age Trail. As a member of this passionate community, you have a world of features at your fingertips:</p>
+        <ul>
+            <li><b>Streamlined Reporting: </b>Quickly and easily report safety hazards and maintenance issues to keep the trail safe and pristine for all.</li>
+            <li><b>Interactive Maps: </b> Navigate confidently with detailed maps highlighting trail segments, campgrounds, water sources, and more.</li>
+            <li><b>Trailhead and Campground Insights: </b>Equip yourself with comprehensive details on amenities, facilities, and unique lodging experiences.</li>
+            <li><b>Track Your Adventures: </b>Celebrate every milestone as you record, track, and conquer segments of the Ice Age Trail.</li>
+        </ul>
+        <p>With TrailGuard, you're not just hiking—you're actively contributing to the preservation and enjoyment of a national treasure. Dive in, explore, report, and celebrate the Ice Age Trail's splendor with us!</p>
+      </div>
     </div>
   </div>
-</div>
 
   <script>
-  //get modal element by its ID  
-  var modal = document.getElementById("myModal");
-  //get first element with the class name 'close', used to close the modal
-  var span = document.getElementsByClassName("close")[0];
 
-  //when app loads, open modal
-  window.onload = function() {
-  modal.style.display = "block";
-  }
-
-  //when the user clicks on close button, close modal
-  span.onclick = function() {
-  modal.style.display = "none";
-  }
-
-  //when the user clicks anywhere outside of the modal, close it
-  window.onclick = function(event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
+    window.onload = function() {
+      loadModal()
     }
-  }
-
+  
   //load the necessary modules for the app
   require([
       "esri/config", 
@@ -213,6 +198,7 @@
 
   //add API key
   esriConfig.apiKey = "AAPKddba40c16f2c479188ee7654064642bcKj2RV3mAHrsiJS_6TRKUzkim46MXbNeE97z3bQn0zq3zyX67A3i8hBg6lEH0Fxl_"
+  
   //create map w grey basemap layer
   const map = new Map({
     basemap: "arcgis-light-gray" //basemap layer
@@ -274,6 +260,7 @@
     expandIconClass: "esri-icon-layer-list",
     expandTooltip: "Layers"  // Tooltip text for the button
   });
+
   //add the Expand widget to the view
   view.ui.add(layerListExpand, "top-right");
 
@@ -412,7 +399,7 @@
     type: "simple",
     symbol: {
       type: "picture-marker",
-      url: "https://ecolville.github.io/TrailGuard/Generic-Trail-Community-Logo.png",
+      url: "https://ecolville.github.io/TrailGuard/img/Generic-Trail-Community-Logo.png",
       width: "20px",
       height: "20px"
     }
@@ -438,7 +425,7 @@
       type: "simple",
       symbol: {
         type: "picture-marker",
-        url: "https://ecolville.github.io/TrailGuard/hazard.png",
+        url: "https://ecolville.github.io/TrailGuard/img/hazard.png",
         width: "20px",
         height: "30px"
       },
@@ -478,15 +465,39 @@
   const mySegments = new FeatureLayer ({
     url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Completed_IAT_Segments/FeatureServer",
     renderer: mySegmentsRenderer,
+
     //adding the mySegment popup 
       popupTemplate: mySegmentPopupTemplate,
       outFields: ["SegmentName", "DateCompleted", "Length_mi"],
       title: "Segment Completed",
   });
+
   //adding the feature layer to the map
   map.add(mySegments);
 
   });
+
+    function loadModal() {
+        var modal = document.getElementById("myModal");
+        
+        //get first element with the class name 'close', used to close the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        modal.style.display = "block";
+
+        //when the user clicks on close button, close modal
+        span.onclick = function() {
+        modal.style.display = "none";
+        }
+
+        //when the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+
+      }
   </script>
 </body>
 </html>
