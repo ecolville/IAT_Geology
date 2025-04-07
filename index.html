@@ -1,492 +1,428 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Geologic Map of IAT</title>
-
+    <title>Geologic Map of Ice Age Trail</title>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
-    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content="Interactive geologic map of the Ice Age Trail featuring trail segments, parking, camping, and geologic insights." />
     <link rel="icon" href="TG.png">
-    
-    <!--calls for the arcgis api's CSS file and JS library-->
-    <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css">
+
+    <!-- ArcGIS API CSS and JS -->
+    <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css" />
     <script src="https://js.arcgis.com/4.25/"></script>
 
-    <!--CSS to make a full screen map-->
-    <style>  
-    html,  
-    body,  
-    #viewDiv {  
-      padding: 0;  
-      margin: 0;  
-      height: calc(100% - 22px);
-      width: 100%;  }
-
+    <!-- Inline CSS for layout and style -->
+    <style>
+      /* Reset basic elements and set font */
+      html, body, #viewDiv {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+      }
       body {
-        font-family: "Century Gothic", sans-serif; /* Font used in IATA brand */
+        font-family: "Century Gothic", sans-serif;
       }
 
+      /* Header styles */
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #0077D4; /* IAT Blue */
+        color: #ffffff;
+        padding: 10px 20px;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 1.4em;
+      }
       .addRecordBtn {
-      position: absolute;
-      z-index: 10;
-      top: 10px;
-      right: 10px;
-      background-color: #ff6700;
-      color: white;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 4px;
-      font-size: 14px;
-      cursor: pointer;
-      text-decoration: none;
-    }
-
-    .addRecordBtn:hover {
-      background-color: #ff6700;
-    }
-     
-    #heading {
-      padding: 0;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-      background-color: #0077D4;
-    }
-
-    .header {
-      display: flex;
-      justify-content: space-between; 
-      align-items: center; 
-      text-align: left;
-      background: #0077D4; /* IAT blue */
-      color: rgb(255, 255, 255);
-      padding: 10px 20px; 
-      height: 44px;
-    }
-   
-    /* border and shadow of the popup */
-    .esri-popup {
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    /* popup header */
-    .esri-popup__header {
-      background-color: #0077D4;
-      color: rgb(255, 255, 255); /* Attempting to add white text color...not displaying */
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
-      padding: 10px 15px; 
-      font-weight: 500; /* Slightly bold text */
-    }
-    /* style the popup content */
-    .esri-popup__content {
-      background-color: rgba(0, 119, 212, 0.1); 
-      padding: 15px; 
-      border-bottom-left-radius: 8px;
-      border-bottom-right-radius: 8px;
-    }
-
-    /* modal background */
-    .modal {
-      display: none; 
-      position: fixed; 
-      z-index: 1; 
-      padding-top: 100px; 
-      left: 0;
-      top: 0;
-      width: 100%; 
-      height: 100%; 
-      overflow: auto; 
-      background-color: rgb(0,0,0); 
-      background-color: rgba(0,0,0,0.4); 
-    }
-
-    /* modal content */
-    .modal-content {
-      position: relative;
-      background-color: #fefefe;
-      margin: auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 50%;
-      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
-      display: flex;
-      flex-direction: column;
-      align-items: center;  
-      position: relative;
-    }
-
-    /* modal close button */
-    .close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-      position: absolute;
-      top: 10px;   /* Adjust this value as needed */
-      right: 15px; /* Adjust this value as needed */
-      cursor: pointer; /* Makes it clear it's clickable */
-    }
-    /* hover close button */
-    .close:hover,
-    .close:focus {
-      color: black;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    </style> 
-</head>
-
-<body>
-  <!-- the div to display the header-->
-  <div class = "header">
-    <h1> Geologic Map of Ice Age Trail</h1> 
-    <!--Link to Trail Hazards and Maintenance Issues Survey-->
-    <a href="https://survey123.arcgis.com/share/28999d44a3004264b788805abd470022"target="_blank" class="addRecordBtn">Report Trail Issue</a>
-  </div>
-
- <!--the div that displays the map-->
- <div id="viewDiv"></div>
-
-<!-- the div to display the modal -->
-<div id="myModal" class="modal">
-  <!-- modal content -->
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h2>Welcome to the Geologic Map of the Ice Age Trail!</h2>
-    <img src="LOGO_Ice-Age-Trail-Alliance-JPG-1267x1536.jpg" alt="Logo of Ice Age Trail Alliance" width="125" height="150">
-    <!-- div for the modal text so that it can be styled differently than the content above-->
-    <div class="modal-text">
-      <p>Your ultimate companion for exploring the geology and trail features of the Ice Age Trail.</p>
-      <ul>
-        <li><b>Geologic Insights:</b> Discover bedrock formations and glacial features along the trail.</li>
-        <li><b>Interactive Mapping:</b> Navigate detailed maps showing trail segments, campgrounds, and water sources.</li>
-        <li><b>Report Issues:</b> Quickly report trail hazards or maintenance concerns.</li>
-        <li><b>Community Contributions:</b> See contributions from fellow hikers and share your experiences.</li>
-      </ul>
-      <p>Explore, report, and enjoy the natural beauty of the Ice Age Trail with our interactive geologic map!</p>
-    </div>
-  </div>
-</div>
-
-  <script>
-  //get modal element by its ID  
-  var modal = document.getElementById("myModal");
-  //get first element with the class name 'close', used to close the modal
-  var span = document.getElementsByClassName("close")[0];
-
-  //when app loads, open modal
-  window.onload = function() {
-  modal.style.display = "block";
-  }
-
-  //when the user clicks on close button, close modal
-  span.onclick = function() {
-  modal.style.display = "none";
-  }
-
-  //when the user clicks anywhere outside of the modal, close it
-  window.onclick = function(event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  }
-
-  //load the necessary modules for the app
-  require([
-      "esri/config", 
-      "esri/Map", 
-      "esri/views/MapView",
-      "esri/widgets/BasemapGallery",
-      "esri/widgets/Locate",
-      "esri/widgets/Search",
-      "esri/widgets/Expand",
-      "esri/layers/FeatureLayer",
-      "esri/renderers/SimpleRenderer",
-      "esri/symbols/SimpleLineSymbol",
-      "esri/Color",
-      "esri/widgets/Editor",
-      "esri/widgets/Legend",
-      "esri/widgets/LayerList"
-  ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, FeatureLayer, SimpleRenderer, SimpleLineSymbol, Color, Editor, Legend, LayerList) {
-
-  //add API key
-  esriConfig.apiKey = "AAPKddba40c16f2c479188ee7654064642bcKj2RV3mAHrsiJS_6TRKUzkim46MXbNeE97z3bQn0zq3zyX67A3i8hBg6lEH0Fxl_"
-  //create map w grey basemap layer
-  const map = new Map({
-    basemap: "arcgis-light-gray" //basemap layer
-  });
-
-  //view of Wisconsin
-  const view = new MapView({
-    map:map,
-    center: [-89.585655,  43.999906], //longitude, latitude
-    zoom: 6, //zoom level
-    container: "viewDiv" //Div element
-  });
-
-  //expand and add widget for basemap gallery
-  const bgExpand = new Expand({
-    view: view,
-    content: new BasemapGallery({
-      view: view,
-     })
-  });
-  view.ui.add(bgExpand, "top-right");
-
-  //create locate widget instance and add it to the view
-  const locate = new Locate({
-      view: view
-  });
-  view.ui.add(locate, "top-left");
-
-  //create search widget instance 
-  const search = new Search({
-    view: view,
-    suggestionsEnabled: true,
-    maxSuggestions: 3
-  });
-    
-  //expand the search widget 
-  const searchExpand = new Expand({
-    view: view,
-    content: search,
-    expandIconClass: "esri-icon-search",
-    expandTooltip: "Search",
-    expanded: false
-  })
-  //add the search widget to the top left corner of the view
-  view.ui.add(searchExpand, {
-    position: "top-left",
-    index: 2
-  });
-
-  //create a LayerList widget
-  const layerList = new LayerList({
-      view: view
-  });
-  
-  //put LayerList widget into an Expand widget
-  const layerListExpand = new Expand({
-    view: view,
-    content: layerList,
-    expandIconClass: "esri-icon-layer-list",
-    expandTooltip: "Layers"  // Tooltip text for the button
-  });
-  //add the Expand widget to the view
-  view.ui.add(layerListExpand, "top-right");
-
-  //create a Legend widget instance 
-  const legend = new Legend({
-    view: view
-  });
-
-  //put Legend widget into an Expand widget and add it to the view
-  const legendExpand = new Expand({
-    view: view,
-    content: legend,
-    expandIconClass: "esri-icon-legend",
-    expandTooltip: "Legend",
-  });
-  view.ui.add(legendExpand, "bottom-left");
-
-  //create Editor widget instance
-  const editor = new Editor({
-    view: view,
-  }); 
-
-  //expand the editor widget and add it to the view
-  const editorExpand = new Expand({
-    view: view,
-    content: editor,
-    expandIconClass: "esri-icon-edit",
-    expandTooltip: "Add Completed Segments",
-    expanded: false
-  });
-  view.ui.add(editorExpand, "top-right");
-
-  //define a popup template for the sections feature layer
-  const sectionsPopupTemplate = {
-    title: "Section or Connecting Route",
-    content: [
-      {
-        type: "text",
-        text: `<div style="margin-bottom: 10px;"><b>Name: </b> {Segment}</div>
-              <div style="margin-bottom: 10px;"><b>Type: </b> {Status}</div>`
-      },
-      {
-        type: "fields", //used Arcade expressions to change the long float to one decimal
-        fieldInfos: [{
-          fieldName: "length_mi",
-          label: "Length (mi)", 
-          format: {
-            places: 1,
-            digitSeparator: true
-          }
-        }]
+        background-color: #ff6700;
+        color: #ffffff;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
       }
-    ]
-  };
+      .addRecordBtn:hover {
+        background-color: #ff6700;
+      }
 
-  //define a popup template for the parking feature layer
-  const parkingPopupTemplate = {
-    title: "Parking Area",
-    content: `<div style="margin-bottom: 10px;"><b>Parking Type: </b> {Parking_Type}</div>
-              <div style="margin-bottom: 10px;"><b>Description: </b> {Description}</div>
-              <div style="margin-bottom: 10px;"><b>Fee: </b> {Fee}</div>
-              <div style="margin-bottom: 10px;"><b>Overnight Parking: </b> {Overnight_Park}</div>
-              <div><b>Comment: </b> {Comment}</div>`
-  }
+      /* Map container: leave space for header */
+      #viewDiv {
+        height: calc(100% - 60px);
+      }
 
-  //define a popup template for the camping feature layer
-  const campingPopupTemplate = {
-    title: "Camping Area",
-    content: `<div style="margin-bottom: 10px;"><b>Type: </b> {Camp_Type}</div>
-              <div style="margin-bottom: 10px;"><b># sites: </b> {Num_sites}</div>
-              <div style="margin-bottom: 10px;"><b>Water: </b> {Water}</div>
-              <div style="margin-bottom: 10px;"><b>Toilet: </b> {Toilet}</div>
-              <div style="margin-bottom: 10px;"><b>Showers: </b> {Showers}</div>
-              <div><b>Description: </b> {Description}</div>`
-  }
+      /* Popup styling */
+      .esri-popup {
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      .esri-popup__header {
+        background-color: #0077D4;
+        color: #ffffff;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        padding: 10px 15px;
+        font-weight: 500;
+      }
+      .esri-popup__content {
+        background-color: rgba(0, 119, 212, 0.1);
+        padding: 15px;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+      }
 
-  //define a popup template for the water feature layer
-  const waterPopupTemplate = {
-    title: "Potential Water Source",
-    content: `<div style="margin-bottom: 10px;"><b>Potability: </b> {Potability}</div>
-              <div style="margin-bottom: 10px;"><b>Reliability: </b> {Reliability}</div>
-              <div><b>Description: </b> {Description}</div>`
-  }
+      /* Modal styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 100;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+      .modal-content {
+        background-color: #fefefe;
+        margin: 10% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 600px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2), 0 6px 20px rgba(0,0,0,0.19);
+        position: relative;
+        text-align: center;
+      }
+      .modal-content h2 {
+        margin-top: 0;
+      }
+      .modal-content img {
+        margin: 10px 0;
+      }
+      .modal-text {
+        text-align: left;
+      }
+      .modal-text ul {
+        padding-left: 20px;
+      }
+      .close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .close:hover, .close:focus {
+        color: #000;
+      }
+    </style>
+  </head>
 
-  //make section lines brown
-  const sectionsRenderer = new SimpleRenderer({
-    symbol: new SimpleLineSymbol({
-      color: new Color([86, 63, 35]),
-      width: "3px"
-    })
-  });
+  <body>
+    <!-- Header Section -->
+    <div class="header">
+      <h1>Geologic Map of Ice Age Trail</h1>
+      <a href="https://survey123.arcgis.com/share/28999d44a3004264b788805abd470022" target="_blank" class="addRecordBtn">Report Trail Issue</a>
+    </div>
 
-  //add sections layer 
-  const sections = new FeatureLayer({
-    url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments_CR/FeatureServer",
-    title: "IAT Sections and Connecting Routes",
-    renderer: sectionsRenderer,
-    //add the popup template
-    outFields: ["Segment", "length_mi", "Status"],
-    popupTemplate: sectionsPopupTemplate
-  });
-  map.add(sections);
-  
-  //add the feature layer for IAT parking lots
-  const parking = new FeatureLayer({
-    url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Parking/FeatureServer",
-    title: "Parking Areas",
-    //add the popup template
-    outFields: ["Parking_Type", "Comment", "Description", "Fee", "Overnight_Park"],
-    popupTemplate: parkingPopupTemplate
-  });
-  map.add(parking);
+    <!-- Map Container -->
+    <div id="viewDiv"></div>
 
-  //add the feature layer for IAT camping areas
-  const camping = new FeatureLayer({
-    url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Camping1/FeatureServer",
-    title: "Camping Areas",
-    //add the popup template
-    outFields: ["Camp_Type", "Num_Sites", "Water", "Toilet", "Showers", "Description"],
-    popupTemplate: campingPopupTemplate
-  });
-  map.add(camping);
+    <!-- Welcome Modal -->
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Welcome to the Geologic Map of the Ice Age Trail!</h2>
+        <img src="LOGO_Ice-Age-Trail-Alliance-JPG-1267x1536.jpg" alt="Ice Age Trail Alliance Logo" width="125" height="150" />
+        <div class="modal-text">
+          <p>Your ultimate companion for exploring the geology and trail features of the Ice Age Trail.</p>
+          <ul>
+            <li><strong>Geologic Insights:</strong> Discover bedrock formations and glacial features along the trail.</li>
+            <li><strong>Interactive Mapping:</strong> Navigate detailed maps showing trail segments, campgrounds, and water sources.</li>
+            <li><strong>Report Issues:</strong> Quickly report trail hazards or maintenance concerns.</li>
+            <li><strong>Community Contributions:</strong> See contributions from fellow hikers and share your experiences.</li>
+          </ul>
+          <p>Explore, report, and enjoy the natural beauty of the Ice Age Trail with our interactive geologic map!</p>
+        </div>
+      </div>
+    </div>
 
-  //add feature layer for water
-  const water = new FeatureLayer ({
-    url:"https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Potable_Water/FeatureServer",
-    title: "Potable Water",
-    //add the popup template
-    outFields: ["Potability", "Reliability", "Description"],
-    popupTemplate: waterPopupTemplate
-  });
-  map.add(water);
+    <!-- ArcGIS API and Application Script -->
+    <script>
+      // Modal functionality
+      var modal = document.getElementById("myModal");
+      var closeBtn = document.getElementsByClassName("close")[0];
+      window.onload = function() {
+        modal.style.display = "block";
+      };
+      closeBtn.onclick = function() {
+        modal.style.display = "none";
+      };
+      window.onclick = function(event) {
+        if (event.target === modal) {
+          modal.style.display = "none";
+        }
+      };
 
-  //community icon renderer for official IAT community logo
-  const communityRenderer = {
-    type: "simple",
-    symbol: {
-      type: "picture-marker",
-      url: "https://ecolville.github.io/TrailGuard/Generic-Trail-Community-Logo.png",
-      width: "20px",
-      height: "20px"
-    }
-  };
+      // Load ArcGIS modules and create the map
+      require([
+          "esri/config", 
+          "esri/Map", 
+          "esri/views/MapView",
+          "esri/widgets/BasemapGallery",
+          "esri/widgets/Locate",
+          "esri/widgets/Search",
+          "esri/widgets/Expand",
+          "esri/layers/FeatureLayer",
+          "esri/renderers/SimpleRenderer",
+          "esri/symbols/SimpleLineSymbol",
+          "esri/Color",
+          "esri/widgets/Editor",
+          "esri/widgets/Legend",
+          "esri/widgets/LayerList"
+      ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, FeatureLayer, SimpleRenderer, SimpleLineSymbol, Color, Editor, Legend, LayerList) {
 
-  //add the feature layer for IAT communities
-  const communities = new FeatureLayer({
-    url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/Ice_Age_Trail_Communities_View/FeatureServer",
-    title: "Trail Communities",
-    renderer: communityRenderer,
-  });
-  map.add(communities);
-  //add popup template
-  communities.popupTemplate = {
-  title: "{Name}"
-  }
+        // Set API key
+        esriConfig.apiKey = "AAPKddba40c16f2c479188ee7654064642bcKj2RV3mAHrsiJS_6TRKUzkim46MXbNeE97z3bQn0zq3zyX67A3i8hBg6lEH0Fxl_";
+        
+        // Create the map using the light-gray basemap
+        const map = new Map({ basemap: "arcgis-light-gray" });
 
-  //add hazards feature layer that's created by survey123 data
-  const hazards = new FeatureLayer ({
-    url:"https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/survey123_28999d44a3004264b788805abd470022_results/FeatureServer",
-    title: "Trail Hazards & Maintenance Issues",
-    renderer: {
-      type: "simple",
-      symbol: {
-        type: "picture-marker",
-        url: "https://ecolville.github.io/TrailGuard/hazard.png",
-        width: "20px",
-        height: "30px"
-      },
-    }
-  });
-  map.add(hazards);
+        // Create the MapView centered on Wisconsin
+        const view = new MapView({
+          container: "viewDiv",
+          map: map,
+          center: [-89.585655, 43.999906],
+          zoom: 6
+        });
 
-  //popup template for the trail hazards
-  hazards.popupTemplate = {
-    title: "Trail Hazards and Maintenance Issue",
-    content: `<div style="margin-bottom: 10px;"><b>Date of Observation: </b> {observation_date_and_time}</div>
-              <div style="margin-bottom: 10px;"><b>Location: </b> {trail_segment_name} {mile_marker}</div>
-              <div style="margin-bottom: 10px;"><b>Hazard/Maintenence Need: </b> {hazardmaintenance_need}</div>
-              <div style="margin-bottom: 10px;"><b>Description: </b> {description}</div>
-              <div><b>Severity of Issue: </b> {level_of_severity}</div>`
-  };
+        // Add Basemap Gallery widget inside an Expand widget
+        const bgGallery = new BasemapGallery({ view: view });
+        view.ui.add(new Expand({ view: view, content: bgGallery }), "top-right");
 
-  //create yellow line for mySegments
-  const yellowLineSymbol = new SimpleLineSymbol({
-      color: new Color([251, 222, 74]), //IAT yellow
-      width: "3px",
-      style: "solid"
-  });
+        // Add Locate widget
+        view.ui.add(new Locate({ view: view }), "top-left");
 
-  //render yellow line for mySegments
-  const mySegmentsRenderer = new SimpleRenderer ({
-    symbol: yellowLineSymbol
-  });
+        // Add Search widget inside an Expand widget
+        const searchWidget = new Search({ view: view, suggestionsEnabled: true, maxSuggestions: 3 });
+        view.ui.add(new Expand({
+          view: view,
+          content: searchWidget,
+          expandIconClass: "esri-icon-search",
+          expandTooltip: "Search"
+        }), { position: "top-left", index: 2 });
 
-  //define the popup template for the mySegments layer
-  const mySegmentPopupTemplate = {
-    title: "{SegmentName} Segment Completed",
-    content: "on {DateCompleted} <br> {Length_mi} miles"
-  }
+        // Add LayerList widget inside an Expand widget
+        const layerList = new LayerList({ view: view });
+        view.ui.add(new Expand({
+          view: view,
+          content: layerList,
+          expandIconClass: "esri-icon-layer-list",
+          expandTooltip: "Layers"
+        }), "top-right");
 
-  //create mySegments Feature Layer
-  const mySegments = new FeatureLayer ({
-    url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Completed_IAT_Segments/FeatureServer",
-    renderer: mySegmentsRenderer,
-    //adding the mySegment popup 
-      popupTemplate: mySegmentPopupTemplate,
-      outFields: ["SegmentName", "DateCompleted", "Length_mi"],
-      title: "Segment Completed",
-  });
-  //adding the feature layer to the map
-  map.add(mySegments);
+        // Add Legend widget inside an Expand widget
+        const legend = new Legend({ view: view });
+        view.ui.add(new Expand({
+          view: view,
+          content: legend,
+          expandIconClass: "esri-icon-legend",
+          expandTooltip: "Legend"
+        }), "bottom-left");
 
-  });
-  </script>
-</body>
+        // Add Editor widget inside an Expand widget
+        const editor = new Editor({ view: view });
+        view.ui.add(new Expand({
+          view: view,
+          content: editor,
+          expandIconClass: "esri-icon-edit",
+          expandTooltip: "Add Completed Segments",
+          expanded: false
+        }), "top-right");
+
+        // Define popup templates and renderers for existing layers (sections, parking, camping, etc.)
+        const sectionsPopupTemplate = {
+          title: "Section or Connecting Route",
+          content: [
+            {
+              type: "text",
+              text: `<div style="margin-bottom: 10px;"><b>Name:</b> {Segment}</div>
+                     <div style="margin-bottom: 10px;"><b>Type:</b> {Status}</div>`
+            },
+            {
+              type: "fields",
+              fieldInfos: [{
+                fieldName: "length_mi",
+                label: "Length (mi)",
+                format: { places: 1, digitSeparator: true }
+              }]
+            }
+          ]
+        };
+        const sectionsRenderer = new SimpleRenderer({
+          symbol: new SimpleLineSymbol({
+            color: new Color([86, 63, 35]),
+            width: "3px"
+          })
+        });
+        const sections = new FeatureLayer({
+          url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments_CR/FeatureServer",
+          title: "IAT Sections and Connecting Routes",
+          renderer: sectionsRenderer,
+          outFields: ["Segment", "length_mi", "Status"],
+          popupTemplate: sectionsPopupTemplate
+        });
+        map.add(sections);
+
+        const parkingPopupTemplate = {
+          title: "Parking Area",
+          content: `<div style="margin-bottom: 10px;"><b>Parking Type:</b> {Parking_Type}</div>
+                    <div style="margin-bottom: 10px;"><b>Description:</b> {Description}</div>
+                    <div style="margin-bottom: 10px;"><b>Fee:</b> {Fee}</div>
+                    <div style="margin-bottom: 10px;"><b>Overnight Parking:</b> {Overnight_Park}</div>
+                    <div><b>Comment:</b> {Comment}</div>`
+        };
+        const parking = new FeatureLayer({
+          url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Parking/FeatureServer",
+          title: "Parking Areas",
+          outFields: ["Parking_Type", "Comment", "Description", "Fee", "Overnight_Park"],
+          popupTemplate: parkingPopupTemplate
+        });
+        map.add(parking);
+
+        const campingPopupTemplate = {
+          title: "Camping Area",
+          content: `<div style="margin-bottom: 10px;"><b>Type:</b> {Camp_Type}</div>
+                    <div style="margin-bottom: 10px;"><b># sites:</b> {Num_sites}</div>
+                    <div style="margin-bottom: 10px;"><b>Water:</b> {Water}</div>
+                    <div style="margin-bottom: 10px;"><b>Toilet:</b> {Toilet}</div>
+                    <div style="margin-bottom: 10px;"><b>Showers:</b> {Showers}</div>
+                    <div><b>Description:</b> {Description}</div>`
+        };
+        const camping = new FeatureLayer({
+          url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Camping1/FeatureServer",
+          title: "Camping Areas",
+          outFields: ["Camp_Type", "Num_Sites", "Water", "Toilet", "Showers", "Description"],
+          popupTemplate: campingPopupTemplate
+        });
+        map.add(camping);
+
+        const waterPopupTemplate = {
+          title: "Potential Water Source",
+          content: `<div style="margin-bottom: 10px;"><b>Potability:</b> {Potability}</div>
+                    <div style="margin-bottom: 10px;"><b>Reliability:</b> {Reliability}</div>
+                    <div><b>Description:</b> {Description}</div>`
+        };
+        const water = new FeatureLayer({
+          url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Potable_Water/FeatureServer",
+          title: "Potable Water",
+          outFields: ["Potability", "Reliability", "Description"],
+          popupTemplate: waterPopupTemplate
+        });
+        map.add(water);
+
+        const communityRenderer = {
+          type: "simple",
+          symbol: {
+            type: "picture-marker",
+            url: "https://ecolville.github.io/TrailGuard/Generic-Trail-Community-Logo.png",
+            width: "20px",
+            height: "20px"
+          }
+        };
+        const communities = new FeatureLayer({
+          url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/Ice_Age_Trail_Communities_View/FeatureServer",
+          title: "Trail Communities",
+          renderer: communityRenderer
+        });
+        communities.popupTemplate = { title: "{Name}" };
+        map.add(communities);
+
+        const hazards = new FeatureLayer({
+          url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/survey123_28999d44a3004264b788805abd470022_results/FeatureServer",
+          title: "Trail Hazards & Maintenance Issues",
+          renderer: {
+            type: "simple",
+            symbol: {
+              type: "picture-marker",
+              url: "https://ecolville.github.io/TrailGuard/hazard.png",
+              width: "20px",
+              height: "30px"
+            }
+          }
+        });
+        hazards.popupTemplate = {
+          title: "Trail Hazards and Maintenance Issue",
+          content: `<div style="margin-bottom: 10px;"><b>Date of Observation:</b> {observation_date_and_time}</div>
+                    <div style="margin-bottom: 10px;"><b>Location:</b> {trail_segment_name} {mile_marker}</div>
+                    <div style="margin-bottom: 10px;"><b>Hazard/Maintenance Need:</b> {hazardmaintenance_need}</div>
+                    <div style="margin-bottom: 10px;"><b>Description:</b> {description}</div>
+                    <div><b>Severity of Issue:</b> {level_of_severity}</div>`
+        };
+        map.add(hazards);
+
+        // Yellow line renderer for completed segments
+        const yellowLineSymbol = new SimpleLineSymbol({
+          color: new Color([251, 222, 74]), // IAT Yellow
+          width: "3px",
+          style: "solid"
+        });
+        const mySegmentsRenderer = new SimpleRenderer({
+          symbol: yellowLineSymbol
+        });
+        const mySegmentPopupTemplate = {
+          title: "{SegmentName} Segment Completed",
+          content: "on {DateCompleted} <br> {Length_mi} miles"
+        };
+        const mySegments = new FeatureLayer({
+          url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Completed_IAT_Segments/FeatureServer",
+          title: "Segment Completed",
+          renderer: mySegmentsRenderer,
+          popupTemplate: mySegmentPopupTemplate,
+          outFields: ["SegmentName", "DateCompleted", "Length_mi"]
+        });
+        map.add(mySegments);
+
+        // Placeholder: Bedrock Geology Layer (update URL when ready)
+        const bedrockGeology = new FeatureLayer({
+          url: "https://services.arcgis.com/YourServiceURL/arcgis/rest/services/Bedrock_Geology/FeatureServer",
+          title: "Bedrock Geology",
+          outFields: ["Feature_ID", "Rock_Type", "Formation_Name", "Age", "Description"],
+          popupTemplate: {
+            title: "Bedrock Geology",
+            content: `<b>Rock Type:</b> {Rock_Type}<br>
+                      <b>Formation:</b> {Formation_Name}<br>
+                      <b>Age:</b> {Age}<br>
+                      <b>Description:</b> {Description}`
+          }
+        });
+        map.add(bedrockGeology);
+
+        // Placeholder: Glacial Geology Layer (update URL when ready)
+        const glacialGeology = new FeatureLayer({
+          url: "https://services.arcgis.com/YourServiceURL/arcgis/rest/services/Glacial_Geology/FeatureServer",
+          title: "Glacial Geology",
+          outFields: ["Feature_ID", "Feature_Name", "Feature_Type", "Description"],
+          popupTemplate: {
+            title: "Glacial Geology",
+            content: `<b>Feature Name:</b> {Feature_Name}<br>
+                      <b>Feature Type:</b> {Feature_Type}<br>
+                      <b>Description:</b> {Description}`
+          }
+        });
+        map.add(glacialGeology);
+
+      });
+    </script>
+  </body>
 </html>
