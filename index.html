@@ -394,19 +394,20 @@
         map.add(mySegments);
 
         // Placeholder: Bedrock Geology Layer (update URL when ready)
-        const bedrockGeology = new FeatureLayer({
-          url: "https://services.arcgis.com/YourServiceURL/arcgis/rest/services/Bedrock_Geology/FeatureServer",
-          title: "Bedrock Geology",
-          outFields: ["Feature_ID", "Rock_Type", "Formation_Name", "Age", "Description"],
+        const outcropLocations = new FeatureLayer({
+          url: "https://services8.arcgis.com/RSxoCJGNVoiAd2K8/arcgis/rest/services/Outcrops_Wisconsin/FeatureServer",
+          title: "Outcrop Locations",
+          outFields: ["SiteName", "Summary", "Description", "Attachment", "Significance", "Age", "Reference"],
           popupTemplate: {
-            title: "Bedrock Geology",
-            content: `<b>Rock Type:</b> {Rock_Type}<br>
-                      <b>Formation:</b> {Formation_Name}<br>
+            title: "Outcrop Locations",
+            content: `<b>Rock Type:</b> {Summary}<br>
                       <b>Age:</b> {Age}<br>
-                      <b>Description:</b> {Description}`
+                      <b>Description:</b> {Description}
+                      <b>Attachment:</b> {Attachment}<br>
+                      <b>Reference:</b> {Reference}<br>`
           }
         });
-        map.add(bedrockGeology);
+        map.add(outcropLocations);
 
         // Placeholder: Glacial Geology Layer (update URL when ready)
         const glacialGeology = new FeatureLayer({
