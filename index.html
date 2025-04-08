@@ -393,20 +393,21 @@
         });
         map.add(mySegments);
 
-        // Placeholder: Bedrock Geology Layer (update URL when ready)
         const outcropLocations = new FeatureLayer({
           url: "https://services8.arcgis.com/RSxoCJGNVoiAd2K8/arcgis/rest/services/Outcrops_Wisconsin/FeatureServer",
           title: "Outcrop Locations",
           outFields: ["SiteName", "Summary", "Description", "Attachment", "Significance", "Age", "Reference"],
           popupTemplate: {
-            title: "Outcrop Locations",
-            content: `<b>Rock Type:</b> {Summary}<br>
-                      <b>Age:</b> {Age}<br>
-                      <b>Description:</b> {Description}
-                      <b>Attachment:</b> {Attachment}<br>
-                      <b>Reference:</b> {Reference}<br>`
-          }
-        });
+          title: "Outcrop Locations",
+          content: `<b>Rock Type:</b> {Summary}<br>
+                    <b>Age:</b> {Age}<br>
+                    <b>Description:</b> {Description}<br>
+                    <b>Attachment:</b> {Attachment}<br>
+                    <b>Reference:</b> {Reference}<br>`
+  },
+  definitionExpression: "hasAttachments = 1"  // Only show features with attachments
+});
+
         map.add(outcropLocations);
 
         // Placeholder: Glacial Geology Layer (update URL when ready)
