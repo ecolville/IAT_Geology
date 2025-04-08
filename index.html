@@ -394,19 +394,29 @@
         map.add(mySegments);
 
         const outcropLocations = new FeatureLayer({
-          url: "https://services8.arcgis.com/RSxoCJGNVoiAd2K8/arcgis/rest/services/Outcrops_Wisconsin/FeatureServer",
-          title: "Outcrop Locations",
-          outFields: ["SiteName", "Summary", "Description", "Attachment", "Significance", "Age", "Reference"],
-          popupTemplate: {
-          title: "Outcrop Locations",
-          content: `<b>Rock Type:</b> {Summary}<br>
-                    <b>Age:</b> {Age}<br>
-                    <b>Description:</b> {Description}<br>
-                    <b>Attachment:</b> {Attachment}<br>
-                    <b>Reference:</b> {Reference}<br>`
-  },
-  definitionExpression: "hasAttachments = 1"  // Only show features with attachments
+  url: "https://services8.arcgis.com/RSxoCJGNVoiAd2K8/arcgis/rest/services/Outcrops_Wisconsin/FeatureServer",
+  title: "Outcrop Locations",
+  outFields: ["SiteName", "Summary", "Description", "Attachment", "Significance", "Age", "Reference"],
+  definitionExpression: "Attachment IS NOT NULL AND Attachment <> ''", // Only show features with attachments
+  popupTemplate: {
+    title: "{SiteName}",
+    content: [
+      {
+        type: "fields",
+        fieldInfos: [
+          { fieldName: "Summary", label: "Rock Type" },
+          { fieldName: "Age" },
+          { fieldName: "Description" },
+          { fieldName: "Reference" }
+        ]
+      },
+      {
+        type: "attachments"
+      }
+    ]
+  }
 });
+
 
         map.add(outcropLocations);
 
