@@ -397,14 +397,13 @@
   url: "https://services8.arcgis.com/RSxoCJGNVoiAd2K8/arcgis/rest/services/Outcrops_Wisconsin/FeatureServer",
   title: "Outcrop Locations",
   outFields: ["SiteName", "Summary", "Description", "Attachment", "Significance", "Age", "Reference"],
-  definitionExpression: "Attachment IS NOT NULL AND Attachment <> ''", // Only show features with attachments
   popupTemplate: {
     title: "{SiteName}",
     content: [
       {
         type: "fields",
         fieldInfos: [
-          { fieldName: "Summary", label: "Rock Type" },
+          { fieldName: "Summary"},
           { fieldName: "Age" },
           { fieldName: "Description" },
           { fieldName: "Reference" }
