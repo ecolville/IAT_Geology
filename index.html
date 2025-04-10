@@ -394,16 +394,23 @@
         map.add(mySegments);
 
         const bedrockGeology = new FeatureLayer({
-          url: "https://services.arcgis.com/ULBqC49IEeIR01GF/arcgis/rest/services/Bedrock_Geology_WI_West_Central_Region_clip/FeatureServer",
+          url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Marathon_County_Bedrock/FeatureServer",
           title: "Bedrock Geology",
-                 })
-          map.add(bedrockGeology);
+          outFields: ["simple", "Description", "Age"],
+          popupTemplate: {
+            title: "Bedrock Geology",
+            content: `<b>Rock Name:</b> {simple}<br>
+                      <b>Age:</b> {Age}<br>
+                      <b>Description:</b> {Description}`
+          }
+        });
+        map.add(glacialGeology);
 
         // Placeholder: Glacial Geology Layer (update URL when ready)
         const glacialGeology = new FeatureLayer({
           url: "https://services.arcgis.com/YourServiceURL/arcgis/rest/services/Glacial_Geology/FeatureServer",
           title: "Glacial Geology",
-          outFields: ["Feature_ID", "Feature_Name", "Feature_Type", "Description"],
+          outFields: ["simple", "Description", "Age", "Description"],
           popupTemplate: {
             title: "Glacial Geology",
             content: `<b>Feature Name:</b> {Feature_Name}<br>
