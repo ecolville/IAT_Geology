@@ -23,7 +23,6 @@
       body {
         font-family: "Century Gothic", sans-serif;
       }
-
       /* Header styles */
       .header {
         display: flex;
@@ -51,12 +50,10 @@
       .addRecordBtn:hover {
         background-color: #ff6700;
       }
-
       /* Map container: leave space for header */
       #viewDiv {
         height: calc(100% - 60px);
       }
-
       /* Popup styling */
       .esri-popup {
         border-radius: 8px;
@@ -76,7 +73,6 @@
         border-bottom-left-radius: 8px;
         border-bottom-right-radius: 8px;
       }
-
       /* Modal styles */
       .modal {
         display: none;
@@ -97,7 +93,8 @@
         width: 80%;
         max-width: 600px;
         border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2), 0 6px 20px rgba(0,0,0,0.19);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2),
+                    0 6px 20px rgba(0, 0, 0, 0.19);
         position: relative;
         text-align: center;
       }
@@ -127,7 +124,6 @@
       }
     </style>
   </head>
-
   <body>
     <!-- Header Section -->
     <div class="header">
@@ -176,28 +172,29 @@
 
       // Load ArcGIS modules and create the map
       require([
-          "esri/config", 
-          "esri/Map", 
-          "esri/views/MapView",
-          "esri/widgets/BasemapGallery",
-          "esri/widgets/Locate",
-          "esri/widgets/Search",
-          "esri/widgets/Expand",
-          "esri/layers/FeatureLayer",
-          "esri/renderers/SimpleRenderer",
-          "esri/symbols/SimpleLineSymbol",
-          "esri/Color",
-          "esri/widgets/Editor",
-          "esri/widgets/Legend",
-          "esri/widgets/LayerList"
-      ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, FeatureLayer, SimpleRenderer, SimpleLineSymbol, Color, Editor, Legend, LayerList) {
+        "esri/config", 
+        "esri/Map", 
+        "esri/views/MapView",
+        "esri/widgets/BasemapGallery",
+        "esri/widgets/Locate",
+        "esri/widgets/Search",
+        "esri/widgets/Expand",
+        "esri/layers/FeatureLayer",
+        "esri/renderers/SimpleRenderer",
+        "esri/symbols/SimpleLineSymbol",
+        "esri/symbols/SimpleFillSymbol",
+        "esri/Color",
+        "esri/widgets/Editor",
+        "esri/widgets/Legend",
+        "esri/widgets/LayerList"
+      ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, FeatureLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol, Color, Editor, Legend, LayerList) {
 
         // Set API key
         esriConfig.apiKey = "AAPKddba40c16f2c479188ee7654064642bcKj2RV3mAHrsiJS_6TRKUzkim46MXbNeE97z3bQn0zq3zyX67A3i8hBg6lEH0Fxl_";
         
-        // Create the map using the light-gray basemap
+        // Create the map with the light-gray basemap
         const map = new Map({ basemap: "arcgis-light-gray" });
-
+        
         // Create the MapView centered on Wisconsin
         const view = new MapView({
           container: "viewDiv",
@@ -205,14 +202,14 @@
           center: [-89.585655, 43.999906],
           zoom: 12
         });
-
+        
         // Add Basemap Gallery widget inside an Expand widget
         const bgGallery = new BasemapGallery({ view: view });
         view.ui.add(new Expand({ view: view, content: bgGallery }), "top-right");
-
+        
         // Add Locate widget
         view.ui.add(new Locate({ view: view }), "top-left");
-
+        
         // Add Search widget inside an Expand widget
         const searchWidget = new Search({ view: view, suggestionsEnabled: true, maxSuggestions: 3 });
         view.ui.add(new Expand({
@@ -221,7 +218,7 @@
           expandIconClass: "esri-icon-search",
           expandTooltip: "Search"
         }), { position: "top-left", index: 2 });
-
+        
         // Add LayerList widget inside an Expand widget
         const layerList = new LayerList({ view: view });
         view.ui.add(new Expand({
@@ -230,7 +227,7 @@
           expandIconClass: "esri-icon-layer-list",
           expandTooltip: "Layers"
         }), "top-right");
-
+        
         // Add Legend widget inside an Expand widget
         const legend = new Legend({ view: view });
         view.ui.add(new Expand({
@@ -239,7 +236,7 @@
           expandIconClass: "esri-icon-legend",
           expandTooltip: "Legend"
         }), "bottom-left");
-
+        
         // Add Editor widget inside an Expand widget
         const editor = new Editor({ view: view });
         view.ui.add(new Expand({
@@ -249,8 +246,53 @@
           expandTooltip: "Add Completed Segments",
           expanded: false
         }), "top-right");
-
-        // Define popup templates and renderers for existing layers (sections, parking, camping, etc.)
+        
+        // === Layer Order ===
+        // Bedrock Geology layer: add first (index 0) so it displays at the bottom.
+        // Use a SimpleFillSymbol to create a simple renderer so the layer is not all one color.
+        const simpleFillSymbol = new SimpleFillSymbol({
+          type: "simple-fill",
+          color: [221, 221, 221, 0.5], // Semi-transparent gray fill
+          outline: {
+            color: "#0077D4", // IAT Blue outline
+            width: 1
+          }
+        });
+        const bedrockRenderer = new SimpleRenderer({
+          symbol: simpleFillSymbol
+        });
+        const bedrockGeology = new FeatureLayer({
+          url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Simplified_Marathon_Bedrock/FeatureServer",
+          title: "Bedrock Geology",
+          outFields: ["simple", "Description", "Age"],
+          renderer: bedrockRenderer,
+          popupTemplate: {
+            title: "Bedrock Geology",
+            content: `<b>Rock Name:</b> {simple}<br>
+                      <b>Age:</b> {Age}<br>
+                      <b>Description:</b> {Description}`
+          }
+        });
+        map.add(bedrockGeology, 0);  // Add bedrock layer at index 0
+        
+        // Glacial Geology layer: add above bedrock (index 1)
+        const glacialGeology = new FeatureLayer({
+          url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Simple_Marathon_Glacial/FeatureServer",
+          title: "Glacial Geology",
+          outFields: ["Name", "Description", "Direction", "Age"],
+          popupTemplate: {
+            title: "Glacial Geology",
+            content: `<b>Feature Name:</b> {Name}<br>
+                      <b>Direction:</b> {Direction}<br>
+                      <b>Age:</b> {Age}<br>
+                      <b>Description:</b> {Description}`
+          }
+        });
+        map.add(glacialGeology, 1);  // Add glacial geology at index 1
+        
+        // === Remaining Layers (added above geologic layers) ===
+        
+        // IAT Sections layer
         const sectionsPopupTemplate = {
           title: "Section or Connecting Route",
           content: [
@@ -283,7 +325,8 @@
           popupTemplate: sectionsPopupTemplate
         });
         map.add(sections);
-
+        
+        // IAT Parking layer
         const parkingPopupTemplate = {
           title: "Parking Area",
           content: `<div style="margin-bottom: 10px;"><b>Parking Type:</b> {Parking_Type}</div>
@@ -299,7 +342,8 @@
           popupTemplate: parkingPopupTemplate
         });
         map.add(parking);
-
+        
+        // IAT Camping layer
         const campingPopupTemplate = {
           title: "Camping Area",
           content: `<div style="margin-bottom: 10px;"><b>Type:</b> {Camp_Type}</div>
@@ -316,7 +360,8 @@
           popupTemplate: campingPopupTemplate
         });
         map.add(camping);
-
+        
+        // IAT Potable Water layer
         const waterPopupTemplate = {
           title: "Potential Water Source",
           content: `<div style="margin-bottom: 10px;"><b>Potability:</b> {Potability}</div>
@@ -330,7 +375,8 @@
           popupTemplate: waterPopupTemplate
         });
         map.add(water);
-
+        
+        // IAT Trail Communities layer
         const communityRenderer = {
           type: "simple",
           symbol: {
@@ -347,7 +393,8 @@
         });
         communities.popupTemplate = { title: "{Name}" };
         map.add(communities);
-
+        
+        // IAT Trail Hazards layer
         const hazards = new FeatureLayer({
           url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/survey123_28999d44a3004264b788805abd470022_results/FeatureServer",
           title: "Trail Hazards & Maintenance Issues",
@@ -370,16 +417,14 @@
                     <div><b>Severity of Issue:</b> {level_of_severity}</div>`
         };
         map.add(hazards);
-
-        // Yellow line renderer for completed segments
+        
+        // IAT Completed Segments layer (yellow line renderer)
         const yellowLineSymbol = new SimpleLineSymbol({
           color: new Color([251, 222, 74]), // IAT Yellow
           width: "3px",
           style: "solid"
         });
-        const mySegmentsRenderer = new SimpleRenderer({
-          symbol: yellowLineSymbol
-        });
+        const mySegmentsRenderer = new SimpleRenderer({ symbol: yellowLineSymbol });
         const mySegmentPopupTemplate = {
           title: "{SegmentName} Segment Completed",
           content: "on {DateCompleted} <br> {Length_mi} miles"
@@ -392,35 +437,6 @@
           outFields: ["SegmentName", "DateCompleted", "Length_mi"]
         });
         map.add(mySegments);
-
-        const bedrockGeology = new FeatureLayer({
-          url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Simplified_Marathon_Bedrock/FeatureServer",
-          title: "Bedrock Geology",
-          outFields: ["simple", "Description", "Age"],
-          popupTemplate: {
-            title: "Bedrock Geology",
-            content: `<b>Rock Name:</b> {simple}<br>
-                      <b>Age:</b> {Age}<br>
-                      <b>Description:</b> {Description}`
-          }
-        });
-        map.add(bedrockGeology);
-
-        // Placeholder: Glacial Geology Layer (update URL when ready)
-        const glacialGeology = new FeatureLayer({
-          url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Simple_Marathon_Glacial/FeatureServer",
-          title: "Glacial Geology",
-          outFields: ["Name", "Description", "Direction", "Age"],
-          popupTemplate: {
-            title: "Glacial Geology",
-            content: `<b>Feature Name:</b> {Name}<br>
-                      <b>Direction from which ice flowed:</b> {Direction}<br>
-                      <b>Age:</b> {Age}<br>
-                      <b>Description:</b> {Description}`
-          }
-        });
-        map.add(glacialGeology);
-
       });
     </script>
   </body>
