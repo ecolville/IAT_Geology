@@ -408,13 +408,14 @@
 
         // Placeholder: Glacial Geology Layer (update URL when ready)
         const glacialGeology = new FeatureLayer({
-          url: "https://services.arcgis.com/YourServiceURL/arcgis/rest/services/Glacial_Geology/FeatureServer",
+          url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Simple_Marathon_Glacial/FeatureServer",
           title: "Glacial Geology",
-          outFields: ["simple", "Description", "Age", "Description"],
+          outFields: ["Name", "Description", "Direction", "Age"],
           popupTemplate: {
             title: "Glacial Geology",
-            content: `<b>Feature Name:</b> {Feature_Name}<br>
-                      <b>Feature Type:</b> {Feature_Type}<br>
+            content: `<b>Feature Name:</b> {Name}<br>
+                      <b>Direction from which ice flowed:</b> {Direction}<br>
+                      <b>Age:</b> {Age}<br>
                       <b>Description:</b> {Description}`
           }
         });
