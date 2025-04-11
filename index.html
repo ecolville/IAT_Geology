@@ -199,7 +199,7 @@
         const view = new MapView({
           container: "viewDiv",
           map: map,
-          center: [-89.585655, 43.999906],
+          center: [-89.8505, 44.8505],
           zoom: 12
         });
         
@@ -250,22 +250,11 @@
         // === Layer Order ===
         // Bedrock Geology layer: add first (index 0) so it displays at the bottom.
         // Use a SimpleFillSymbol to create a simple renderer so the layer is not all one color.
-        const simpleFillSymbol = new SimpleFillSymbol({
-          type: "simple-fill",
-          color: [221, 221, 221, 0.5], // Semi-transparent gray fill
-          outline: {
-            color: "#0077D4", // IAT Blue outline
-            width: 1
-          }
-        });
-        const bedrockRenderer = new SimpleRenderer({
-          symbol: simpleFillSymbol
-        });
+        
         const bedrockGeology = new FeatureLayer({
           url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Simplified_Marathon_Bedrock/FeatureServer",
           title: "Bedrock Geology",
           outFields: ["simple", "Description", "Age"],
-          renderer: bedrockRenderer,
           popupTemplate: {
             title: "Bedrock Geology",
             content: `<b>Rock Name:</b> {simple}<br>
