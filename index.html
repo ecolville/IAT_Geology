@@ -264,13 +264,13 @@
         const glacialGeology = new FeatureLayer({
         url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Simple_Marathon_Glacial/FeatureServer",
         title: "Glacial Geology",
-        outFields: ["Name", "Description", "Direction", "Age"],
+        outFields: ["Name", "Descr", "Direction", "Age"],
         popupTemplate: {
         title: "Glacial Geology",
         content: `<b>Feature Name:</b> {Name}<br><br>
                   <b>Direction:</b> {Direction}<br><br>
                   <b>Age:</b> {Age}<br><br>
-                  <b>Description:</b> {Description} - Test`
+                  <b>Description:</b> {Descr}`
            }
          });
          map.add(glacialGeology);  
@@ -310,13 +310,13 @@ map.add(sections);
            content: `<div style="margin-bottom: 10px;"><b>Parking Type:</b> {Parking_Type}</div>
                      <div style="margin-bottom: 10px;"><b>Description:</b> {Description}</div>
                      <div style="margin-bottom: 10px;"><b>Fee:</b> {Fee}</div>
-                     <div style="margin-bottom: 10px;"><b>Overnight Parking:</b> {Overnight Parking}</div>
-                     <div style="margin-bottom: 10px;"><b>Parking Notes: </b> {Parking Notes}`
+                     <div style="margin-bottom: 10px;"><b>Overnight Parking:</b> {Overnight_Park}</div>
+                     <div style="margin-bottom: 10px;"><b>Parking Notes: </b> {Parking_Notes}`
          };
          const parking = new FeatureLayer({
            url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Parking/FeatureServer",
            title: "Parking Areas",
-           outFields: ["Parking Type", "Description", "Fee", "Overnight Parking", "Parking Notes"],
+           outFields: ["Parking_Type", "Description", "Fee", "Overnight_Park", "Parking_Notes"],
            popupTemplate: parkingPopupTemplate
          });
          map.add(parking);
@@ -324,8 +324,8 @@ map.add(sections);
          // IAT Camping layer
          const campingPopupTemplate = {
            title: "Campgrounds",
-           content: `<div style="margin-bottom: 10px;"><b>Type:</b> {Camping Type}</div>
-                     <div style="margin-bottom: 10px;"><b># sites:</b> {Number of Sites}</div>
+           content: `<div style="margin-bottom: 10px;"><b>Type:</b> {Camp_Type}</div>
+                     <div style="margin-bottom: 10px;"><b># sites:</b> {Num_Sites}</div>
                      <div style="margin-bottom: 10px;"><b>Water:</b> {Water}</div>
                      <div style="margin-bottom: 10px;"><b>Toilet:</b> {Toilet}</div>
                      <div style="margin-bottom: 10px;"><b>Showers:</b> {Showers}</div>
@@ -334,7 +334,7 @@ map.add(sections);
          const campgrounds = new FeatureLayer({
            url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT___Campgrounds_NEW/FeatureServer",
            title: "Camping Areas",
-           outFields: ["Camping Type", "Number of Sites", "Water", "Toilet", "Showers", "Comment"],
+           outFields: ["Camp_Type", "Num_Sites", "Water", "Toilet", "Showers", "Comment"],
            popupTemplate: campingPopupTemplate
          });
          map.add(campgrounds);
