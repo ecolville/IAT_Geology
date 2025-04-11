@@ -418,12 +418,12 @@
         const bedrockGeology = new FeatureLayer({
           url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Simplified_Marathon_Bedrock/FeatureServer",
           title: "Bedrock Geology",
-          outFields: ["simple", "Description", "Age"],
+          outFields: ["simple", "Descr", "Age"],
           renderer: bedrockRenderer,
           popupTemplate: {
             title: "Bedrock Geology",
             content:
-              "<b>Rock Name:</b> {simple}<br><b>Age:</b> {Age}<br><b>Description:</b> {Description}"
+              "<b>Rock Name:</b> {simple}<br><b>Age:</b> {Age}<br><b>Description:</b> {Descr}"
           }
         });
         // Add bedrock layer at index 0
