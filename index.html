@@ -321,23 +321,23 @@ map.add(sections);
          });
          map.add(parking);
         
-        // // IAT Camping layer
-        // const campingPopupTemplate = {
-        //   title: "Camping Area",
-        //   content: `<div style="margin-bottom: 10px;"><b>Type:</b> {Camp_Type}</div>
-        //             <div style="margin-bottom: 10px;"><b># sites:</b> {Num_sites}</div>
-        //             <div style="margin-bottom: 10px;"><b>Water:</b> {Water}</div>
-        //             <div style="margin-bottom: 10px;"><b>Toilet:</b> {Toilet}</div>
-        //             <div style="margin-bottom: 10px;"><b>Showers:</b> {Showers}</div>
-        //             <div><b>Description:</b> {Description}</div>`
-        // };
-        // const camping = new FeatureLayer({
-        //   url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Camping1/FeatureServer",
-        //   title: "Camping Areas",
-        //   outFields: ["Camp_Type", "Num_Sites", "Water", "Toilet", "Showers", "Description"],
-        //   popupTemplate: campingPopupTemplate
-        // });
-        // map.add(camping);
+         // IAT Camping layer
+         const campingPopupTemplate = {
+           title: "Campgrounds",
+           content: `<div style="margin-bottom: 10px;"><b>Type:</b> {Camping Type}</div>
+                     <div style="margin-bottom: 10px;"><b># sites:</b> {Number of Sites}</div>
+                     <div style="margin-bottom: 10px;"><b>Water:</b> {Water}</div>
+                     <div style="margin-bottom: 10px;"><b>Toilet:</b> {Toilet}</div>
+                     <div style="margin-bottom: 10px;"><b>Showers:</b> {Showers}</div>
+                     <div><b>Description:</b> {Comment}</div>`
+         };
+         const campgrounds = new FeatureLayer({
+           url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT___Campgrounds_NEW/FeatureServer",
+           title: "Camping Areas",
+           outFields: ["Camping Type", "Number of Sites", "Water", "Toilet", "Showers", "Comment"],
+           popupTemplate: campingPopupTemplate
+         });
+         map.add(campgrounds);
         
         // // IAT Potable Water layer
         // const waterPopupTemplate = {
