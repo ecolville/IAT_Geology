@@ -217,15 +217,7 @@
           expandTooltip: "Search"
         }), { position: "top-left", index: 2 });
         
-        // Add LayerList widget inside an Expand widget
-        const layerList = new LayerList({ view: view });
-        view.ui.add(new Expand({
-          view: view,
-          content: layerList,
-          expandIconClass: "esri-icon-layer-list",
-          expandTooltip: "Layers",
-          expanded: true
-        }), "top-right");
+        
         
         /*
         // Add Editor widget inside an Expand widget
@@ -389,6 +381,16 @@ map.add(sections);
                      <div><b>Severity of Issue:</b> {level_of_severity}</div>`
          };
          map.add(hazards);
+
+         // Add LayerList widget inside an Expand widget
+        const layerList = new LayerList({ view: view });
+        view.ui.add(new Expand({
+          view: view,
+          content: layerList,
+          expandIconClass: "esri-icon-layer-list",
+          expandTooltip: "Layers",
+          expanded: true
+        }), "top-right");
         
          /*
          // IAT Completed Segments layer (yellow line renderer)
