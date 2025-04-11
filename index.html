@@ -274,43 +274,41 @@
                   <b>Description:</b> {Description}`
            }
          });
-         map.add(glacialGeology);  // Add glacial geology at index 1
-        
-        // // === Remaining Layers (added above geologic layers) ===
-        
-        // // IAT Sections layer
-        // const sectionsPopupTemplate = {
-        //   title: "Section or Connecting Route",
-        //   content: [
-        //     {
-        //       type: "text",
-        //       text: `<div style="margin-bottom: 10px;"><b>Name:</b> {Segment}</div>
-        //              <div style="margin-bottom: 10px;"><b>Type:</b> {Status}</div>`
-        //     },
-        //     {
-        //       type: "fields",
-        //       fieldInfos: [{
-        //         fieldName: "length_mi",
-        //         label: "Length (mi)",
-        //         format: { places: 1, digitSeparator: true }
-        //       }]
-        //     }
-        //   ]
-        // };
-        // const sectionsRenderer = new SimpleRenderer({
-        //   symbol: new SimpleLineSymbol({
-        //     color: new Color([86, 63, 35]),
-        //     width: "3px"
-        //   })
-        // });
-        // const sections = new FeatureLayer({
-        //   url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments_CR/FeatureServer",
-        //   title: "IAT Sections and Connecting Routes",
-        //   renderer: sectionsRenderer,
-        //   outFields: ["Segment", "length_mi", "Status"],
-        //   popupTemplate: sectionsPopupTemplate
-        // });
-        // map.add(sections);
+         map.add(glacialGeology);  
+                
+        //IAT Sections layer
+        const sectionsPopupTemplate = {
+        title: "Section or Connecting Route",
+        content: [
+             {
+               type: "text",
+               text: `<div style="margin-bottom: 10px;"><b>Name:</b> {Segment}</div>
+                      <div style="margin-bottom: 10px;"><b>Type:</b> {Status}</div>`
+             },
+             {
+               type: "fields",
+               fieldInfos: [{
+                 fieldName: "length_mi",
+                 label: "Length (mi)",
+                 format: { places: 1, digitSeparator: true }
+               }]
+             }
+           ]
+         };
+         const sectionsRenderer = new SimpleRenderer({
+           symbol: new SimpleLineSymbol({
+             color: new Color([86, 63, 35]),
+             width: "3px"
+           })
+         });
+         const sections = new FeatureLayer({
+           url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments_CR/FeatureServer",
+           title: "IAT Sections and Connecting Routes",
+           renderer: sectionsRenderer,
+           outFields: ["Segment", "length_mi", "Status"],
+           popupTemplate: sectionsPopupTemplate
+         });
+         map.add(sections);
         
         // // IAT Parking layer
         // const parkingPopupTemplate = {
