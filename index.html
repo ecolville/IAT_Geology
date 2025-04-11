@@ -295,7 +295,7 @@
   ]
 };
 
-// IAT Sections FeatureLayer using the updated renderer
+// IAT Sections 
 const sections = new FeatureLayer({
   url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments_CR/FeatureServer",
   title: "IAT Sections and Connecting Routes",
@@ -354,23 +354,23 @@ map.add(sections);
          });
         map.add(water);
         
-        // // IAT Trail Communities layer
-        // const communityRenderer = {
-        //   type: "simple",
-        //   symbol: {
-        //     type: "picture-marker",
-        //     url: "https://ecolville.github.io/TrailGuard/Generic-Trail-Community-Logo.png",
-        //     width: "20px",
-        //     height: "20px"
-        //   }
-        // };
-        // const communities = new FeatureLayer({
-        //   url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/Ice_Age_Trail_Communities_View/FeatureServer",
-        //   title: "Trail Communities",
-        //   renderer: communityRenderer
-        // });
-        // communities.popupTemplate = { title: "{Name}" };
-        // map.add(communities);
+         // IAT Trail Communities layer
+         const communityRenderer = {
+           type: "simple",
+           symbol: {
+             type: "picture-marker",
+             url: "https://github.com/ecolville/IAT_Geology/blob/main/Generic-Trail-Community-Logo.png",
+             width: "20px",
+             height: "20px"
+           }
+         };
+         const communities = new FeatureLayer({
+           url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/Ice_Age_Trail_Communities_View/FeatureServer",
+           title: "Trail Communities",
+           renderer: communityRenderer
+         });
+         communities.popupTemplate = { title: "{Name}" };
+         map.add(communities);
         
         // // IAT Trail Hazards layer
         // const hazards = new FeatureLayer({
