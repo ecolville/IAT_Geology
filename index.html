@@ -296,47 +296,15 @@ const sectionsPopupTemplate = {
   ]
 };
 
-// Create a UniqueValueRenderer based on the "Status" field
-const sectionsRenderer = new UniqueValueRenderer({
-  field: "Status",
-  // Optional: a default symbol if a feature doesn't match any unique value
-  defaultSymbol: new SimpleLineSymbol({
-    color: new Color([86, 63, 35]),
-    width: "3px",
-    style: "solid"
-  }),
-  uniqueValueInfos: [
-    {
-      value: "Ice Age Trail",
-      label: "Ice Age Trail",
-      symbol: new SimpleLineSymbol({
-        color: new Color([255, 0, 0]), // bright red
-        width: "3px",
-        style: "solid"
-      })
-    },
-    {
-      value: "Connecting Route",
-      label: "Connecting Route",
-      symbol: new SimpleLineSymbol({
-        color: new Color([255, 0, 0]), // bright red; change to dark gray if desired, e.g., new Color([105,105,105])
-        width: "3px",
-        style: "short-dash" // dashed line style
-      })
-    }
-  ]
-});
-
 // IAT Sections FeatureLayer using the updated renderer
 const sections = new FeatureLayer({
   url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments_CR/FeatureServer",
   title: "IAT Sections and Connecting Routes",
-  renderer: sectionsRenderer,
   outFields: ["Segment", "length_mi", "Status"],
   popupTemplate: sectionsPopupTemplate
 });
 map.add(sections);
-      /*  
+       
         //IAT Parking layer
         const parkingPopupTemplate = {
           title: "Parking Area",
@@ -387,7 +355,7 @@ map.add(sections);
          });
         map.add(water);
         
-        /*
+        
          // IAT Trail Communities layer
          const communityRenderer = {
            type: "simple",
@@ -406,8 +374,8 @@ map.add(sections);
          communities.popupTemplate = { title: "{Name}" };
          map.add(communities);
 
-         */
-        /*
+         
+        
          // IAT Trail Hazards layer
          const hazards = new FeatureLayer({
            url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/survey123_28999d44a3004264b788805abd470022_results/FeatureServer",
@@ -451,7 +419,7 @@ map.add(sections);
            outFields: ["SegmentName", "DateCompleted", "Length_mi"]
          });
          map.add(mySegments);
-         */
+         
       });
     </script>
   </body>
