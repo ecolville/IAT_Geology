@@ -270,7 +270,7 @@
         content: `<b>Feature Name:</b> {Name}<br><br>
                   <b>Direction:</b> {Direction}<br><br>
                   <b>Age:</b> {Age}<br><br>
-                  <b>Description:</b> {Description}`
+                  <b>Description:</b> {Description} - Test`
            }
          });
          map.add(glacialGeology);  
@@ -310,13 +310,13 @@ map.add(sections);
            content: `<div style="margin-bottom: 10px;"><b>Parking Type:</b> {Parking_Type}</div>
                      <div style="margin-bottom: 10px;"><b>Description:</b> {Description}</div>
                      <div style="margin-bottom: 10px;"><b>Fee:</b> {Fee}</div>
-                     <div style="margin-bottom: 10px;"><b>Overnight Parking:</b> {Overnight_Park}</div>
-                     <div><b>Comment:</b> {Comment}</div>`
+                     <div style="margin-bottom: 10px;"><b>Overnight Parking:</b> {Overnight Parking}</div>
+                     <div style="margin-bottom: 10px;"><b>Parking Notes: </b> {Parking Notes}`
          };
          const parking = new FeatureLayer({
            url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Parking/FeatureServer",
            title: "Parking Areas",
-           outFields: ["Parking_Type", "Comment", "Description", "Fee", "Overnight_Park"],
+           outFields: ["Parking Type", "Description", "Fee", "Overnight Parking", "Parking Notes"],
            popupTemplate: parkingPopupTemplate
          });
          map.add(parking);
