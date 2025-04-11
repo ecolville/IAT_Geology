@@ -200,7 +200,7 @@
           container: "viewDiv",
           map: map,
           center: [-89.8505, 44.8505],
-          zoom: 12
+          zoom: 9
         });
         
         // Add Basemap Gallery widget inside an Expand widget
@@ -251,18 +251,183 @@
         // Bedrock Geology layer: add first (index 0) so it displays at the bottom.
         // Use a SimpleFillSymbol to create a simple renderer so the layer is not all one color.
         
+        const bedrockRenderer = new UniqueValueRenderer({
+  field: "simple",
+  // Default symbol in case a feature's value doesn't match any unique value (optional)
+  defaultSymbol: new SimpleFillSymbol({
+    type: "simple-fill",
+    color: [211, 211, 211, 0.5], // light gray semi-transparent
+    outline: { color: "#0077D4", width: 1 }
+  }),
+  uniqueValueInfos: [
+    {
+      value: "alluvium",
+      label: "Alluvium",
+      symbol: new SimpleFillSymbol({
+        type: "simple-fill",
+        color: [210, 180, 140, 0.8], // Tan
+        outline: { color: "#0077D4", width: 1 }
+      })
+    },
+    {
+      value: "anorthosite",
+      label: "Anorthosite",
+      symbol: new SimpleFillSymbol({
+        type: "simple-fill",
+        color: [220, 220, 220, 0.8], // Light gray
+        outline: { color: "#0077D4", width: 1 }
+      })
+    },
+    {
+      value: "diorite",
+      label: "Diorite",
+      symbol: new SimpleFillSymbol({
+        type: "simple-fill",
+        color: [169, 169, 169, 0.8], // Dark gray
+        outline: { color: "#0077D4", width: 1 }
+      })
+    },
+    {
+      value: "gabbro",
+      label: "Gabbro",
+      symbol: new SimpleFillSymbol({
+        type: "simple-fill",
+        color: [105, 105, 105, 0.8], // Dim gray
+        outline: { color: "#0077D4", width: 1 }
+      })
+    },
+    {
+      value: "glacial deposits",
+      label: "Glacial Deposits",
+      symbol: new SimpleFillSymbol({
+        type: "simple-fill",
+        color: [176, 196, 222, 0.8], // Light steel blue
+        outline: { color: "#0077D4", width: 1 }
+      })
+    },
+    {
+      value: "gneiss",
+      label: "Gneiss",
+      symbol: new SimpleFillSymbol({
+        type: "simple-fill",
+        color: [192, 192, 192, 0.8], // Silver
+        outline: { color: "#0077D4", width: 1 }
+      })
+    },
+    {
+      value: "granite",
+      label: "Granite",
+      symbol: new SimpleFillSymbol({
+        type: "simple-fill",
+        color: [255, 182, 193, 0.8], // Light pink
+        outline: { color: "#0077D4", width: 1 }
+      })
+    },
+    {
+      value: "granodiorite",
+      label: "Granodiorite",
+      symbol: new SimpleFillSymbol({
+        type: "simple-fill",
+        color: [205, 201, 201, 0.8], // A soft grayish tone
+        outline: { color: "#0077D4", width: 1 }
+      })
+    },
+    {
+      value: "metagabbro",
+      label: "Metagabbro",
+      symbol: new SimpleFillSymbol({
+        type: "simple-fill",
+        color: [112, 128, 144, 0.8], // Slate gray
+        outline: { color: "#0077D4", width: 1 }
+      })
+    },
+    {
+      value: "metavolcanics",
+      label: "Metavolcanics",
+      symbol: new SimpleFillSymbol({
+        type: "simple-fill",
+        color: [143, 188, 143, 0.8], // Dark sea green
+        outline: { color: "#0077D4", width: 1 }
+      })
+    },
+    {
+      value: "mylonite",
+      label: "Mylonite",
+      symbol: new SimpleFillSymbol({
+        type: "simple-fill",
+        color: [128, 128, 128, 0.8], // Medium gray
+        outline: { color: "#0077D4", width: 1 }
+      })
+    },
+    {
+      value: "quartz monzonite",
+      label: "Quartz Monzonite",
+      symbol: new SimpleFillSymbol({
+        type: "simple-fill",
+        color: [255, 228, 196, 0.8], // Bisque
+        outline: { color: "#0077D4", width: 1 }
+      })
+    },
+    {
+      value: "quartzite",
+      label: "Quartzite",
+      symbol: new SimpleFillSymbol({
+        type: "simple-fill",
+        color: [245, 245, 245, 0.8], // White smoke
+        outline: { color: "#0077D4", width: 1 }
+      })
+    },
+    {
+      value: "sandstone",
+      label: "Sandstone",
+      symbol: new SimpleFillSymbol({
+        type: "simple-fill",
+        color: [244, 164, 96, 0.8], // Sandy brown
+        outline: { color: "#0077D4", width: 1 }
+      })
+    },
+    {
+      value: "schist",
+      label: "Schist",
+      symbol: new SimpleFillSymbol({
+        type: "simple-fill",
+        color: [112, 128, 144, 0.8], // Slate gray (you may choose a slightly different tone if needed)
+        outline: { color: "#0077D4", width: 1 }
+      })
+    },
+    {
+      value: "syenite",
+      label: "Syenite",
+      symbol: new SimpleFillSymbol({
+        type: "simple-fill",
+        color: [218, 112, 214, 0.8], // Orchid
+        outline: { color: "#0077D4", width: 1 }
+      })
+    },
+    {
+      value: "ultramafic rocks",
+      label: "Ultramafic Rocks",
+      symbol: new SimpleFillSymbol({
+        type: "simple-fill",
+        color: [47, 79, 79, 0.8], // Dark slate gray
+        outline: { color: "#0077D4", width: 1 }
+      })
+    }
+  ]
+});
         const bedrockGeology = new FeatureLayer({
           url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Simplified_Marathon_Bedrock/FeatureServer",
           title: "Bedrock Geology",
           outFields: ["simple", "Description", "Age"],
+          renderer: bedrockRenderer,
           popupTemplate: {
             title: "Bedrock Geology",
-            content: `<b>Rock Name:</b> {simple}<br>
-                      <b>Age:</b> {Age}<br>
-                      <b>Description:</b> {Description}`
+            content:
+              "<b>Rock Name:</b> {simple}<br><b>Age:</b> {Age}<br><b>Description:</b> {Description}"
           }
         });
-        map.add(bedrockGeology);  // Add bedrock layer at index 0
+        // Add bedrock layer at index 0
+        map.add(bedrockGeology); // Add bedrock layer at index 0
         
         // // Glacial Geology layer: add above bedrock (index 1)
         // const glacialGeology = new FeatureLayer({
