@@ -382,15 +382,18 @@ map.add(sections);
          };
          map.add(hazards);
 
-         // Add LayerList widget inside an Expand widget
-        const layerList = new LayerList({ view: view });
-        view.ui.add(new Expand({
-          view: view,
-          content: layerList,
-          expandIconClass: "esri-icon-layer-list",
-          expandTooltip: "Layers",
-          expanded: true
-        }), "top-right");
+         // Wait until the view is ready before adding the LayerList
+view.when(() => {
+  const layerList = new LayerList({ view: view });
+  view.ui.add(new Expand({
+    view: view,
+    content: layerList,
+    expandIconClass: "esri-icon-layer-list",
+    expandTooltip: "Layers",
+    expanded: true
+  }), "top-right");
+});
+
         
          /*
          // IAT Completed Segments layer (yellow line renderer)
