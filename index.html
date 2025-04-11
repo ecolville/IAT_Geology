@@ -261,20 +261,20 @@
         });
         map.add(bedrockGeology); 
         
-        // // Glacial Geology layer: add above bedrock (index 1)
-        // const glacialGeology = new FeatureLayer({
-        //   url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Simple_Marathon_Glacial/FeatureServer",
-        //   title: "Glacial Geology",
-        //   outFields: ["Name", "Description", "Direction", "Age"],
-        //   popupTemplate: {
-        //     title: "Glacial Geology",
-        //     content: `<b>Feature Name:</b> {Name}<br>
-        //               <b>Direction:</b> {Direction}<br>
-        //               <b>Age:</b> {Age}<br>
-        //               <b>Description:</b> {Description}`
-        //   }
-        // });
-        // map.add(glacialGeology, 1);  // Add glacial geology at index 1
+        // // Glacial Geology layer: add above bedrock 
+        const glacialGeology = new FeatureLayer({
+        url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Simple_Marathon_Glacial/FeatureServer",
+        title: "Glacial Geology",
+        outFields: ["Name", "Description", "Direction", "Age"],
+        popupTemplate: {
+        title: "Glacial Geology",
+        content: `<b>Feature Name:</b> {Name}<br><br>
+                  <b>Direction:</b> {Direction}<br><br>
+                  <b>Age:</b> {Age}<br><br>
+                  <b>Description:</b> {Description}`
+           }
+         });
+         map.add(glacialGeology);  // Add glacial geology at index 1
         
         // // === Remaining Layers (added above geologic layers) ===
         
