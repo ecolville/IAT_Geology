@@ -181,14 +181,12 @@
         "esri/widgets/Expand",
         "esri/layers/FeatureLayer",
         "esri/renderers/SimpleRenderer",
-        "esri/renderers/UniqueValueRenderer",
         "esri/symbols/SimpleLineSymbol",
         "esri/symbols/SimpleFillSymbol",
         "esri/Color",
         "esri/widgets/Editor",
-        "esri/widgets/Legend",
         "esri/widgets/LayerList"
-      ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, FeatureLayer, SimpleRenderer, UniqueValueRenderer, SimpleFillSymbol, Color, Editor, Legend, LayerList) {
+      ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, FeatureLayer, SimpleRenderer, SimpleFillSymbol, Color, Editor, LayerList) {
 
         // Set API key
         esriConfig.apiKey = "AAPKddba40c16f2c479188ee7654064642bcKj2RV3mAHrsiJS_6TRKUzkim46MXbNeE97z3bQn0zq3zyX67A3i8hBg6lEH0Fxl_";
@@ -228,15 +226,6 @@
           expandIconClass: "esri-icon-layer-list",
           expandTooltip: "Layers"
         }), "top-right");
-        
-        // Add Legend widget inside an Expand widget
-        const legend = new Legend({ view: view });
-        view.ui.add(new Expand({
-          view: view,
-          content: legend,
-          expandIconClass: "esri-icon-legend",
-          expandTooltip: "Legend"
-        }), "bottom-left");
         
         // Add Editor widget inside an Expand widget
         const editor = new Editor({ view: view });
