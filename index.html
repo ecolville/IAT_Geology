@@ -181,6 +181,7 @@
         "esri/widgets/Expand",
         "esri/layers/FeatureLayer",
         "esri/renderers/SimpleRenderer",
+        "esri/renderers/UniqueValueRenderer", 
         "esri/symbols/SimpleLineSymbol",
         "esri/symbols/SimpleFillSymbol",
         "esri/Color",
@@ -247,9 +248,7 @@
           expanded: false
         }), "top-right");
         
-        // === Layer Order ===
-        // Bedrock Geology layer: add first (index 0) so it displays at the bottom.
-        // Use a SimpleFillSymbol to create a simple renderer so the layer is not all one color.
+      
         
         const bedrockRenderer = new UniqueValueRenderer({
   field: "simple",
@@ -426,8 +425,7 @@
               "<b>Rock Name:</b> {simple}<br><b>Age:</b> {Age}<br><b>Description:</b> {Descr}"
           }
         });
-        // Add bedrock layer at index 0
-        map.add(bedrockGeology); // Add bedrock layer at index 0
+        map.add(bedrockGeology); 
         
         // // Glacial Geology layer: add above bedrock (index 1)
         // const glacialGeology = new FeatureLayer({
