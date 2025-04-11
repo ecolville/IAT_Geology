@@ -237,6 +237,7 @@
           outFields: ["simple", "Descr", "Age"],
           popupTemplate: {
             title: "Bedrock Geology",
+            listMode: "show",
             content:
               "<b>Rock Name:</b> {simple}<br><br><b>Age:</b> {Age}<br><br><b>Description:</b> {Descr}"
           }
@@ -250,6 +251,7 @@
         outFields: ["Name", "Descr", "Direction", "Age"],
         popupTemplate: {
         title: "Glacial Geology",
+        listMode: "show",
         content: `<b>Feature Name:</b> {Name}<br><br>
                   <b>Direction:</b> {Direction}<br><br>
                   <b>Age:</b> {Age}<br><br>
@@ -299,6 +301,7 @@ map.add(sections);
          const parking = new FeatureLayer({
            url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Parking/FeatureServer",
            title: "Parking Areas",
+           listMode: "show",
            outFields: ["Parking_Type", "Description", "Fee", "Overnight_Park", "Parking_Notes"],
            popupTemplate: parkingPopupTemplate
          });
@@ -317,6 +320,7 @@ map.add(sections);
          const campgrounds = new FeatureLayer({
            url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT___Campgrounds_NEW/FeatureServer",
            title: "Camping Areas",
+           listMode: "show",
            outFields: ["Camp_Type", "Num_Sites", "Water", "Toilet", "Showers", "Comment"],
            popupTemplate: campingPopupTemplate
          });
@@ -325,6 +329,7 @@ map.add(sections);
          // IAT Potable Water layer
          const waterPopupTemplate = {
            title: "Potable Water",
+           listMode: "show",
            content: `<div style="margin-bottom: 10px;"><b>Feature Type:</b> {Feature Type}</div>
                      <div style="margin-bottom: 10px;"><b>Reliability:</b> {Reliability}</div>
                      <div><b>Comment:</b> {Comment}</div>`
@@ -362,6 +367,7 @@ map.add(sections);
          const hazards = new FeatureLayer({
            url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/survey123_28999d44a3004264b788805abd470022_results/FeatureServer",
            title: "Trail Hazards & Maintenance Issues",
+           listMode: "show",
            renderer: {
              type: "simple",
              symbol: {
