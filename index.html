@@ -181,13 +181,14 @@
         "esri/widgets/Expand",
         "esri/layers/FeatureLayer",
         "esri/renderers/SimpleRenderer",
+        "esri/renderers/UniqueValueRenderer",
         "esri/symbols/SimpleLineSymbol",
         "esri/symbols/SimpleFillSymbol",
         "esri/Color",
         "esri/widgets/Editor",
         "esri/widgets/Legend",
         "esri/widgets/LayerList"
-      ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, FeatureLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol, Color, Editor, Legend, LayerList) {
+      ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, FeatureLayer, SimpleRenderer, UniqueValueRenderer, SimpleFillSymbol, Color, Editor, Legend, LayerList) {
 
         // Set API key
         esriConfig.apiKey = "AAPKddba40c16f2c479188ee7654064642bcKj2RV3mAHrsiJS_6TRKUzkim46MXbNeE97z3bQn0zq3zyX67A3i8hBg6lEH0Fxl_";
@@ -275,14 +276,14 @@
          });
          map.add(glacialGeology);  
         
-         //IAT Sections layer
-         const sectionsPopupTemplate = {
-          title: "Section or Connecting Route",
-          content: [
-            {
-              type: "text",
-              text: `<div style="margin-bottom: 10px;"><b>Name:</b> {Segment}</div>
-                      <div style="margin-bottom: 10px;"><b>Type:</b> {Status}</div>`
+         // IAT Sections layer popup template
+const sectionsPopupTemplate = {
+  title: "Section or Connecting Route",
+  content: [
+    {
+      type: "text",
+      text: `<div style="margin-bottom: 10px;"><b>Name:</b> {Segment}</div>
+             <div style="margin-bottom: 10px;"><b>Type:</b> {Status}</div>`
     },
     {
       type: "fields",
@@ -295,10 +296,42 @@
   ]
 };
 
-// IAT Sections 
+// Create a UniqueValueRenderer based on the "Status" field
+const sectionsRenderer = new UniqueValueRenderer({
+  field: "Status",
+  // Optional: a default symbol if a feature doesn't match any unique value
+  defaultSymbol: new SimpleLineSymbol({
+    color: new Color([86, 63, 35]),
+    width: "3px",
+    style: "solid"
+  }),
+  uniqueValueInfos: [
+    {
+      value: "Ice Age Trail",
+      label: "Ice Age Trail",
+      symbol: new SimpleLineSymbol({
+        color: new Color([255, 0, 0]), // bright red
+        width: "3px",
+        style: "solid"
+      })
+    },
+    {
+      value: "Connecting Route",
+      label: "Connecting Route",
+      symbol: new SimpleLineSymbol({
+        color: new Color([255, 0, 0]), // bright red; change to dark gray if desired, e.g., new Color([105,105,105])
+        width: "3px",
+        style: "short-dash" // dashed line style
+      })
+    }
+  ]
+});
+
+// IAT Sections FeatureLayer using the updated renderer
 const sections = new FeatureLayer({
   url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments_CR/FeatureServer",
   title: "IAT Sections and Connecting Routes",
+  renderer: sectionsRenderer,
   outFields: ["Segment", "length_mi", "Status"],
   popupTemplate: sectionsPopupTemplate
 });
