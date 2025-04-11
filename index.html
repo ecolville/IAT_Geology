@@ -228,6 +228,7 @@
           expanded: true
         }), "top-right");
         
+        /*
         // Add Editor widget inside an Expand widget
         const editor = new Editor({ view: view });
         view.ui.add(new Expand({
@@ -238,7 +239,7 @@
           expanded: false
         }), "top-right");
         
-      
+      */
         const bedrockGeology = new FeatureLayer({
           url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Simplified_Marathon_Bedrock/FeatureServer",
           title: "Bedrock Geology",
@@ -390,6 +391,7 @@ map.add(sections);
          };
          map.add(hazards);
         
+         /*
          // IAT Completed Segments layer (yellow line renderer)
          const yellowLineSymbol = new SimpleLineSymbol({
            color: new Color([251, 222, 74]), // IAT Yellow
@@ -409,7 +411,7 @@ map.add(sections);
            outFields: ["SegmentName", "DateCompleted", "Length_mi"]
          });
          map.add(mySegments);
-         
+         */
       });
     </script>
   </body>
