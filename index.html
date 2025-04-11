@@ -396,25 +396,25 @@ map.add(sections);
          };
          map.add(hazards);
         
-        // // IAT Completed Segments layer (yellow line renderer)
-        // const yellowLineSymbol = new SimpleLineSymbol({
-        //   color: new Color([251, 222, 74]), // IAT Yellow
-        //   width: "3px",
-        //   style: "solid"
-        // });
-        // const mySegmentsRenderer = new SimpleRenderer({ symbol: yellowLineSymbol });
-        // const mySegmentPopupTemplate = {
-        //   title: "{SegmentName} Segment Completed",
-        //   content: "on {DateCompleted} <br> {Length_mi} miles"
-        // };
-        // const mySegments = new FeatureLayer({
-        //   url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Completed_IAT_Segments/FeatureServer",
-        //   title: "Segment Completed",
-        //   renderer: mySegmentsRenderer,
-        //   popupTemplate: mySegmentPopupTemplate,
-        //   outFields: ["SegmentName", "DateCompleted", "Length_mi"]
-        // });
-        // map.add(mySegments);
+         // IAT Completed Segments layer (yellow line renderer)
+         const yellowLineSymbol = new SimpleLineSymbol({
+           color: new Color([251, 222, 74]), // IAT Yellow
+           width: "3px",
+           style: "solid"
+         });
+         const mySegmentsRenderer = new SimpleRenderer({ symbol: yellowLineSymbol });
+         const mySegmentPopupTemplate = {
+           title: "{SegmentName} Segment Completed",
+           content: "on {DateCompleted} <br> {Length_mi} miles"
+         };
+         const mySegments = new FeatureLayer({
+           url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Completed_IAT_Segments/FeatureServer",
+           title: "Segment Completed",
+           renderer: mySegmentsRenderer,
+           popupTemplate: mySegmentPopupTemplate,
+           outFields: ["SegmentName", "DateCompleted", "Length_mi"]
+         });
+         map.add(mySegments);
       });
     </script>
   </body>
