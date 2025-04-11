@@ -372,29 +372,29 @@ map.add(sections);
          communities.popupTemplate = { title: "{Name}" };
          map.add(communities);
         
-        // // IAT Trail Hazards layer
-        // const hazards = new FeatureLayer({
-        //   url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/survey123_28999d44a3004264b788805abd470022_results/FeatureServer",
-        //   title: "Trail Hazards & Maintenance Issues",
-        //   renderer: {
-        //     type: "simple",
-        //     symbol: {
-        //       type: "picture-marker",
-        //       url: "https://ecolville.github.io/TrailGuard/hazard.png",
-        //       width: "20px",
-        //       height: "30px"
-        //     }
-        //   }
-        // });
-        // hazards.popupTemplate = {
-        //   title: "Trail Hazards and Maintenance Issue",
-        //   content: `<div style="margin-bottom: 10px;"><b>Date of Observation:</b> {observation_date_and_time}</div>
-        //             <div style="margin-bottom: 10px;"><b>Location:</b> {trail_segment_name} {mile_marker}</div>
-        //             <div style="margin-bottom: 10px;"><b>Hazard/Maintenance Need:</b> {hazardmaintenance_need}</div>
-        //             <div style="margin-bottom: 10px;"><b>Description:</b> {description}</div>
-        //             <div><b>Severity of Issue:</b> {level_of_severity}</div>`
-        // };
-        // map.add(hazards);
+         // IAT Trail Hazards layer
+         const hazards = new FeatureLayer({
+           url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/survey123_28999d44a3004264b788805abd470022_results/FeatureServer",
+           title: "Trail Hazards & Maintenance Issues",
+           renderer: {
+             type: "simple",
+             symbol: {
+               type: "picture-marker",
+               url: "https://github.com/ecolville/IAT_Geology/blob/main/hazard.png",
+               width: "20px",
+               height: "30px"
+             }
+           }
+         });
+         hazards.popupTemplate = {
+           title: "Trail Hazards and Maintenance Issue",
+           content: `<div style="margin-bottom: 10px;"><b>Date of Observation:</b> {observation_date_and_time}</div>
+                     <div style="margin-bottom: 10px;"><b>Location:</b> {trail_segment_name} {mile_marker}</div>
+                     <div style="margin-bottom: 10px;"><b>Hazard/Maintenance Need:</b> {hazardmaintenance_need}</div>
+                     <div style="margin-bottom: 10px;"><b>Description:</b> {description}</div>
+                     <div><b>Severity of Issue:</b> {level_of_severity}</div>`
+         };
+         map.add(hazards);
         
         // // IAT Completed Segments layer (yellow line renderer)
         // const yellowLineSymbol = new SimpleLineSymbol({
