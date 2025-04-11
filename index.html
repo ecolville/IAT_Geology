@@ -339,20 +339,20 @@ map.add(sections);
          });
          map.add(campgrounds);
         
-        // // IAT Potable Water layer
-        // const waterPopupTemplate = {
-        //   title: "Potential Water Source",
-        //   content: `<div style="margin-bottom: 10px;"><b>Potability:</b> {Potability}</div>
-        //             <div style="margin-bottom: 10px;"><b>Reliability:</b> {Reliability}</div>
-        //             <div><b>Description:</b> {Description}</div>`
-        // };
-        // const water = new FeatureLayer({
-        //   url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Potable_Water/FeatureServer",
-        //   title: "Potable Water",
-        //   outFields: ["Potability", "Reliability", "Description"],
-        //   popupTemplate: waterPopupTemplate
-        // });
-        // map.add(water);
+         // IAT Potable Water layer
+         const waterPopupTemplate = {
+           title: "Potable Water",
+           content: `<div style="margin-bottom: 10px;"><b>Feature Type:</b> {Feature Type}</div>
+                     <div style="margin-bottom: 10px;"><b>Reliability:</b> {Reliability}</div>
+                     <div><b>Comment:</b> {Comment}</div>`
+         };
+         const water = new FeatureLayer({
+           url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Potable_Water/FeatureServer",
+           title: "Potable Water",
+           outFields: ["Feature Type", "Reliability", "Comment"],
+           popupTemplate: waterPopupTemplate
+         });
+        map.add(water);
         
         // // IAT Trail Communities layer
         // const communityRenderer = {
