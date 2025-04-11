@@ -304,22 +304,22 @@ const sections = new FeatureLayer({
 });
 map.add(sections);
         
-        // // IAT Parking layer
-        // const parkingPopupTemplate = {
-        //   title: "Parking Area",
-        //   content: `<div style="margin-bottom: 10px;"><b>Parking Type:</b> {Parking_Type}</div>
-        //             <div style="margin-bottom: 10px;"><b>Description:</b> {Description}</div>
-        //             <div style="margin-bottom: 10px;"><b>Fee:</b> {Fee}</div>
-        //             <div style="margin-bottom: 10px;"><b>Overnight Parking:</b> {Overnight_Park}</div>
-        //             <div><b>Comment:</b> {Comment}</div>`
-        // };
-        // const parking = new FeatureLayer({
-        //   url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Parking/FeatureServer",
-        //   title: "Parking Areas",
-        //   outFields: ["Parking_Type", "Comment", "Description", "Fee", "Overnight_Park"],
-        //   popupTemplate: parkingPopupTemplate
-        // });
-        // map.add(parking);
+        //IAT Parking layer
+        const parkingPopupTemplate = {
+          title: "Parking Area",
+           content: `<div style="margin-bottom: 10px;"><b>Parking Type:</b> {Parking_Type}</div>
+                     <div style="margin-bottom: 10px;"><b>Description:</b> {Description}</div>
+                     <div style="margin-bottom: 10px;"><b>Fee:</b> {Fee}</div>
+                     <div style="margin-bottom: 10px;"><b>Overnight Parking:</b> {Overnight_Park}</div>
+                     <div><b>Comment:</b> {Comment}</div>`
+         };
+         const parking = new FeatureLayer({
+           url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Parking/FeatureServer",
+           title: "Parking Areas",
+           outFields: ["Parking_Type", "Comment", "Description", "Fee", "Overnight_Park"],
+           popupTemplate: parkingPopupTemplate
+         });
+         map.add(parking);
         
         // // IAT Camping layer
         // const campingPopupTemplate = {
