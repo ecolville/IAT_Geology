@@ -253,6 +253,13 @@
         center: [-89.8505, 44.8505],
         zoom: 9
       });
+
+      // Define your teal highlight symbol for query results
+      const tealHighlightSymbol = new SimpleLineSymbol({
+        color: new Color([0, 128, 128]),  
+        width: "3px",
+        style: "solid"
+      });
       
       // Add Basemap Gallery, Locate, and Search widgets
       const bgGallery = new BasemapGallery({ view: view });
@@ -329,7 +336,7 @@
         url: "https://services.arcgis.com/EeCmkqXss9GYEKIZ/arcgis/rest/services/IAT_Segments_CR/FeatureServer",
         title: "IAT Sections and Connecting Routes",
         listMode: "show",
-        outFields: ["Segment", "length_mi", "Status"],
+        outFields: ["OBJECTID","Segment", "length_mi", "Status"],
         popupTemplate: sectionsPopupTemplate
       });
       map.add(sections);
@@ -366,7 +373,7 @@
       };
       // Completed Segments layer – where completed segments will be added
       const mySegments = new FeatureLayer({
-        url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Completed_IAT_Segments/FeatureServer",
+        url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/MySegments/FeatureServer",
         title: "Segment Completed",
         outFields: ["SegmentName", "DateCompleted", "Length_mi"],
         renderer: mySegmentsRenderer,
@@ -473,17 +480,6 @@
         // Buffer the selected segment geometry.
         const bufferedGeom = geometryEngine.buffer(selectedSegmentFeature.geometry, distance, "meters");
 
-        // Optionally show buffer graphic.
-        const bufferGraphic = new Graphic({
-          geometry: bufferedGeom,
-          symbol: new SimpleFillSymbol({
-            color: [255, 255, 0, 0.15],
-            outline: { color: [255, 255, 0], width: 2 }
-          })
-        });
-        view.graphics.removeAll();
-        view.graphics.add(bufferGraphic);
-
         // Clear previous results.
        document.getElementById("queryResults").innerText = "";
 
@@ -507,42 +503,62 @@
           bedrockGeology: bedrockGeology
         };
 
-       // Initialize results summary.
-  let resultsSummary = "";
+      // Initialize a variable to accumulate the HTML for the query results.
+      let allResultsHtml = "";
 
-queryLayers.forEach(function(layerId) {
-  const targetLayer = targetLayers[layerId];
-  if (targetLayer) {
-    targetLayer.queryFeatures({
-      geometry: bufferedGeom,
-      spatialRelationship: "intersects",
-      outFields: ["*"]
-    }).then(function(results) {
-      const count = results.features.length;
-      resultsSummary += `${targetLayer.title}: ${count} feature(s) found.\n`;
-      // Optionally, add highlight graphics.
-      results.features.forEach(function(feature) {
-        const highlightGraphic = new Graphic({
-          geometry: feature.geometry,
-          symbol: new SimpleLineSymbol({
-            color: new Color([255, 0, 0]),
-            width: "3px",
-            style: "dash"
-          })
+      // Create an array to hold our asynchronous query promises.
+      let queryPromises = [];
+
+      queryLayers.forEach(function(layerId) {
+      const targetLayer = targetLayers[layerId];
+      if (targetLayer) {
+        // For each targte layer, perform the spatial query
+        let queryPromise = targetLayer
+        .queryFeatures({
+          geometry: bufferedGeom,
+          spatialRelationship: "intersects",
+          outFields: ["*"]
+        })
+        .then(function(results) {
+      // Build the HTML summary for this layer.
+      let layerResults = `<h3>${targetLayer.title}</h3>`;
+          if (results.features.length === 0) {
+            layerResults += "<p>No features found.</p>";
+          } else {
+            layerResults += "<ul>";
+            results.features.forEach(function(feature) {
+              // Example: displaying an ID (adjust as needed for your fields)
+              layerResults += `<li>ID: ${feature.attributes.OBJECTID || "N/A"}</li>`;
+
+              // Optionally, add a highlight graphic for visual feedback.
+              const highlightGraphic = new Graphic({
+                geometry: feature.geometry,
+                symbol: tealHighlightSymbol
+              });
+              view.graphics.add(highlightGraphic);
+            });
+            layerResults += "</ul>";
+          }
+          // Append this layer’s results to the aggregated HTML.
+          allResultsHtml += layerResults;
+        })
+        .catch(function(error) {
+          console.error("Error querying " + targetLayer.title + ":", error);
         });
-        view.graphics.add(highlightGraphic);
-      });
-      // Append rather than overwrite.
-      document.getElementById("queryResults").innerText += resultsSummary;
-      // Reset summary for next layer.
-      resultsSummary = "";
-    }).catch(function(error) {
-      console.error("Error querying " + targetLayer.title + ":", error);
-      document.getElementById("queryResults").innerText += `${targetLayer.title}: error querying.\n`;
+      queryPromises.push(queryPromise);
+    }
+  });
+
+  // When all queries are finished, open the popup with the accumulated results.
+  Promise.all(queryPromises).then(function() {
+    view.popup.open({
+      title: "Query Results",
+      content: allResultsHtml,
+      location: bufferedGeom.extent.center // Adjust location as needed.
     });
-  }
-});
+  });
 }
+
       // Attach event listener to the Run Query button.
       document.getElementById("runQuery").addEventListener("click", runSpatialQuery);
 
