@@ -375,7 +375,7 @@
       const mySegments = new FeatureLayer({
         url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/MySegments/FeatureServer",
         title: "Segment Completed",
-        outFields: ["SegmentName", "DateCompleted", "Length_mi"],
+        outFields: ["OBJECTID","SegmentName", "DateCompleted", "Length_mi"],
         renderer: mySegmentsRenderer,
         popupTemplate: mySegmentsPopupTemplate
       });   
