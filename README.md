@@ -1,46 +1,46 @@
-# TrailGuard: Your Ice Age Trail Companion 
+# Geologic Map of Ice Age Trail App
 
-TrailGuard enhances the hiking experience along the Ice Age Trail. Powered by Esri.js and ArcGIS Online, this app is dedicated to fostering a community passionate about preserving and exploring this natural wonder.
-
-![TrailGuard App Screenshot](https://github.com/ecolville/TrailGuard/blob/main/TrailGuard_screenshot.jpg)
+This interactive application displays a geologic map of the Ice Age Trail. It features detailed datasets on geology, trail segments, parking, camping, potable water, and more. Users can perform spatial queries on selected trail segments to highlight nearby features and get an aggregated summary via a popup. A Survey123 link is also provided for users to report trail issues.
 
 ## Features
 
-- **Streamlined Reporting and Maintenance**: Easily report safety hazards and maintenance needs.
-- **Interactive Trail Maps**: Navigate trail segments, trailhead parking, campgrounds, and potable water sources.
-- **Trailhead and Campground Insights**: Dive deep into details of trailhead, campgrounds, backcountry cabins, and IAT communities.
-- **Track your Completed Trail Segments**: Record and celebrate your journey along the trail.
+- **Interactive Map:**  
+  Displays a basemap (ArcGIS API for JavaScript v4.25) centered on Marathon County with multiple geologic and trail-related feature layers.
 
-## Prerequisites
+- **Spatial Query Widget:**  
+  - **Segment Lookup:** Auto-complete functionality helps users find and select specific trail segments.
+  - **Buffer Query:** Users can define a buffer (in meters) around a selected trail segment.
+  - **Results Popup:** Features within the buffer are highlighted with a teal-blue outline, and query results are summarized in a popup window.
+  
+- **Feature Layers:**  
+  The app includes layers for:
+  - Bedrock Geology
+  - Glacial Geology
+  - Trail Sections & Connecting Routes
+  - Parking Areas
+  - Camping Areas
+  - Potable Water
+  - Trail Communities
+  - Trail Hazards & Maintenance Issues
 
-- Web Browser: A modern web browser that supports JavaScript and ES6+ features. Recommended: Chrome, Firefox, Safari, or Edge.
+- **Report Issue:**  
+  A **Report Trail Issue** button redirects users to a Survey123 form to report hazards or maintenance needs.
 
-## Usage 
+- **Responsive UI Elements:**  
+  Includes a welcome modal, layer list, basemap gallery, locate widget, and search widget for enhanced user interaction.
 
-1. **Report Trail Hazards or Maintenance Issues**: Click the orange "Report Trail Issue" button on the upper right.  This will open a Survey123 form which will ask detailed information to help provide trail maintainers the necessary information to resolve the issue. 
-2. **Track your Completed Trail Segments**: Use the editor tool (bottom button on right) to draw your completed segments on the map.
-3. **Interactive Maps**: Open the ListLayer widget (middle button on right) to change layer visibility.  Only visible layers appear in the legend (lower left).  Change the basemap with the basemap tool (upper right).  Search for locations using the search tool (middle button on left).
+## Technology Stack
 
-## Contributing 
+- **ArcGIS API for JavaScript v4.25:**  
+  Provides mapping functionality, feature layers, and UI widgets.
+- **HTML5, CSS3, and JavaScript:**  
+  Used for the application structure, styling, and client-side logic.
+- **Survey123:**  
+  Integrated link for reporting trail issues.
 
-TrailGuard welcomes contributions! 
+## Installation
 
-1. Fork the project.
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`).
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-4. Push to the branch (`git push origin feature/AmazingFeature`).
-5. Open a pull request.
+1. **Clone or Download the Repository:**
 
-## Data Sources 
-
-- **Esri Basemaps**: Provides various map backgrounds for user preference.
-- **IAT Data Layers**: Offers comprehensive data about the Ice Age National Scenic Trail, parking, camping, communities, water sources, shelters, cabins, hazards, and user progress.
-
-[View full data table](https://github.com/ecolville/TrailGuard/blob/main/Midterm%20Project%20Proposal.pdf).
-
-## Acknowledgments 
-
-- Thanks to Tiffany Stram, Ice Age Trail Alliance GIS Coordinator for data sources.  
-
-## Author
-- Lisa Siewert UW-Madison GEOG 576 Midterm Project
+   ```bash
+   git clone https://github.com/yourusername/ice-age-trail-app.git
