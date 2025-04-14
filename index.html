@@ -50,11 +50,36 @@
     .addRecordBtn:hover {
       background-color: #ff6700;
     }
-    /* Map container: leave space for header */
     #viewDiv {
       height: calc(100% - 60px);
     }
-    /* Popup styling */
+    #queryWidget {
+      padding: 10px;
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 250px;
+    }
+    #queryWidget label, 
+    #queryWidget input, 
+    #queryWidget select, 
+    #queryWidget button {
+      display: block;
+      margin: 5px 0;
+    }
+    #suggestions {
+      border: 1px solid #ccc;
+      max-height: 100px;
+      overflow-y: auto;
+    }
+    .suggestion-item {
+      padding: 3px 5px;
+      cursor: pointer;
+    }
+    .suggestion-item:hover {
+      background-color: #f0f0f0;
+    }
+  
     .esri-popup {
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -132,6 +157,19 @@
     <a href="https://survey123.arcgis.com/share/28999d44a3004264b788805abd470022" target="_blank" class="addRecordBtn">Report Trail Issue</a>
   </div>
 
+  <div id="queryWidget">
+    <label for="segmentInput">Segment Name:</label>
+    <input type="text" id="segmentInput" placeholder="Type at least 3 letters...">
+    <div id="suggestions"></div>
+    <label for="bufferDistance">Buffer Distance (meters):</label>
+    <input type="number" id="bufferDistance" value="100">
+    <label>Select Layers to Query:</label>
+    <label><input type="checkbox" class="queryLayer" value="hazards" checked> Hazards</label>
+    <label><input type="checkbox" class="queryLayer" value="glacialGeology"> Glacial Geology</label>
+    <button id="runQuery">Run Query</button>
+    <div id="queryResults"></div>
+  </div>
+
   <!-- Map Container -->
   <div id="viewDiv"></div>
 
@@ -171,6 +209,10 @@
       }
     };
 
+    // Global variable to store the selected segment feature.
+    var selectedSegmentFeature = null;
+
+
     // Load ArcGIS modules and create the map
     require([
       "esri/config",
@@ -205,7 +247,7 @@
       
       // Add Basemap Gallery widget inside an Expand widget
       const bgGallery = new BasemapGallery({ view: view });
-      view.ui.add(new Expand({ view: view, content: bgGallery }), "bottom-right");
+      view.ui.add(new Expand({ view: view, content: bgGallery }), "top-left");
       
       // Add Locate widget
       view.ui.add(new Locate({ view: view }), "top-left");
@@ -253,7 +295,6 @@
       map.add(glacialGeology);
       
       // IAT Sections layer – these are the available segments
-      // Double-check field names: "Segment" and "Status" must match your data.
       const sectionsPopupTemplate = {
         title: "Section or Connecting Route",
         content: [
@@ -347,17 +388,149 @@
           }
         }
       });
+
+      // =====================
+      // Create the Custom Query Widget
+      // =====================
+      // Wrap the "queryWidget" HTML (already defined in the body) in an Expand widget.
+      const queryWidgetElement = document.getElementById("queryWidget");
+      const queryExpand = new Expand({
+        view: view,
+        content: queryWidgetElement,
+        expandIconClass: "esri-icon-search",
+        expandTooltip: "Spatial Query"
+      });
+      view.ui.add(queryExpand, "top-right");
+
+      // Auto-complete functionality: query the sections layer by name.
+      const segmentInput = document.getElementById("segmentInput");
+      const suggestionsDiv = document.getElementById("suggestions");
+
+      segmentInput.addEventListener("keyup", function(e) {
+        const text = segmentInput.value;
+        suggestionsDiv.innerHTML = ""; // Clear old suggestions.
+        if (text.length >= 3) {
+          // Query the sections layer for segment names beginning with the typed text.
+          sections.queryFeatures({
+            where: "Segment LIKE '" + text + "%'",
+            outFields: ["Segment", "OBJECTID"],
+            returnGeometry: true
+          }).then(function(results) {
+            results.features.forEach(function(feature) {
+              const suggestionItem = document.createElement("div");
+              suggestionItem.classList.add("suggestion-item");
+              suggestionItem.innerText = feature.attributes.Segment;
+              suggestionItem.addEventListener("click", function() {
+                // When user selects a suggestion, populate the input and store the feature.
+                segmentInput.value = feature.attributes.Segment;
+                selectedSegmentFeature = feature;
+                suggestionsDiv.innerHTML = "";
+              });
+              suggestionsDiv.appendChild(suggestionItem);
+            });
+          });
+        }
+      });
+
+      // =====================
+      // Spatial Query Function
+      // =====================
+      function runSpatialQuery() {
+        if (!selectedSegmentFeature) {
+          alert("Please select a trail segment from the suggestions.");
+          return;
+        }
+        const distance = parseFloat(document.getElementById("bufferDistance").value);
+        if (isNaN(distance) || distance <= 0) {
+          alert("Please enter a valid buffer distance.");
+          return;
+        }
+
+        // Buffer the selected segment geometry.
+        const bufferedGeom = geometryEngine.buffer(selectedSegmentFeature.geometry, distance, "meters");
+
+        // Optionally show buffer graphic.
+        const bufferGraphic = new Graphic({
+          geometry: bufferedGeom,
+          symbol: new SimpleFillSymbol({
+            color: [255, 255, 0, 0.15],
+            outline: { color: [255, 255, 0], width: 2 }
+          })
+        });
+        view.graphics.removeAll();
+        view.graphics.add(bufferGraphic);
+
+        // Determine which target layers have been checked.
+        const queryLayers = [];
+        document.querySelectorAll(".queryLayer").forEach(function(cb) {
+          if (cb.checked) { queryLayers.push(cb.value); }
+        });
+        if (queryLayers.length === 0) {
+          alert("Please select at least one layer to query.");
+          return;
+        }
+
+        const targetLayers = {
+          hazards: hazards,
+          glacialGeology: glacialGeology
+          // Add more mappings if you add additional checkboxes.
+        };
+
+        let resultsSummary = "";
+        queryLayers.forEach(function(layerId) {
+          const targetLayer = targetLayers[layerId];
+          if (targetLayer) {
+            targetLayer.queryFeatures({
+              geometry: bufferedGeom,
+              spatialRelationship: "intersects",
+              outFields: ["*"]
+            }).then(function(results) {
+              const count = results.features.length;
+              resultsSummary += `${targetLayer.title}: ${count} feature(s) found.\n`;
+              // Optionally, add highlight graphics.
+              results.features.forEach(function(feature) {
+                const highlightGraphic = new Graphic({
+                  geometry: feature.geometry,
+                  symbol: new SimpleLineSymbol({
+                    color: new Color([255, 0, 0]),
+                    width: "3px",
+                    style: "dash"
+                  })
+                });
+                view.graphics.add(highlightGraphic);
+              });
+              document.getElementById("queryResults").innerText = resultsSummary;
+            }).catch(function(error) {
+              console.error("Error querying " + targetLayer.title + ":", error);
+              resultsSummary += `${targetLayer.title}: error querying.\n`;
+              document.getElementById("queryResults").innerText = resultsSummary;
+            });
+          }
+        });
+      }
+      
+      // Attach event listener to the Run Query button.
+      document.getElementById("runQuery").addEventListener("click", runSpatialQuery);
+
+      // =====================
+      // Popup Action and Editing for Sections (Mark as Completed)
+      // =====================
+      view.popup.on("trigger-action", function(event) {
+        if (event.action.id === "completeSegment") {
+          const selected = view.popup.selectedFeature;
+          if (selected) { completeSegment(selected); }
+        }
+      });
       
       // Function to mark a segment as completed:
       function completeSegment(feature) {
         // Build a new feature to add to the completed segments layer.
-        // Verify the attribute names ("Segment", "SegmentName", etc.) match your service schema.
         let newCompletedSegment = {
-          geometry: feature.geometry,  // Copy the existing geometry
+          geometry: feature.geometry,  
           attributes: {
-            SegmentName: feature.attributes.Segment, // Double-check that this field name is correct.
-            DateCompleted: new Date().toISOString().slice(0, 10), // Today's date in YYYY-MM-DD format.
-            Comments: "Reported as completed" // Optional additional information.
+            SegmentName: feature.attributes.Segment, 
+            DateCompleted: new Date().toISOString().slice(0, 10), 
+            Comments: "Reported as completed" 
           }
         };
 
