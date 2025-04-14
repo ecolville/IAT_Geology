@@ -53,9 +53,6 @@
     #viewDiv {
       height: calc(100% - 60px);
     }
-    #queryWidget {
-      display: none
-    }
     /* Styles for query widget elements */
     #queryWidget {
       padding: 10px;
@@ -235,6 +232,8 @@
       "esri/widgets/Search",
       "esri/widgets/Expand",
       "esri/layers/FeatureLayer",
+      "esri/Graphic",
+      "esri/geometry/geometryEngine",
       "esri/renderers/SimpleRenderer",
       "esri/renderers/UniqueValueRenderer",
       "esri/symbols/SimpleLineSymbol",
@@ -547,16 +546,7 @@ queryLayers.forEach(function(layerId) {
       // Attach event listener to the Run Query button.
       document.getElementById("runQuery").addEventListener("click", runSpatialQuery);
 
-      // =====================
-      // Popup Action and Editing for Sections (Mark as Completed)
-      // =====================
-      view.popup.on("trigger-action", function(event) {
-        if (event.action.id === "completeSegment") {
-          const selected = view.popup.selectedFeature;
-          if (selected) { completeSegment(selected); }
-        }
-      });
-      
+        
       // Function to mark a segment as completed:
       function completeSegment(feature) {
         // Build a new feature to add to the completed segments layer.
