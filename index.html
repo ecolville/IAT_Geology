@@ -5,7 +5,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="description" content="Interactive geologic map of the Ice Age Trail featuring trail segments, parking, camping, and geologic insights." />
-  <link rel="icon" href="TG.png">
 
   <!-- ArcGIS API CSS and JS -->
   <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css" />
@@ -28,7 +27,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background-color: #0077D4; /* IAT Blue */
+      background-color: #0077D4; 
       color: #ffffff;
       padding: 10px 20px;
     }
@@ -50,16 +49,20 @@
     .addRecordBtn:hover {
       background-color: #ff6700;
     }
+    /* Map container */
     #viewDiv {
       height: calc(100% - 60px);
     }
+    #queryWidget {
+      display: none
+    }
+    /* Styles for query widget elements */
     #queryWidget {
       padding: 10px;
       background-color: white;
       border: 1px solid #ccc;
       border-radius: 4px;
       width: 250px;
-      display: none
     }
     #queryWidget label, 
     #queryWidget input, 
@@ -80,7 +83,6 @@
     .suggestion-item:hover {
       background-color: #f0f0f0;
     }
-  
     .esri-popup {
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -162,7 +164,7 @@
     <h1>Geologic Map of Ice Age Trail</h1>
     <a href="https://survey123.arcgis.com/share/28999d44a3004264b788805abd470022" target="_blank" class="addRecordBtn">Report Trail Issue</a>
   </div>
-
+  <!-- Query Widget Container: This container is hidden by default -->
   <div id="queryWidget">
     <label for="segmentInput">Segment Name:</label>
     <input type="text" id="segmentInput" placeholder="Type at least 3 letters...">
@@ -177,9 +179,6 @@
     <label><input type="checkbox" class="queryLayer" value="parking"> Parking Areas</label>
     <label><input type="checkbox" class="queryLayer" value="glacialGeology"> Glacial Geology</label>
     <label><input type="checkbox" class="queryLayer" value="bedrockGeology"> Bedrock Geology</label>
-
-
-    
     <button id="runQuery">Run Query</button>
     <div id="queryResults"></div>
   </div>
@@ -226,7 +225,6 @@
     // Global variable to store the selected segment feature.
     var selectedSegmentFeature = null;
 
-
     // Load ArcGIS modules and create the map
     require([
       "esri/config",
@@ -245,13 +243,11 @@
       "esri/widgets/LayerList"
     ], function(esriConfig, Map, MapView, BasemapGallery, Locate, Search, Expand, FeatureLayer, SimpleRenderer, UniqueValueRenderer, SimpleLineSymbol, SimpleFillSymbol, Color, LayerList) {
 
-      // Set API key (Double-check your API key)
+      // Set API key 
       esriConfig.apiKey = "AAPKddba40c16f2c479188ee7654064642bcKj2RV3mAHrsiJS_6TRKUzkim46MXbNeE97z3bQn0zq3zyX67A3i8hBg6lEH0Fxl_";
       
-      // Create the map with the light-gray basemap
+      // Create the map with the light-gray basemap, centered on Marathon County
       const map = new Map({ basemap: "arcgis-light-gray" });
-      
-      // Create the MapView centered on Wisconsin
       const view = new MapView({
         container: "viewDiv",
         map: map,
@@ -259,14 +255,10 @@
         zoom: 9
       });
       
-      // Add Basemap Gallery widget inside an Expand widget
+      // Add Basemap Gallery, Locate, and Search widgets
       const bgGallery = new BasemapGallery({ view: view });
       view.ui.add(new Expand({ view: view, content: bgGallery }), "top-left");
-      
-      // Add Locate widget
       view.ui.add(new Locate({ view: view }), "top-left");
-      
-      // Add Search widget inside an Expand widget
       const searchWidget = new Search({ view: view, suggestionsEnabled: true, maxSuggestions: 3 });
       view.ui.add(new Expand({
         view: view,
@@ -345,8 +337,8 @@
 
       // Create a SimpleLineSymbol with a bold yellow appearance
       const yellowLineSymbol = new SimpleLineSymbol({
-        color: new Color([251, 222, 74]), // Bold yellow color
-        width: "5px",                   // Bold (thick) line
+        color: new Color([251, 222, 74]), 
+        width: "5px",                   
         style: "solid"
       });
 
@@ -354,18 +346,6 @@
       const mySegmentsRenderer = new SimpleRenderer({
         symbol: yellowLineSymbol
       });
-      
-      // Completed Segments layer – where completed segments will be added
-      const mySegments = new FeatureLayer({
-        url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Completed_IAT_Segments/FeatureServer",
-        title: "Segment Completed",
-        outFields: ["SegmentName", "DateCompleted", "Length_mi"],
-        renderer: mySegmentsRenderer,
-        popupTemplate: mySegmentsPopupTemplate
-      });
-
-      // Add a popup template for mySegments.
-      // This popup displays the segment name, date completed, and length.
       const mySegmentsPopupTemplate = {
         title: "Completed Segment: {SegmentName}",
         content: [
@@ -385,23 +365,55 @@
           }
         ]
       };
+      // Completed Segments layer – where completed segments will be added
+      const mySegments = new FeatureLayer({
+        url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Completed_IAT_Segments/FeatureServer",
+        title: "Segment Completed",
+        outFields: ["SegmentName", "DateCompleted", "Length_mi"],
+        renderer: mySegmentsRenderer,
+        popupTemplate: mySegmentsPopupTemplate
+      });   
       map.add(mySegments);
       
       // =====================
-      // Popup Action and Editing
+      // Popup Action Event for Mark as Completed
       // =====================
-      
-      // Listen for the custom popup action: "Mark as Completed"
       view.popup.on("trigger-action", function(event) {
         if (event.action.id === "completeSegment") {
-          // Get the selected feature from the sections layer
-          const selectedFeature = view.popup.selectedFeature;
-          if (selectedFeature) {
-            completeSegment(selectedFeature);
-          }
+          const selected = view.popup.selectedFeature;
+          if (selected) { completeSegment(selected); }
         }
       });
-
+      
+      function completeSegment(feature) {
+        const newSegment = {
+          geometry: feature.geometry,
+          attributes: {
+            SegmentName: feature.attributes.Segment,
+            DateCompleted: new Date().toISOString().slice(0, 10),
+            Comments: "Reported as completed"
+          }
+        };
+        mySegments.applyEdits({ addFeatures: [newSegment] })
+          .then(function(result) {
+            if (result.addFeatureResults && result.addFeatureResults[0].error) {
+              alert("Error reporting segment completion.");
+            } else {
+              alert("Segment successfully reported as completed!");
+              let updatedFeature = feature.clone();
+              updatedFeature.attributes.Status = "completed";
+              sections.applyEdits({ updateFeatures: [updatedFeature] })
+                .then(function(updateResult) {
+                  console.log("Section updated for visual feedback.");
+                }).catch(function(error) {
+                  console.error("Error updating section:", error);
+                });
+            }
+          }).catch(function(error) {
+            console.error("Error applying edits:", error);
+            alert("An unexpected error occurred.");
+          });
+      }
       // =====================
       // Create the Custom Query Widget
       // =====================
