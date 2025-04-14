@@ -320,7 +320,7 @@
         actions: [{
           title: "Mark as Completed",
           id: "completeSegment",
-          className: "esri-icon-check",
+          className: "esri-icon-check-mark",
           label: "Mark as Completed"
         }]
       };
@@ -421,7 +421,7 @@
       const queryExpand = new Expand({
         view: view,
         content: queryWidgetElement,
-        expandIconClass: "esri-icon-query",
+        expandIconClass: "esri-icon-filter",
         expandTooltip: "Spatial Query"
       });
       view.ui.add(queryExpand, "top-left");
