@@ -274,7 +274,8 @@
         actions: [{
           title: "Mark as Completed",
           id: "completeSegment",
-          className: "esri-icon-check"
+          className: "esri-icon-check",
+          visible: true
         }]
       };
       
@@ -286,13 +287,25 @@
         popupTemplate: sectionsPopupTemplate
       });
       map.add(sections);
+
+      // Create a SimpleLineSymbol with a bold yellow appearance
+      const yellowLineSymbol = new SimpleLineSymbol({
+        color: new Color([251, 222, 74]), // Bold yellow color
+        width: "5px",                   // Bold (thick) line
+        style: "solid"
+      });
+
+      // Use a SimpleRenderer to apply this symbol to every feature in mySegments
+      const mySegmentsRenderer = new SimpleRenderer({
+        symbol: yellowLineSymbol
+      });
       
       // Completed Segments layer – where completed segments will be added
-      // Double-check service URL and outFields; ensure editing is enabled on this service.
       const mySegments = new FeatureLayer({
         url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/Completed_IAT_Segments/FeatureServer",
         title: "Segment Completed",
-        outFields: ["SegmentName", "DateCompleted", "Length_mi"]
+        outFields: ["SegmentName", "DateCompleted", "Length_mi"],
+        renderer: mySegmentsRenderer
       });
       map.add(mySegments);
       
