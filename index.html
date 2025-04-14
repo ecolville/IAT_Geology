@@ -308,6 +308,29 @@
         outFields: ["SegmentName", "DateCompleted", "Length_mi"],
         renderer: mySegmentsRenderer
       });
+
+      // Add a popup template for mySegments.
+      // This popup displays the segment name, date completed, and length.
+      const mySegmentsPopupTemplate = {
+        title: "Completed Segment: {SegmentName}",
+        content: [
+          {
+            type: "fields",
+            fieldInfos: [
+              { fieldName: "DateCompleted", label: "Date Completed", format: { dateFormat: "short-date" } },
+              { fieldName: "Length_mi", label: "Length (mi)" }
+            ]
+          },
+          {
+            type: "media",
+            mediaInfos: [{
+              type: "attachments",
+              caption: "Photos and Files"
+            }]
+          }
+        ]
+      };
+      mySegments.popupTemplate = mySegmentsPopupTemplate;
       map.add(mySegments);
       
       // =====================
