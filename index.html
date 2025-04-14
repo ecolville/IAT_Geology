@@ -164,8 +164,16 @@
     <label for="bufferDistance">Buffer Distance (meters):</label>
     <input type="number" id="bufferDistance" value="100">
     <label>Select Layers to Query:</label>
-    <label><input type="checkbox" class="queryLayer" value="hazards" checked> Hazards</label>
+    <label><input type="checkbox" class="queryLayer" value="hazards" checked>Trail Hazards</label>
+    <label><input type="checkbox" class="queryLayer" value="communities"> Trail Communities</label>
+    <label><input type="checkbox" class="queryLayer" value="water"> Potable Water</label>
+    <label><input type="checkbox" class="queryLayer" value="campgrounds"> Camping Areas</label>
+    <label><input type="checkbox" class="queryLayer" value="parking"> Parking Areas</label>
     <label><input type="checkbox" class="queryLayer" value="glacialGeology"> Glacial Geology</label>
+    <label><input type="checkbox" class="queryLayer" value="bedrockGeology"> Bedrock Geology</label>
+
+
+    
     <button id="runQuery">Run Query</button>
     <div id="queryResults"></div>
   </div>
@@ -460,6 +468,9 @@
         view.graphics.removeAll();
         view.graphics.add(bufferGraphic);
 
+        // Clear previous results.
+       document.getElementById("queryResults").innerText = "";
+
         // Determine which target layers have been checked.
         const queryLayers = [];
         document.querySelectorAll(".queryLayer").forEach(function(cb) {
@@ -472,43 +483,50 @@
 
         const targetLayers = {
           hazards: hazards,
-          glacialGeology: glacialGeology
-          // Add more mappings if you add additional checkboxes.
+          glacialGeology: glacialGeology,
+          communities: communities,
+          water: waterLayer,
+          campgrounds: campgrounds,
+          parking: parking,
+          bedrockGeology: bedrockGeology
         };
 
-        let resultsSummary = "";
-        queryLayers.forEach(function(layerId) {
-          const targetLayer = targetLayers[layerId];
-          if (targetLayer) {
-            targetLayer.queryFeatures({
-              geometry: bufferedGeom,
-              spatialRelationship: "intersects",
-              outFields: ["*"]
-            }).then(function(results) {
-              const count = results.features.length;
-              resultsSummary += `${targetLayer.title}: ${count} feature(s) found.\n`;
-              // Optionally, add highlight graphics.
-              results.features.forEach(function(feature) {
-                const highlightGraphic = new Graphic({
-                  geometry: feature.geometry,
-                  symbol: new SimpleLineSymbol({
-                    color: new Color([255, 0, 0]),
-                    width: "3px",
-                    style: "dash"
-                  })
-                });
-                view.graphics.add(highlightGraphic);
-              });
-              document.getElementById("queryResults").innerText = resultsSummary;
-            }).catch(function(error) {
-              console.error("Error querying " + targetLayer.title + ":", error);
-              resultsSummary += `${targetLayer.title}: error querying.\n`;
-              document.getElementById("queryResults").innerText = resultsSummary;
-            });
-          }
+       // Initialize results summary.
+  let resultsSummary = "";
+
+queryLayers.forEach(function(layerId) {
+  const targetLayer = targetLayers[layerId];
+  if (targetLayer) {
+    targetLayer.queryFeatures({
+      geometry: bufferedGeom,
+      spatialRelationship: "intersects",
+      outFields: ["*"]
+    }).then(function(results) {
+      const count = results.features.length;
+      resultsSummary += `${targetLayer.title}: ${count} feature(s) found.\n`;
+      // Optionally, add highlight graphics.
+      results.features.forEach(function(feature) {
+        const highlightGraphic = new Graphic({
+          geometry: feature.geometry,
+          symbol: new SimpleLineSymbol({
+            color: new Color([255, 0, 0]),
+            width: "3px",
+            style: "dash"
+          })
         });
-      }
-      
+        view.graphics.add(highlightGraphic);
+      });
+      // Append rather than overwrite.
+      document.getElementById("queryResults").innerText += resultsSummary;
+      // Reset summary for next layer.
+      resultsSummary = "";
+    }).catch(function(error) {
+      console.error("Error querying " + targetLayer.title + ":", error);
+      document.getElementById("queryResults").innerText += `${targetLayer.title}: error querying.\n`;
+    });
+  }
+});
+}
       // Attach event listener to the Run Query button.
       document.getElementById("runQuery").addEventListener("click", runSpatialQuery);
 
@@ -585,7 +603,7 @@
       
       // IAT Camping layer
       const campingPopupTemplate = {
-        title: "Campgrounds",
+        title: "Camping Areas",
         content: `<div style="margin-bottom: 10px;"><b>Type:</b> {Camp_Type}</div>
                   <div style="margin-bottom: 10px;"><b># sites:</b> {Num_Sites}</div>
                   <div style="margin-bottom: 10px;"><b>Water:</b> {Water}</div>
