@@ -437,7 +437,11 @@
         listMode: "show",
         renderer: communityRenderer
       });
-      communities.popupTemplate = { title: "{Name}" };
+
+      communities.popupTemplate = {
+        title: "{Full_Name}",
+        content: `<b>Community Website:</b> <a href="{CommunityWeb}" target="_blank">{CommunityWeb}</a>`
+      };
       map.add(communities);
       
       // IAT Trail Hazards layer
