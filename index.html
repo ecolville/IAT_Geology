@@ -59,6 +59,7 @@
       border: 1px solid #ccc;
       border-radius: 4px;
       width: 250px;
+      display: none
     }
     #queryWidget label, 
     #queryWidget input, 
@@ -409,10 +410,10 @@
       const queryExpand = new Expand({
         view: view,
         content: queryWidgetElement,
-        expandIconClass: "esri-icon-search",
+        expandIconClass: "esri-icon-query",
         expandTooltip: "Spatial Query"
       });
-      view.ui.add(queryExpand, "top-right");
+      view.ui.add(queryExpand, "top-left");
 
       // Auto-complete functionality: query the sections layer by name.
       const segmentInput = document.getElementById("segmentInput");
