@@ -358,7 +358,6 @@
           {
             type: "fields",
             fieldInfos: [
-              { fieldName: "DateCompleted", label: "Date Completed", format: { dateFormat: "short-date" } },
               { fieldName: "Length_mi", label: "Length (mi)" }
             ]
           },
@@ -375,7 +374,7 @@
       const mySegments = new FeatureLayer({
         url: "https://services1.arcgis.com/kkX9mRo34fTGAX96/arcgis/rest/services/MySegments/FeatureServer",
         title: "Segment Completed",
-        outFields: ["OBJECTID","SegmentName", "DateCompleted", "Length_mi"],
+        outFields: ["OBJECTID","SegmentName", "Length_mi"],
         renderer: mySegmentsRenderer,
         popupTemplate: mySegmentsPopupTemplate
       });   
