@@ -397,7 +397,7 @@
           attributes: {
             SegmentName: feature.attributes.Segment,
             DateCompleted: new Date().toISOString().slice(0, 10),
-            Comments: "Reported as completed"
+            Length_mi: feature.attributes.length_mi
           }
         };
         mySegments.applyEdits({ addFeatures: [newSegment] })
