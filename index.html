@@ -396,7 +396,6 @@
           geometry: feature.geometry,
           attributes: {
             SegmentName: feature.attributes.Segment,
-            DateCompleted: new Date().toISOString().slice(0, 10),
             Length_mi: feature.attributes.length_mi
           }
         };
