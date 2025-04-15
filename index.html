@@ -406,14 +406,6 @@
               alert("Error reporting segment completion.");
             } else {
               alert("Segment successfully reported as completed!");
-              let updatedFeature = feature.clone();
-              updatedFeature.attributes.Status = "completed";
-              sections.applyEdits({ updateFeatures: [updatedFeature] })
-                .then(function(updateResult) {
-                  console.log("Section updated for visual feedback.");
-                }).catch(function(error) {
-                  console.error("Error updating section:", error);
-                });
             }
           }).catch(function(error) {
             console.error("Error applying edits:", error);
@@ -562,46 +554,7 @@
       // Attach event listener to the Run Query button.
       document.getElementById("runQuery").addEventListener("click", runSpatialQuery);
 
-        
-      // Function to mark a segment as completed:
-      function completeSegment(feature) {
-        // Build a new feature to add to the completed segments layer.
-        let newCompletedSegment = {
-          geometry: feature.geometry,  
-          attributes: {
-            SegmentName: feature.attributes.Segment, 
-            DateCompleted: new Date().toISOString().slice(0, 10), 
-            Comments: "Reported as completed" 
-          }
-        };
-
-        // Add the new feature to the Completed Segments layer using applyEdits
-        mySegments.applyEdits({
-          addFeatures: [newCompletedSegment]
-        }).then(function(result) {
-          if (result.addFeatureResults && result.addFeatureResults[0].error) {
-            alert("Error reporting segment completion.");
-          } else {
-            alert("Segment successfully reported as completed!");
-            
-            // Optionally update the original section's status to "completed"
-            // so its renderer changes (e.g., from red to yellow)
-            let updatedFeature = feature.clone();
-            updatedFeature.attributes.Status = "completed"; // Ensure your renderer uses this value.
-            sections.applyEdits({
-              updateFeatures: [updatedFeature]
-            }).then(function(updateResult) {
-              console.log("Section updated for visual feedback.");
-            }).catch(function(error) {
-              console.error("Error updating section: ", error);
-            });
-          }
-        }).catch(function(error) {
-          console.error("Error applying edits: ", error);
-          alert("An unexpected error occurred.");
-        });
-      }
-      
+           
       // =====================
       // Additional Layers
       // =====================
